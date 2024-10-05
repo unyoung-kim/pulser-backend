@@ -1,0 +1,11 @@
+{
+  "name": "pulser-backend",
+  "version": "1.0.0",
+  "description": "Pulser backend node server",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Pulser AI",
+  "license": "ISC"
+}
