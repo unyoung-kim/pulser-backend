@@ -1,4 +1,4 @@
-# Fiber backend
+# Pulser backend
 
 ## Requirements
 
