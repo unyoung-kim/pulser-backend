@@ -4,7 +4,10 @@
   "description": "Pulser backend node server",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "cleanse": "rm -rf package-lock.json && rm -rf node_modules && npm install",
+    "serve": "npx tsx watch src/index.ts"
   },
   "author": "Pulser AI",
   "license": "ISC",
