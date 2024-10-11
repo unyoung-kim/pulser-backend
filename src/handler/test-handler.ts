@@ -4,13 +4,13 @@ import { tRPC } from "../lib/trpc";
 /**
  * Test endpoint (GET)
  */
-export function testEndpointHandler(t: tRPC, endpoint: string) {
+export function testEndpointHandler(t: tRPC) {
   return (
     t.procedure
       .meta({
         openapi: {
           method: "GET",
-          path: "/trpc/hello",
+          path: "/hello",
           summary: "A hello world endpoint",
         },
       })

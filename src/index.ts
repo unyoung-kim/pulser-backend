@@ -4,9 +4,12 @@ import * as trpcExpress from "@trpc/server/adapters/express";
 import cors from "cors";
 import express from "express";
 import helmet from "helmet";
+import dotenv from 'dotenv';
 import { testEndpointHandler } from "./handler/test-handler";
 import { t } from "./lib/trpc";
-
+import { authorizeHandler, getAccessTokenHandler } from "./handler/wordpress-auth";
+import { createContext } from "./context";
+import { createPostHandler } from "./handler/wordpress-post-creation";
 // Initialize Express app
 const app = express();
 
@@ -14,6 +17,8 @@ const app = express();
 app.use(cors());
 app.use(helmet());
 app.use(express.json()); // This should parse JSON request bodies
+
+dotenv.config();
 
 /**
  * tRPC routers from here
@@ -23,18 +28,19 @@ app.use(express.json()); // This should parse JSON request bodies
  * mutation => POST methods
  */
 const trpcRouter = t.router({
-  hello: testEndpointHandler(t, "hello"),
-  // Just keep adding More endpoints here...
+  hello: testEndpointHandler(t),
+  "auth/wordpress/authorize": authorizeHandler(t),
+  "auth/wordpress/callback": getAccessTokenHandler(t),
+  "create-post": createPostHandler(t),
 });
 
 // TODO: I should probably add auth here too but I can do this later.
 
 // Apply the tRPC middleware on the '/trpc' route
 app.use(
-  "/trpc",
   trpcExpress.createExpressMiddleware({
     router: trpcRouter,
-    createContext: () => ({}),
+    createContext,
   })
 );
 

@@ -15,6 +15,7 @@
   "dependencies": {
     "@trpc/server": "^10.45.2",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "express": "^4.21.0",
     "helmet": "^8.0.0",
     "trpc-openapi": "^1.2.0",
