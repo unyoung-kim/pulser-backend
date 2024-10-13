@@ -7,9 +7,11 @@ import helmet from "helmet";
 import dotenv from 'dotenv';
 import { testEndpointHandler } from "./handler/test-handler";
 import { t } from "./lib/trpc";
-import { authorizeHandler, getAccessTokenHandler } from "./handler/wordpress-auth";
+import { wordpressAuthHandler } from "./handler/wordpress-auth-handler";
+import { wordpressTokenHandler } from "./handler/wordpress-token-handler";
 import { createContext } from "./context";
 import { createPostHandler } from "./handler/wordpress-post-creation";
+
 // Initialize Express app
 const app = express();
 
@@ -28,10 +30,10 @@ dotenv.config();
  * mutation => POST methods
  */
 const trpcRouter = t.router({
-  hello: testEndpointHandler(t),
-  "auth/wordpress/authorize": authorizeHandler(t),
-  "auth/wordpress/callback": getAccessTokenHandler(t),
-  "create-post": createPostHandler(t),
+  "hello": testEndpointHandler(t, "hello"),
+  "auth/wordpress/authorize": wordpressAuthHandler(t, "auth/wordpress/authorize"),
+  "auth/wordpress/callback": wordpressTokenHandler(t, "auth/wordpress/callback"),
+  "create-post": createPostHandler(t, "create-post"),
 });
 
 // TODO: I should probably add auth here too but I can do this later.
@@ -45,7 +47,7 @@ app.use(
 );
 
 // Start the server
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT ?? 8000;
 app.listen(PORT, () => {
   console.log(`💡 Server running on http://localhost:${PORT}`);
 });
