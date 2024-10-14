@@ -12,6 +12,8 @@ export function createPostHandler(t: tRPC, path: string) {
         method: "POST",
         path: "/create-post",
         summary: "Create a post on WordPress",
+        description: "Creates a new post on a WordPress site using the provided access token",
+        tags: ['WordPress'],
       },
     })
     .input(

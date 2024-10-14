@@ -11,6 +11,8 @@ export function wordpressTokenHandler(t: tRPC, path: string) {
           method: "GET",
           path: "/auth/wordpress/callback",
           summary: "Handle the callback from WordPress and get access token",
+          description: "Processes the callback from WordPress OAuth and retrieves the access token",
+          tags: ['WordPress'],
         },
       })
       .input(z.void())

@@ -13,6 +13,8 @@ export function testEndpointHandler(t: tRPC, path: string) {
           method: "GET",
           path: "/hello",
           summary: "A hello world endpoint",
+          description: "A simple test endpoint that returns a hello world message",
+          tags: ['Test'],
         },
       })
       .input(z.void())

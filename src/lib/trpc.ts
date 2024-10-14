@@ -1,4 +1,5 @@
-import { inferAsyncReturnType, initTRPC } from "@trpc/server";
+import { initTRPC, inferAsyncReturnType } from "@trpc/server";
+import { OpenApiMeta } from 'trpc-openapi';
 import { ZodError } from "zod";
 import { createContext } from "../context";
 
@@ -9,7 +10,9 @@ import { createContext } from "../context";
 // Plug in the tRPC x OpenAPI tool:
 // https://www.npmjs.com/package/trpc-openapi
 export const t = initTRPC
-  .context<inferAsyncReturnType<typeof createContext>>().create({
+  .meta<OpenApiMeta>()
+  .context<inferAsyncReturnType<typeof createContext>>()
+  .create({
     errorFormatter(opts) {
       // You can change the error messages here if you want
     const { shape, error } = opts;
