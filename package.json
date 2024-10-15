@@ -2,7 +2,7 @@
   "name": "pulser-backend",
   "version": "1.0.0",
   "description": "Pulser backend node server",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "NODE_OPTIONS='--max-old-space-size=8000' npx tsx watch src/index.ts",
@@ -15,6 +15,7 @@
   "dependencies": {
     "@trpc/server": "^10.45.2",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "express": "^4.21.0",
     "helmet": "^8.0.0",
     "trpc-openapi": "^1.2.0",
