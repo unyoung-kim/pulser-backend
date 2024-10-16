@@ -5,12 +5,11 @@ import cors from "cors";
 import express from "express";
 import helmet from "helmet";
 import dotenv from 'dotenv';
-import { testEndpointHandler } from "./handler/test-handler";
-import { t } from "./lib/trpc";
-import { wordpressAuthHandler } from "./handler/wordpress-auth-handler";
-import { wordpressTokenHandler } from "./handler/wordpress-token-handler";
 import { createContext } from "./context";
-import { createPostHandler } from "./handler/wordpress-post-creation";
+import { openApiDocument } from "./lib/generate-openapi-document";
+import swaggerUi from 'swagger-ui-express';
+import { createOpenApiExpressMiddleware } from 'trpc-openapi';
+import { trpcRouter } from "./trpcRouter";
 
 // Initialize Express app
 const app = express();
@@ -22,19 +21,12 @@ app.use(express.json()); // This should parse JSON request bodies
 
 dotenv.config();
 
-/**
- * tRPC routers from here
- * You should add any additional handlers in the '/handler' folder!!
- *
- * query => GET methods
- * mutation => POST methods
- */
-const trpcRouter = t.router({
-  "hello": testEndpointHandler(t, "hello"),
-  "auth/wordpress/authorize": wordpressAuthHandler(t, "auth/wordpress/authorize"),
-  "auth/wordpress/callback": wordpressTokenHandler(t, "auth/wordpress/callback"),
-  "create-post": createPostHandler(t, "create-post"),
-});
+// Serve OpenAPI UI
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openApiDocument));
+
+// Handle OpenAPI requests
+app.use('/api', createOpenApiExpressMiddleware({ router: trpcRouter, createContext }));
+
 
 // TODO: I should probably add auth here too but I can do this later.
 

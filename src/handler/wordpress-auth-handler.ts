@@ -11,6 +11,8 @@ export function wordpressAuthHandler(t: tRPC, path: string) {
         method: "GET",
         path: "/auth/wordpress/authorize",
         summary: "Get WordPress authentication URL",
+        description: "Generates and returns a URL for WordPress authentication",
+        tags: ['WordPress'],
       },
     })
     .input(z.void())
@@ -31,3 +33,4 @@ export function wordpressAuthHandler(t: tRPC, path: string) {
       }
     });
 }
+
