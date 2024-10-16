@@ -2,6 +2,7 @@
   "name": "pulser-backend",
   "version": "1.0.0",
   "description": "Pulser backend node server",
+  "type": "module",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -13,13 +14,17 @@
   "author": "Pulser AI",
   "license": "ISC",
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.29.1",
     "@trpc/server": "^10.45.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
     "helmet": "^8.0.0",
+    "langchain": "^0.3.2",
+    "openai": "^4.67.3",
     "swagger-ui-express": "^5.0.1",
     "trpc-openapi": "^1.2.0",
+    "true-myth": "^8.0.1",
     "zod": "^3.23.8"
   },
   "devDependencies": {
