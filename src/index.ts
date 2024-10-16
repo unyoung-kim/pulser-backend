@@ -2,14 +2,14 @@
 
 import * as trpcExpress from "@trpc/server/adapters/express";
 import cors from "cors";
+import dotenv from "dotenv";
 import express from "express";
 import helmet from "helmet";
-import dotenv from 'dotenv';
-import { createContext } from "./context";
-import { openApiDocument } from "./lib/generate-openapi-document";
-import swaggerUi from 'swagger-ui-express';
-import { createOpenApiExpressMiddleware } from 'trpc-openapi';
-import { trpcRouter } from "./trpcRouter";
+import swaggerUi from "swagger-ui-express";
+import { createOpenApiExpressMiddleware } from "trpc-openapi";
+import { createContext } from "./context.js";
+import { openApiDocument } from "./lib/generate-openapi-document.js";
+import { trpcRouter } from "./trpcRouter.js";
 
 // Initialize Express app
 const app = express();
@@ -22,11 +22,13 @@ app.use(express.json()); // This should parse JSON request bodies
 dotenv.config();
 
 // Serve OpenAPI UI
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openApiDocument));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiDocument));
 
 // Handle OpenAPI requests
-app.use('/api', createOpenApiExpressMiddleware({ router: trpcRouter, createContext }));
-
+app.use(
+  "/api",
+  createOpenApiExpressMiddleware({ router: trpcRouter, createContext })
+);
 
 // TODO: I should probably add auth here too but I can do this later.
 

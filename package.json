@@ -2,6 +2,7 @@
   "name": "pulser-backend",
   "version": "1.0.0",
   "description": "Pulser backend node server",
+  "type": "module",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

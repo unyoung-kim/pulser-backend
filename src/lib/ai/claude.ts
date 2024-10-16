@@ -6,6 +6,8 @@ const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
+const DEFAULT_MAX_TOKENS_FOR_CLAUDE = 4000;
+
 /**
  * Ask a question and you'll get a simple string response from gpt.
  * @param model
@@ -17,26 +19,39 @@ const anthropic = new Anthropic({
 export async function getSimpleClaudeResponse(
   systemPrompt: string,
   userPrompt: string,
+  maxTokens?: number,
   temperature?: number
 ): Promise<Result<string, string>> {
   try {
     const msg = await anthropic.messages.create({
       model: "claude-3-5-sonnet-20240620",
-      max_tokens: 1024,
-      messages: [{ role: "user", content: "Hello, Claude" }],
+      max_tokens: maxTokens ?? DEFAULT_MAX_TOKENS_FOR_CLAUDE,
+      messages: [
+        { role: "assistant", content: systemPrompt },
+        { role: "user", content: userPrompt },
+      ],
+      temperature: temperature ?? 0,
     });
-    console.log(msg);
 
-    const response: string | null = msg;
+    if (Array.isArray(msg.content)) {
+      const firstContentBlock = msg.content[0];
 
-    if (response === null) {
-      return err("No response from gpt");
+      if ("text" in firstContentBlock) {
+        const response: string = firstContentBlock.text;
+        console.log(response);
+
+        return ok(response);
+      } else {
+        console.error("Content block does not have a 'text' property.");
+
+        return err("Content block does not have a 'text' property.");
+      }
+    } else {
+      console.error("Unexpected content format.");
+      return err("Unexpected content format.");
     }
-
-    return ok(response);
   } catch (error) {
+    console.log("Error from claude: ", error);
     return err(`Error from gpt response: ${error}`);
   }
 }
-
-await getSimpleClaudeResponse("", "Hello, Claude");

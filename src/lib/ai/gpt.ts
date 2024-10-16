@@ -1,7 +1,7 @@
 import OpenAI from "openai";
 import { zodResponseFormat } from "openai/helpers/zod";
 import { Result } from "true-myth";
-import { err, ok } from "true-myth/dist/es/result";
+import { err, ok } from "true-myth/result";
 import { z } from "zod";
 
 export type GPT_MODEL = "gpt-4o" | "gpt-4o-mini";
