@@ -3,6 +3,7 @@ import { t } from "./lib/trpc";
 import { wordpressAuthHandler } from "./handler/wordpress-auth-handler";
 import { wordpressTokenHandler } from "./handler/wordpress-token-handler";
 import { createPostHandler } from "./handler/wordpress-post-creation";
+import { webRetrievalHandler } from "./handler/web-retrieval-handler";
 
 /**
  * tRPC routers from here
@@ -16,4 +17,5 @@ export const trpcRouter = t.router({
     "auth/wordpress/authorize": wordpressAuthHandler(t, "auth/wordpress/authorize"),
     "auth/wordpress/callback": wordpressTokenHandler(t, "auth/wordpress/callback"),
     "create-post": createPostHandler(t, "create-post"),
+    "web-retrieval": webRetrievalHandler(t, "web-retrieval"),
   });

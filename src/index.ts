@@ -6,10 +6,15 @@ import express from "express";
 import helmet from "helmet";
 import dotenv from 'dotenv';
 import { createContext } from "./context";
-import { openApiDocument } from "./lib/generate-openapi-document";
+import { createOpenApiDocument } from "./lib/generate-openapi-document";
 import swaggerUi from 'swagger-ui-express';
 import { createOpenApiExpressMiddleware } from 'trpc-openapi';
 import { trpcRouter } from "./trpcRouter";
+
+
+const PORT = process.env.PORT ?? 8000;
+export const baseURL = process.env.BASE_URL ?? `http://localhost:${PORT}`;
+
 
 // Initialize Express app
 const app = express();
@@ -20,6 +25,8 @@ app.use(helmet());
 app.use(express.json()); // This should parse JSON request bodies
 
 dotenv.config();
+
+const openApiDocument = createOpenApiDocument(baseURL);
 
 // Serve OpenAPI UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openApiDocument));
@@ -39,7 +46,6 @@ app.use(
 );
 
 // Start the server
-const PORT = process.env.PORT ?? 8000;
 app.listen(PORT, () => {
-  console.log(`💡 Server running on http://localhost:${PORT}`);
+  console.log(`💡 Server running on ${baseURL}`);
 });

@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { tRPC } from "../lib/trpc";
 import { callWordpressAccessToken } from "../lib/call-wordpress-access-token";
-import { ApiResponseSchema } from "../lib/api-response-schema";
+import { ApiResponseSchema } from "../lib/schema/api-response-schema";
 
 // handle the callback from wordpress to get the access token
 export function wordpressTokenHandler(t: tRPC, path: string) {

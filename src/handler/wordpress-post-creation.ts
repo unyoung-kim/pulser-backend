@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { tRPC } from "../lib/trpc";
-import { ApiResponseSchema } from "../lib/api-response-schema";
+import { ApiResponseSchema } from "../lib/schema/api-response-schema";
 
 // create a post on wordpress
 // refer to https://developer.wordpress.com/docs/api/1.1/post/sites/%24site/posts/new/
@@ -43,7 +43,7 @@ export function createPostHandler(t: tRPC, path: string) {
           const errorData = await response.json();
           return {
             success: false,
-            error: errorData.message || 'Failed to create post',
+            error: errorData.message ?? 'Failed to create post',
           };
         }
 

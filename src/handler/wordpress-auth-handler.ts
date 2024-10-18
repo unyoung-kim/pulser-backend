@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { tRPC } from "../lib/trpc";
 import { getWordpressAuthUrl } from "../lib/get-wordpress-auth-url";
-import { ApiResponseSchema } from "../lib/api-response-schema";
+import { ApiResponseSchema } from "../lib/schema/api-response-schema";
 
 // redirect to wordpress for authentication
 export function wordpressAuthHandler(t: tRPC, path: string) {
