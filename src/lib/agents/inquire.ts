@@ -1,6 +1,6 @@
 import { generateObject } from 'ai'
-import { queryResultSchema } from '../schema/inquiry'
-import { getModel } from '../get-model'
+import { queryResultSchema } from '../schema/inquiry.js'
+import { getModel } from '../get-model.js'
 
 export async function inquire(query: string) {
 

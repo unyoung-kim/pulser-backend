@@ -1,5 +1,5 @@
 import { tool } from 'ai'
-import { searchSchema } from '../schema/search'
+import { searchSchema } from '../schema/search.js'
 
 // Start Generation Here
 export const videoSearchTool = () => tool({

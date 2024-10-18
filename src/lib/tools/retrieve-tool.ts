@@ -1,6 +1,6 @@
 import { tool } from 'ai'
-import { retrieveSchema } from '../schema/retrieve'
-import { SearchResults as SearchResultsType } from '../types'
+import { retrieveSchema } from '../schema/retrieve.js'
+import { SearchResults as SearchResultsType } from '../types.js'
 
 const CONTENT_CHARACTER_LIMIT = 10000
 

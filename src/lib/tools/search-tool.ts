@@ -1,15 +1,14 @@
 import { tool } from 'ai'
-import Exa from 'exa-js'
-import { searchSchema } from '../schema/search';
-import { sanitizeUrl } from '../get-model'
+import Exa from "exa-js"
+import { searchSchema } from '../schema/search.js';
+import { sanitizeUrl } from '../get-model.js'
 import {
   SearchResultImage,
   SearchResults,
   SearchResultItem,
   SearXNGResponse,
   SearXNGResult
-} from '../types'
-
+} from '../types.js'
 
 export const searchTool = () =>
   tool({

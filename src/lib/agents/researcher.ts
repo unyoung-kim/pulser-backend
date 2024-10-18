@@ -1,6 +1,6 @@
 import { generateText } from 'ai'
-import { getTools } from '../tools/get-tools'
-import { getModel } from '../get-model'
+import { getTools } from '../tools/get-tools.js'
+import { getModel } from '../get-model.js'
 
 const SYSTEM_PROMPT = `As a professional search expert, you possess the ability to search for any information on the web.
 For each user query, utilize the search results to their fullest potential to provide additional information and assistance in your response.

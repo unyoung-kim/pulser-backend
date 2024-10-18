@@ -1,5 +1,5 @@
 import { generateOpenApiDocument } from 'trpc-openapi';
-import { trpcRouter } from '../trpcRouter';  // Import your main tRPC router
+import { trpcRouter } from '../trpcRouter.js';  // Import your main tRPC router
 
 export function createOpenApiDocument(baseURL: string) {
   return generateOpenApiDocument(trpcRouter, {

@@ -1,6 +1,6 @@
-import { retrieveTool } from './retrieve-tool'
-import { searchTool } from './search-tool'
-import { videoSearchTool } from './video-search'
+import { retrieveTool } from './retrieve-tool.js'
+import { searchTool } from './search-tool.js'
+import { videoSearchTool } from './video-search.js'
 
 
 export const getTools = () => {

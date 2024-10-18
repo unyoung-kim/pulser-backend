@@ -2,14 +2,14 @@
 
 import * as trpcExpress from "@trpc/server/adapters/express";
 import cors from "cors";
+import dotenv from "dotenv";
 import express from "express";
 import helmet from "helmet";
-import dotenv from 'dotenv';
-import { createContext } from "./context";
-import { createOpenApiDocument } from "./lib/generate-openapi-document";
+import { createContext } from "./context.js";
+import { createOpenApiDocument } from "./lib/generate-openapi-document.js";
 import swaggerUi from 'swagger-ui-express';
 import { createOpenApiExpressMiddleware } from 'trpc-openapi';
-import { trpcRouter } from "./trpcRouter";
+import { trpcRouter } from "./trpcRouter.js";
 
 
 const PORT = process.env.PORT ?? 8000;
@@ -29,11 +29,19 @@ dotenv.config();
 const openApiDocument = createOpenApiDocument(baseURL);
 
 // Serve OpenAPI UI
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openApiDocument));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiDocument));
 
 // Handle OpenAPI requests
-app.use('/api', createOpenApiExpressMiddleware({ router: trpcRouter, createContext }));
-
+app.use(
+  "/api",
+  createOpenApiExpressMiddleware({
+    router: trpcRouter,
+    createContext,
+    responseMeta: undefined,
+    onError: undefined,
+    maxBodySize: undefined,
+  })
+);
 
 // TODO: I should probably add auth here too but I can do this later.
 

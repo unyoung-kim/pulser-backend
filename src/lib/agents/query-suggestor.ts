@@ -1,6 +1,6 @@
 import { generateObject } from 'ai'
-import { relatedSchema } from '../schema/related'
-import { getModel } from '../get-model'
+import { relatedSchema } from '../schema/related.js'
+import { getModel } from '../get-model.js'
 
 export async function querySuggestor(query: string) {
 

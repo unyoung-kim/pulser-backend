@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { tRPC } from "../lib/trpc";
-import { ApiResponseSchema } from "../lib/schema/api-response-schema";
-import { workflow } from "../lib/workflow";
+import { tRPC } from "../lib/trpc.js";
+import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
+import { workflow } from "../lib/workflow.js";
 
 export function webRetrievalHandler(t: tRPC, path: string) {
   return (

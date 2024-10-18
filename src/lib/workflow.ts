@@ -1,7 +1,7 @@
-import { taskManager } from "./agents/task-manager";
-import { inquire } from "./agents/inquire";
-import { researcher } from "./agents/researcher";
-import { querySuggestor } from "./agents/query-suggestor";
+import { taskManager } from "./agents/task-manager.js";
+import { inquire } from "./agents/inquire.js";
+import { researcher } from "./agents/researcher.js";
+import { querySuggestor } from "./agents/query-suggestor.js";
 
 export async function workflow(query: string) {
     // const action = (await taskManager(query)) ?? { object: { next: 'proceed' } };

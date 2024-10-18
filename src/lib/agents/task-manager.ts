@@ -1,6 +1,6 @@
 import { generateObject } from 'ai'
-import { nextActionSchema } from '../schema/next-action-schema'
-import { getModel } from '../get-model'
+import { nextActionSchema } from '../schema/next-action-schema.js'
+import { getModel } from '../get-model.js'
 
 // Decide whether inquiry is required for the user input
 export async function taskManager(query: string) {
