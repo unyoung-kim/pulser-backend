@@ -36,6 +36,7 @@ const servicePatterns = [
 // Contact Information
 const contactPatterns = [
   "/contact",
+  "/contact-us",
   "/support",
   "/help",
   "/customer-support",
@@ -113,6 +114,12 @@ const keyPatterns = [
   ...portfolioPatterns,
 ];
 
+// Array of patterns to exclude
+const excludPatterns = [
+  "#", // Exclude URLs with fragment identifiers
+  "terms-and-conditions",
+];
+
 /**
  * Use me!
  * Entry point to start the crawling process and return an array
@@ -120,7 +127,8 @@ const keyPatterns = [
  * @returns
  */
 export async function crawlImportantInternalLinks(
-  domain: string
+  domain: string,
+  limit: number
 ): Promise<string[]> {
   // Immutable way: reassigning `visited` after every operation
   const visited = await crawl(
@@ -128,7 +136,16 @@ export async function crawlImportantInternalLinks(
     domain,
     ImmutableSet<string>()
   );
-  return visited.toArray(); // Convert the immutable set to an array before returning
+
+  const sortedUrls = sortUrlsByDepth(visited.toArray());
+
+  // If the number of URLs exceeds the limit, return only the first X URLs
+  return sortedUrls.slice(0, limit);
+}
+
+// Function to check if a URL should be excluded based on exclusion patterns
+function shouldBeExcludedUrl(url: string): boolean {
+  return excludPatterns.some((pattern) => url.includes(pattern));
 }
 
 // Function to normalize URLs by converting `http` to `https`
@@ -147,8 +164,8 @@ async function crawl(
 ): Promise<ImmutableSet<string>> {
   // Normalize the URL to `https` and check if it has already been visited
   url = normalizeUrl(url);
-  if (visited.has(url) || url.includes("#")) {
-    return visited; // Avoid visiting the same URL multiple times and skip URLs with '#'
+  if (visited.has(url) || shouldBeExcludedUrl(url)) {
+    return visited;
   }
 
   try {
@@ -205,6 +222,30 @@ function isKeyUrl(url: string): boolean {
   return keyPatterns.some((pattern) => url.includes(pattern));
 }
 
-// // Usage example
-// const ans = await crawlImportantInternalLinks("drinkag1.com");
+/**
+ * Function to calculate depth of a URL based on the number of path segments.
+ * @param url
+ * @returns depth of the URL
+ */
+function calculateDepth(url: string): number {
+  // Remove the protocol and domain part and count the number of `/` in the path
+  const urlObj = new URL(url);
+  const path = urlObj.pathname;
+  return path.split("/").filter(Boolean).length + 1; // +1 for the domain itself
+}
+
+/**
+ * Function to sort URLs by their depth.
+ * Maybe there is a better way to sort it
+ *
+ * E.g. product apge is more important that pricing page or something like that
+ * @param urls
+ * @returns sorted array of URLs by depth
+ */
+function sortUrlsByDepth(urls: string[]): string[] {
+  return urls.sort((a, b) => calculateDepth(a) - calculateDepth(b));
+}
+
+// Usage example
+// const ans = await crawlImportantInternalLinks("drinkag1.com", 100);
 // console.log("ANS: ", ans); // Print the final array of crawled URLs
