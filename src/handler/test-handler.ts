@@ -1,28 +1,29 @@
 import { z } from "zod";
 import { tRPC } from "../lib/trpc";
+import { ApiResponseSchema } from "../lib/api-response-schema";
 
 /**
  * Test endpoint (GET)
  */
-export function testEndpointHandler(t: tRPC, endpoint: string) {
+export function testEndpointHandler(t: tRPC, path: string) {
   return (
     t.procedure
       .meta({
         openapi: {
           method: "GET",
-          path: "/trpc/hello",
+          path: "/hello",
           summary: "A hello world endpoint",
+          description: "A simple test endpoint that returns a hello world message",
+          tags: ['Test'],
         },
       })
       .input(z.void())
-      .output(
-        z.object({
-          message: z.string(),
-        })
-      )
-      // .query() for GET methods, .mutation() for POST methods
-      .query((opts) => {
-        return { message: "hello, world" };
+      .output(ApiResponseSchema)
+      .query(() => {
+        return {
+          success: true,
+          data: { message: "hello, world" },
+        };
       })
   );
 }

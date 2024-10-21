@@ -1,5 +1,7 @@
-import { initTRPC } from "@trpc/server";
+import { inferAsyncReturnType, initTRPC } from "@trpc/server";
+import { OpenApiMeta } from "trpc-openapi";
 import { ZodError } from "zod";
+import { createContext } from "../context.js";
 
 /**
  * Prepare tRPC object
@@ -7,18 +9,21 @@ import { ZodError } from "zod";
 // Prepare endpoints
 // Plug in the tRPC x OpenAPI tool:
 // https://www.npmjs.com/package/trpc-openapi
-export const t = initTRPC.create({
-  errorFormatter(opts) {
-    // You can change the error messages here if you want
-    const { shape, error } = opts;
-    return {
-      ...shape,
-      zodErrors:
-        error.code === "BAD_REQUEST" && error.cause instanceof ZodError
-          ? error.cause.issues
-          : null,
-    };
-  },
-});
+export const t = initTRPC
+  .meta<OpenApiMeta>()
+  .context<inferAsyncReturnType<typeof createContext>>()
+  .create({
+    errorFormatter(opts) {
+      // You can change the error messages here if you want
+      const { shape, error } = opts;
+      return {
+        ...shape,
+        zodErrors:
+          error.code === "BAD_REQUEST" && error.cause instanceof ZodError
+            ? error.cause.issues
+            : null,
+      };
+    },
+  });
 
 export type tRPC = typeof t;

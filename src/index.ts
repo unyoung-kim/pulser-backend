@@ -2,16 +2,21 @@
 
 import * as trpcExpress from "@trpc/server/adapters/express";
 import cors from "cors";
+import dotenv from "dotenv";
 import express from "express";
 import helmet from "helmet";
 import { testEndpointHandler } from "./handler/test-handler";
 import { contentHandler } from "./handler/content-handler";
 import { t } from "./lib/trpc";
 import { createClient } from '@supabase/supabase-js';
-import dotenv from 'dotenv';
 
 // Load environment variables from .env file
 dotenv.config();
+import swaggerUi from "swagger-ui-express";
+import { createOpenApiExpressMiddleware } from "trpc-openapi";
+import { createContext } from "./context.js";
+import { openApiDocument } from "./lib/generate-openapi-document.js";
+import { trpcRouter } from "./trpcRouter.js";
 
 // Initialize Express app
 const app = express();
@@ -43,20 +48,29 @@ const trpcRouter = t.router({
   content: contentHandler(t, supabase),
   // Just keep adding More endpoints here...
 });
+dotenv.config();
+
+// Serve OpenAPI UI
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiDocument));
+
+// Handle OpenAPI requests
+app.use(
+  "/api",
+  createOpenApiExpressMiddleware({ router: trpcRouter, createContext })
+);
 
 // TODO: I should probably add auth here too but I can do this later.
 
 // Apply the tRPC middleware on the '/trpc' route
 app.use(
-  "/trpc",
   trpcExpress.createExpressMiddleware({
     router: trpcRouter,
-    createContext: () => ({}),
+    createContext,
   })
 );
 
 // Start the server
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT ?? 8000;
 app.listen(PORT, () => {
   console.log(`💡 Server running on http://localhost:${PORT}`);
 });
