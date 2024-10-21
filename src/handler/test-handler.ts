@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { tRPC } from "../lib/trpc";
-import { ApiResponseSchema } from "../lib/api-response-schema";
+import { tRPC } from "../lib/trpc.js";
+import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
 
 /**
  * Test endpoint (GET)

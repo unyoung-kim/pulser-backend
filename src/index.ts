@@ -5,11 +5,16 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import helmet from "helmet";
-import swaggerUi from "swagger-ui-express";
-import { createOpenApiExpressMiddleware } from "trpc-openapi";
 import { createContext } from "./context.js";
-import { openApiDocument } from "./lib/generate-openapi-document.js";
+import { createOpenApiDocument } from "./lib/generate-openapi-document.js";
+import swaggerUi from 'swagger-ui-express';
+import { createOpenApiExpressMiddleware } from 'trpc-openapi';
 import { trpcRouter } from "./trpcRouter.js";
+
+
+const PORT = process.env.PORT ?? 8000;
+export const baseURL = process.env.BASE_URL ?? `http://localhost:${PORT}`;
+
 
 // Initialize Express app
 const app = express();
@@ -21,13 +26,21 @@ app.use(express.json()); // This should parse JSON request bodies
 
 dotenv.config();
 
+const openApiDocument = createOpenApiDocument(baseURL);
+
 // Serve OpenAPI UI
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiDocument));
 
 // Handle OpenAPI requests
 app.use(
   "/api",
-  createOpenApiExpressMiddleware({ router: trpcRouter, createContext })
+  createOpenApiExpressMiddleware({
+    router: trpcRouter,
+    createContext,
+    responseMeta: undefined,
+    onError: undefined,
+    maxBodySize: undefined,
+  })
 );
 
 // TODO: I should probably add auth here too but I can do this later.
@@ -41,7 +54,6 @@ app.use(
 );
 
 // Start the server
-const PORT = process.env.PORT ?? 8000;
 app.listen(PORT, () => {
-  console.log(`💡 Server running on http://localhost:${PORT}`);
+  console.log(`💡 Server running on ${baseURL}`);
 });
