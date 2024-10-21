@@ -5,7 +5,13 @@ import cors from "cors";
 import express from "express";
 import helmet from "helmet";
 import { testEndpointHandler } from "./handler/test-handler";
+import { contentHandler } from "./handler/content-handler";
 import { t } from "./lib/trpc";
+import { createClient } from '@supabase/supabase-js';
+import dotenv from 'dotenv';
+
+// Load environment variables from .env file
+dotenv.config();
 
 // Initialize Express app
 const app = express();
@@ -14,6 +20,16 @@ const app = express();
 app.use(cors());
 app.use(helmet());
 app.use(express.json()); // This should parse JSON request bodies
+
+// Initialize Supabase client
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error('Missing Supabase credentials');
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 /**
  * tRPC routers from here
@@ -24,6 +40,7 @@ app.use(express.json()); // This should parse JSON request bodies
  */
 const trpcRouter = t.router({
   hello: testEndpointHandler(t, "hello"),
+  content: contentHandler(t, supabase),
   // Just keep adding More endpoints here...
 });
 
@@ -43,3 +60,5 @@ const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
   console.log(`💡 Server running on http://localhost:${PORT}`);
 });
+
+export type AppRouter = typeof trpcRouter;
