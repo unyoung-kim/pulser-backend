@@ -14,13 +14,10 @@
   "author": "Pulser AI",
   "license": "ISC",
   "dependencies": {
-<<<<<<< HEAD
     "@supabase/supabase-js": "^2.45.6",
     "@trpc/client": "^10.45.2",
     "@trpc/next": "^10.45.2",
-=======
     "@anthropic-ai/sdk": "^0.29.1",
->>>>>>> 3d99377b297b8d1a13cc7e3c1438304a487dece0
     "@trpc/server": "^10.45.2",
     "axios": "^1.7.7",
     "cors": "^2.8.5",
