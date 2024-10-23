@@ -1,9 +1,8 @@
-import { generateObject } from 'ai'
-import { relatedSchema } from '../schema/related.js'
-import { getModel } from '../get-model.js'
+import { generateObject } from "ai";
+import { getModel } from "../get-model.js";
+import { relatedSchema } from "../schema/related.js";
 
 export async function querySuggestor(query: string) {
-
   try {
     const { object } = await generateObject({
       model: getModel(),
@@ -14,12 +13,12 @@ export async function querySuggestor(query: string) {
       Aim to create queries that progressively delve into more specific aspects, implications, or adjacent topics related to the initial query. The goal is to anticipate the user's potential information needs and guide them towards a more comprehensive understanding of the subject matter.
       Please match the language of the response to the user's language.`,
       prompt: query,
-      schema: relatedSchema
-    })
-  
-    return { relatedQueries: object.relatedQueries }
+      schema: relatedSchema,
+    });
+
+    return { relatedQueries: object.relatedQueries };
   } catch (error) {
-    console.error('Error in querySuggestor:', error)
-    return { relatedQueries: [] }
+    console.error("Error in querySuggestor:", error);
+    return { relatedQueries: [] };
   }
 }

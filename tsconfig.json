@@ -68,6 +68,6 @@
     "strictNullChecks": true
   },
   // Do we need to include zen here explicitly? IDK! It works without it??
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "index.ts"],
   "exclude": ["node_modules"]
 }
