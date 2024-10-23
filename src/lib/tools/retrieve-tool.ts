@@ -7,6 +7,8 @@ const CONTENT_CHARACTER_LIMIT = 10000
 async function fetchJinaReaderData(
   url: string
 ): Promise<SearchResultsType | null> {
+  console.log('Using Jina in retrieval tool')
+  
   try {
     const response = await fetch(`https://r.jina.ai/${url}`, {
       method: 'GET',
@@ -42,6 +44,8 @@ async function fetchJinaReaderData(
 async function fetchTavilyExtractData(
   url: string
 ): Promise<SearchResultsType | null> {
+  console.log('Using Tavily in retrieval tool')
+
   try {
     const apiKey = process.env.TAVILY_API_KEY
     const response = await fetch('https://api.tavily.com/extract', {

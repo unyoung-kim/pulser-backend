@@ -6,7 +6,8 @@ export const videoSearchTool = () => tool({
   description: 'Search for videos from YouTube',
   parameters: searchSchema,
   execute: async ({ query }: { query: string }) => {
-
+    console.log('Using Serper in video search tool')
+    
     let searchResult
     try {
       const response = await fetch('https://google.serper.dev/videos', {

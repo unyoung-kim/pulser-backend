@@ -86,6 +86,8 @@ async function tavilySearch(
   includeDomains: string[] = [],
   excludeDomains: string[] = []
 ): Promise<SearchResults> {
+  console.log('Using Tavily in search tool')
+
   const apiKey = process.env.TAVILY_API_KEY
   if (!apiKey) {
     throw new Error('TAVILY_API_KEY is not set in the environment variables')
@@ -145,6 +147,8 @@ async function exaSearch(
   includeDomains: string[] = [],
   excludeDomains: string[] = []
 ): Promise<SearchResults> {
+  console.log('Using Exa in search tool')
+  
   const apiKey = process.env.EXA_API_KEY
   if (!apiKey) {
     throw new Error('EXA_API_KEY is not set in the environment variables')
@@ -177,6 +181,8 @@ async function searxngSearch(
   includeDomains: string[] = [],
   excludeDomains: string[] = []
 ): Promise<SearchResults> {
+  console.log('Using SearXNG in search tool')
+
   const apiUrl = process.env.SEARXNG_API_URL
   if (!apiUrl) {
     throw new Error('SEARXNG_API_URL is not set in the environment variables')

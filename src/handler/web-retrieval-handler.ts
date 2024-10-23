@@ -2,6 +2,7 @@ import { z } from "zod";
 import { tRPC } from "../lib/trpc.js";
 import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
 import { workflow } from "../lib/workflow.js";
+import { combineLLMAndToolResults } from "../lib/combineLLMAndToolResults.js"
 
 export function webRetrievalHandler(t: tRPC, path: string) {
   return (
