@@ -1,4 +1,6 @@
-export async function callWordpressAccessToken(code: string): Promise<string> {
+import { err, ok, Result } from 'true-myth/result';
+
+export async function callWordpressAccessToken(code: string): Promise<Result<string, string>> {
     const response = await fetch('https://public-api.wordpress.com/oauth2/token', {
       method: 'POST',
       headers: {
@@ -14,9 +16,9 @@ export async function callWordpressAccessToken(code: string): Promise<string> {
     });
   
     if (!response.ok) {
-      throw new Error('Failed to fetch access token');
+      return err('Failed to fetch access token');
     }
   
     const data = await response.json();
-    return data.access_token;
-  }
+    return ok(data.access_token);
+}

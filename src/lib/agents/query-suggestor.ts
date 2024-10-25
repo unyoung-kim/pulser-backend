@@ -1,8 +1,9 @@
 import { generateObject } from "ai";
 import { getModel } from "../get-model.js";
 import { relatedSchema } from "../schema/related.js";
+import { Result, ok, err } from "true-myth/result";
 
-export async function querySuggestor(query: string) {
+export async function querySuggestor(query: string): Promise<Result<{ query: string; }[],string>> {
   try {
     const { object } = await generateObject({
       model: getModel(),
@@ -16,9 +17,9 @@ export async function querySuggestor(query: string) {
       schema: relatedSchema,
     });
 
-    return { relatedQueries: object.relatedQueries };
+    return ok(object.relatedQueries);
   } catch (error) {
     console.error("Error in querySuggestor:", error);
-    return { relatedQueries: [] };
+    return err("Error in query suggestor");
   }
 }

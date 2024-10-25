@@ -1,5 +1,4 @@
 import { generateText } from 'ai'
-import { getTools } from '../tools/get-tools.js'
 import { getModel } from '../get-model.js'
 
 const SYSTEM_PROMPT = `Persona: Consider yourself a professional SEO blog writing expert. Your task is to leverage the input effectively and generate response to enrich the content you create for your clients.
@@ -42,14 +41,13 @@ export async function contentEngine(query: string) {
       model: getModel(),
       system: `${SYSTEM_PROMPT} Current date and time: ${currentDate}`,
       prompt: query,
-      maxSteps: 5,
     })
 
     return { result: result.text }
   } catch (error) {
     console.error('Error in contentEngine:', error)
     return {
-      text: 'An error has occurred. Please try again.',
+      result: 'An error has occurred. Please try again.',
     }
   }
 }

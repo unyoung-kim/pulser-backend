@@ -1,4 +1,5 @@
 import { z } from "zod";
+import {Result, ok, err} from "true-myth/result"
 import { tRPC } from "../lib/trpc.js";
 import { getWordpressAuthUrl } from "../lib/get-wordpress-auth-url.js";
 import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
@@ -19,10 +20,16 @@ export function wordpressAuthHandler(t: tRPC, path: string) {
     .output(ApiResponseSchema)
     .query(async () => {
       try {
-        const redirectUrl = await getWordpressAuthUrl();
+        const redirectUrl: Result<string,string> = getWordpressAuthUrl();
+        if(redirectUrl.isErr){
+          return {
+            success: false,
+            data: redirectUrl.error,
+          }
+        }
         return {
           success: true,
-          data: { redirectUrl },
+          data: redirectUrl.value,
         };
       } catch (error) {
         console.error(error);

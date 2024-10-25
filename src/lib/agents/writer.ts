@@ -1,5 +1,6 @@
 import { generateText } from "ai";
 import { getModel } from "../get-model.js";
+import { Result, ok, err } from "true-myth/result";
 
 // const SYSTEM_PROMPT = `As a professional search expert, you possess the ability to search for any information on the web.
 // For each user query, utilize the search results to their fullest potential to provide additional information and assistance in your response.
@@ -19,7 +20,7 @@ Here are a couple things to note when writing a blog post:
 6. Make sure external links are embedded naturally with the right anchor text throughout the article.
   `;
 
-export async function writer(outline: string) {
+export async function writer(outline: string): Promise<Result<string,string>> {
   try {
     const currentDate = new Date().toLocaleString();
     const result = await generateText({
@@ -31,11 +32,9 @@ export async function writer(outline: string) {
 
     console.log("Result: ", result);
 
-    return { text: result.text };
+    return ok(result.text);
   } catch (error) {
     console.error("Error in researcher:", error);
-    return {
-      text: "An error has occurred. Please try again.",
-    };
+    return err("An error has occurred. Please try again.")
   }
 }
