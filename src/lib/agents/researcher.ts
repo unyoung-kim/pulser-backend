@@ -1,6 +1,7 @@
 import { generateText } from "ai";
 import { getModel } from "../get-model.js";
 import { getTools } from "../tools/researcher/get-tools.js";
+import { ok, err, Result } from "true-myth/result"
 
 // const SYSTEM_PROMPT = `As a professional search expert, you possess the ability to search for any information on the web.
 // For each user query, utilize the search results to their fullest potential to provide additional information and assistance in your response.
@@ -28,7 +29,7 @@ Here are a few rules to follow for the outline:
   8) Again, make sure to conduct the initial research, come up with a basic outline, then conduct additional research on all the subtopics to enrich the outline.
   `;
 
-export async function researcher(query: string) {
+export async function researcher(query: string): Promise<Result<string,string>> {
   try {
     let toolResults: any[] = [];
 
@@ -39,15 +40,15 @@ export async function researcher(query: string) {
       prompt: query,
       tools: getTools(),
       maxSteps: 10,
-      onStepFinish: async (event: {
-        stepType: string;
-        toolCalls?: any[];
-        toolResults?: any;
-      }) => {
-        if (event.stepType === "initial" && event.toolCalls) {
-          toolResults = event.toolResults;
-        }
-      },
+      // onStepFinish: async (event: {
+      //   stepType: string;
+      //   toolCalls?: any[];
+      //   toolResults?: any;
+      // }) => {
+      //   if (event.stepType === "initial" && event.toolCalls) {
+      //     toolResults = event.toolResults;
+      //   }
+      // },
     });
 
     // console.log("Result: ", result);
@@ -55,11 +56,9 @@ export async function researcher(query: string) {
     // //
     // console.log("Tool results: ", JSON.stringify(toolResults, null, 2));
 
-    return { text: result.text };
+    return ok(result.text);
   } catch (error) {
     console.error("Error in researcher:", error);
-    return {
-      text: "An error has occurred. Please try again.",
-    };
+    return err("An error has occurred. Please try again.")
   }
 }

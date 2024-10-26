@@ -1,7 +1,8 @@
 import { z } from "zod";
+import { Result } from "true-myth/result";
 import { tRPC } from "../lib/trpc.js";
 import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
-import { workflow } from "../lib/workflow.js";
+import { workflow, WorkflowResult } from "../lib/workflow.js";
 
 export function webRetrievalHandler(t: tRPC, path: string) {
   return (
@@ -23,10 +24,16 @@ export function webRetrievalHandler(t: tRPC, path: string) {
       .output(ApiResponseSchema)
       .mutation(async ({ input }) => {
         try {
-          const result = await workflow(input.query);
+          const result: Result<WorkflowResult,string> = await workflow(input.query);
+          if(result.isErr){
+            return {
+              success: false,
+              data: result.error
+            };
+          }
           return {
             success: true,
-            data: result
+            data: result.value
           };
         } catch (error) {
           console.error('Error in web retrieval API:', error);

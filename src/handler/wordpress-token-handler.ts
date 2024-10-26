@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { err, ok, Result } from 'true-myth/result';
 import { tRPC } from "../lib/trpc.js";
 import { callWordpressAccessToken } from "../lib/call-wordpress-access-token.js";
 import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
@@ -28,11 +29,20 @@ export function wordpressTokenHandler(t: tRPC, path: string) {
         }
   
         try {
-          const accessToken = await callWordpressAccessToken(code);
-          return {
-            success: true,
-            data: { accessToken },
-          };
+          const accessToken: Result<string, string> = await callWordpressAccessToken(code);
+
+          if(accessToken.isErr){
+            return {
+              success: false,
+              data: accessToken.error,
+            };
+          }
+          else{
+            return {
+              success: true,
+              data: accessToken.value,
+            };
+          }
         } catch (error) {
           console.error(error);
           return {
