@@ -18,13 +18,14 @@ export function webRetrievalHandler(t: tRPC, path: string) {
       })
       .input(
         z.object({
-          query: z.string().describe('The query to search for')
+          projectId: z.string().describe('Id of the project or which blog post needs to be generated'),
+          inputTopic: z.string().optional().describe('The blog topic')
         })
       )
       .output(ApiResponseSchema)
       .mutation(async ({ input }) => {
         try {
-          const result: Result<WorkflowResult,string> = await workflow(input.query);
+          const result: Result<WorkflowResult,string> = await workflow(input);
           if(result.isErr){
             return {
               success: false,

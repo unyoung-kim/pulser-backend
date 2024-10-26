@@ -1,7 +1,11 @@
 import { Result, ok, err } from "true-myth/result";
+import { SupabaseClient } from '@supabase/supabase-js'
 import { querySuggestor } from "./agents/query-suggestor.js";
 import { researcher } from "./agents/researcher.js";
 import { writer } from "./agents/writer.js";
+import { outlineEnricher } from "./agents/outline-enricher.js";
+import { getSupabaseClient } from "./get-supabase-client.js";
+import { EnrichedURL } from "./enrich-internal-links.js";
 
 export interface WorkflowResult{
   answer: string,
@@ -16,7 +20,7 @@ export interface WorkflowResult{
  * @param query
  * @returns
  */
-export async function workflow(query: string): Promise<Result<WorkflowResult,string>> {
+export async function workflow({ projectId, inputTopic }: { projectId: string; inputTopic?: string}): Promise<Result<WorkflowResult, string>> {
   // const action = (await taskManager(query)) ?? { object: { next: 'proceed' } };
 
   // if (action.object.next === 'inquire') {
@@ -25,20 +29,47 @@ export async function workflow(query: string): Promise<Result<WorkflowResult,str
   // }
 
   //
-  const outline: Result<string,string> = await researcher(query);
+
+  const topic = inputTopic ?? "Topic generated from topic generator"
+
+  const outline: Result<string,string> = await researcher(topic);
 
   if(outline.isErr) return err(outline.error)
 
   console.log("Outline: ", outline.value);
 
-  // const {text: enrichedOutline } = await outline(outline);
-  const article: Result<string,string> = await writer(outline.value);
+
+  const supabaseClient: Result<SupabaseClient,string> = getSupabaseClient();
+
+  if(supabaseClient.isErr) return err(supabaseClient.error);
+
+  const supabase= supabaseClient.value;
+
+  const enrichedURLsResponse = await supabase
+    .from('InternalLink')
+    .select('url,summary')
+    .eq('project_id',projectId)
+
+    const enrichedURLs: EnrichedURL[] = (enrichedURLsResponse.data ?? []).map(item => ({
+      id: item.url,
+      summary: item.summary,
+  }));
+
+  const enrichedOutline: Result<string,string> = await outlineEnricher(enrichedURLs, outline.value);
+
+  if(enrichedOutline.isErr) return err(enrichedOutline.error)
+
+  console.log("Enriched outline: ", enrichedOutline.value);
+
+
+  const article: Result<string,string> = await writer(enrichedOutline.value);
 
   if(article.isErr) return err(article.error)
 
   console.log("Article: ", article.value);
+  
 
-  const relatedQueries: Result<{ query: string }[],string> = await querySuggestor(query);
+  const relatedQueries: Result<{ query: string }[],string> = await querySuggestor(topic);
 
   if(relatedQueries.isErr) return err(relatedQueries.error)
 

@@ -1,47 +1,38 @@
 import { generateText } from "ai";
 import { getModel } from "../get-model.js";
-import { getOutlineEnrichTools } from "../tools/outline-enricher/outline-enrich-tools.js";
+import { Result, ok, err } from "true-myth/result";
+import { EnrichedURL } from "../enrich-internal-links.js";
 
-const SYSTEM_PROMPT = `
-You are a professional SEO content writer.
+// const SYSTEM_PROMPT = `As a professional search expert, you possess the ability to search for any information on the web.
+// For each user query, utilize the search results to their fullest potential to provide additional information and assistance in your response.
+// If there are any images relevant to your answer, be sure to include them as well.
+// Aim to directly address the user's question, augmenting your response with insights gleaned from the search results.`;
 
-You have the capability to perform image and video search. 
+const SYSTEM_PROMPT = `As a professional SEO blog writer, you will be given:
+1) a list of internal website URLs of a client along with a short summary of the corresponding web page
+2) a detailed outline for an SEO blog post to be written for that client.
 
-Based on the provided outline, Identify sections that would benefit from additional visuals (images or videos) where they are missing.
+Your task is to enrich the outline with atleast around 4 to 5 internal URLs. 
+The output will be used to write a blog post of length strictly more than 3000 words, so try to preserve the structure of the original outline while being as much detailed as possible.
+
+Make sure the internal links are embedded naturally with the right anchor text throughout the article.
   `;
 
-export async function outlineEnricher(query: string) {
+export async function outlineEnricher(enrichedURLs: EnrichedURL[], outline: string): Promise<Result<string,string>> {
   try {
-    let toolResults: any[] = [];
-
     const currentDate = new Date().toLocaleString();
     const result = await generateText({
       model: getModel(),
       system: `${SYSTEM_PROMPT} Current date and time: ${currentDate}`,
-      prompt: query,
-      tools: getOutlineEnrichTools(),
-      maxSteps: 10,
-      onStepFinish: async (event: {
-        stepType: string;
-        toolCalls?: any[];
-        toolResults?: any;
-      }) => {
-        if (event.stepType === "initial" && event.toolCalls) {
-          toolResults = event.toolResults;
-        }
-      },
+      prompt: `Enriched URLs: ${enrichedURLs}\nOutline: ${outline}`,
+      maxTokens: 7000,
     });
 
-    // console.log("Result: ", result);
-    console.log(JSON.stringify(result, null, 2));
-    //
-    console.log("Tool results: ", JSON.stringify(toolResults, null, 2));
+    console.log("Result: ", result);
 
-    return { text: result.text };
+    return ok(result.text);
   } catch (error) {
-    console.error("Error in writer:", error);
-    return {
-      text: "An error has occurred. Please try again.",
-    };
+    console.error("Error in outline enricher:", error);
+    return err("An error has occured from the outline enricher")
   }
 }
