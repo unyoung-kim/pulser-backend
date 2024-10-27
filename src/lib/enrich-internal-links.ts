@@ -22,7 +22,9 @@ export async function enrichInternalLinks(projectId: string): Promise<Result<Enr
 
     const supabaseClient: Result<SupabaseClient,string> = getSupabaseClient();
 
-    if(supabaseClient.isErr) return err(supabaseClient.error);
+    if(supabaseClient.isErr){
+        return err(supabaseClient.error);
+    }
 
     const supabase= supabaseClient.value;
 
@@ -43,39 +45,6 @@ export async function enrichInternalLinks(projectId: string): Promise<Result<Enr
     if(!internalLinks || internalLinks.length==0){
         return err("No internal links found from crawler")
     }
-
-    // const links: string[] = [
-    //     'https://www.prestashop.com',
-    //     'https://www.prestashop.com/support/',
-    //     'https://www.prestashop.com/blog',
-    //     'https://www.prestashop.com/support',
-    //     'https://www.prestashop.com/about-us/',
-    //     'https://www.prestashop.com/contact/',
-    //     'https://www.prestashop.com/careers/',
-    //     'https://www.prestashop.com/contact',
-    //     'https://www.prestashop.com/blog/improve-customer-experience-retain-customers',
-    //     'https://www.prestashop.com/blog/ultimate-seo-checklist-for-prestashop',
-    //     'https://www.prestashop.com/blog/ecommerce-foresight-2022',
-    //     'https://www.prestashop.com/blog/marketing-actions-boost',
-    //     'https://www.prestashop.com/blog/customer-reviews-module',
-    //     'https://www.prestashop.com/blog/create-welcome-email-series-contacts',
-    //     'https://www.prestashop.com/blog/using-conversion-rate-optimization-to-boost-sales',
-    //     'https://www.prestashop.com/blog/reduce-size-weight-photos',
-    //     'https://www.prestashop.com/blog/best-practices-after-sales',
-    //     'https://www.prestashop.com/blog/importance-product-titles',
-    //     'https://www.prestashop.com/blog/bnpl-clearpay-ecommerce',
-    //     'https://www.prestashop.com/blog/boost-ecommerce-search',
-    //     'https://www.prestashop.com/blog/logistics',
-    //     'https://www.prestashop.com/blog/ecommerce-performance-potential',
-    //     'https://www.prestashop.com/blog/conversion-marketing-automation',
-    //     'https://www.prestashop.com/blog/local-seo-best-practices',
-    //     'https://www.prestashop.com/blog/amazon-ebay-prestashop',
-    //     'https://www.prestashop.com/blog/brand-story-through-storytelling',
-    //     'https://www.prestashop.com/blog/ecommerce-environmental-sustainability',
-    //     'https://www.prestashop.com/blog/ecommerce-kpi',
-    //     'https://www.prestashop.com/blog/search-engine-e-shop',
-    //     'https://www.prestashop.com/blog/404-not-found-error-how-to-fix-it'
-    // ];
 
     // @ts-ignore
     const exa = new Exa(process.env.EXA_API_KEY ?? '');

@@ -34,14 +34,18 @@ export async function workflow({ projectId, inputTopic }: { projectId: string; i
 
   const outline: Result<string,string> = await researcher(topic);
 
-  if(outline.isErr) return err(outline.error)
+  if(outline.isErr){
+    return err(outline.error)
+  }
 
   console.log("Outline: ", outline.value);
 
 
   const supabaseClient: Result<SupabaseClient,string> = getSupabaseClient();
 
-  if(supabaseClient.isErr) return err(supabaseClient.error);
+  if(supabaseClient.isErr){
+    return err(supabaseClient.error);
+  }
 
   const supabase= supabaseClient.value;
 
@@ -57,21 +61,27 @@ export async function workflow({ projectId, inputTopic }: { projectId: string; i
 
   const enrichedOutline: Result<string,string> = await outlineEnricher(enrichedURLs, outline.value);
 
-  if(enrichedOutline.isErr) return err(enrichedOutline.error)
+  if(enrichedOutline.isErr){
+    return err(enrichedOutline.error)
+  }
 
   console.log("Enriched outline: ", enrichedOutline.value);
 
 
   const article: Result<string,string> = await writer(enrichedOutline.value);
 
-  if(article.isErr) return err(article.error)
+  if(article.isErr){
+    return err(article.error)
+  }
 
   console.log("Article: ", article.value);
   
 
   const relatedQueries: Result<{ query: string }[],string> = await querySuggestor(topic);
 
-  if(relatedQueries.isErr) return err(relatedQueries.error)
+  if(relatedQueries.isErr){
+    return err(relatedQueries.error)
+  }
 
   return ok({answer: article.value, relatedQueries: relatedQueries.value});
 }

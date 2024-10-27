@@ -2,7 +2,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { Result } from "true-myth";
 import { err, ok } from "true-myth/result";
 
-const apikey: Result<string,string> = process.env.ANTHROPIC_API_KEY ? ok(process.env.ANTHROPIC_API_KEY) : err("Anthropic API key is not defined")
+const apikey: string | null = process.env.ANTHROPIC_API_KEY ?? null
 
 const DEFAULT_MAX_TOKENS_FOR_CLAUDE = 4000;
 
@@ -22,10 +22,12 @@ export async function getSimpleClaudeResponse(
 ): Promise<Result<string, string>> {
   try {
 
-    if(apikey.isErr) return err(apikey.error)
+    if(apikey==null){
+      return err("Anthropic API key is not defined")
+    }
       
     const anthropic = new Anthropic({
-      apiKey: apikey.value,
+      apiKey: apikey,
     });
 
     const msg = await anthropic.messages.create({

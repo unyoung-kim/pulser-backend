@@ -6,7 +6,7 @@ import { z } from "zod";
 
 export type GPT_MODEL = "gpt-4o" | "gpt-4o-mini";
 
-const apikey: Result<string,string> = process.env.OPENAI_API_KEY ? ok(process.env.OPENAI_API_KEY) : err("Open API key is not defined")
+const apikey: string | null = process.env.OPENAI_API_KEY ?? null
 
 /**
  * Use this when you want to get a structured output from gpt. Input the schema, and you'll
@@ -29,10 +29,12 @@ export async function getStructuredGptResponse<T extends z.ZodTypeAny>(
 ): Promise<Result<z.infer<T>, string>> {
   try {
 
-    if(apikey.isErr) return err(apikey.error);
+    if(apikey==null){
+      return err("Open API key is not defined");
+    }
 
     const openai = new OpenAI({
-      apiKey: apikey.value
+      apiKey: apikey
     });
 
     const completion = await openai.beta.chat.completions.parse({
@@ -74,10 +76,12 @@ export async function getSimpleGptResponse(
 ): Promise<Result<string, string>> {
   try {
 
-    if(apikey.isErr) return err(apikey.error);
+    if(apikey==null){
+      return err("Open API key is not defined");
+    }
     
     const openai = new OpenAI({
-      apiKey: apikey.value
+      apiKey: apikey
     });
 
     const completion = await openai.chat.completions.create({

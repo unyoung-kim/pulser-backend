@@ -2,13 +2,17 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js'
 import { err, ok, Result } from 'true-myth/result';
 
 export function getSupabaseClient(): Result<SupabaseClient,string>{
-    const supabaseURLResult: Result<string,string> = process.env.SUPABASE_URL ? ok(process.env.SUPABASE_URL) : err("Supabase URL is not defined");
-    const supabaseKeyResult: Result<string,string> = process.env.SUPABASE_KEY ? ok(process.env.SUPABASE_KEY) : err("Supabase Key is not defined");
+    const supabaseURL: string | null = process.env.SUPABASE_URL ?? null
+    const supabaseKey: string | null = process.env.SUPABASE_KEY ?? null;
 
-    if (supabaseURLResult.isErr) return err(supabaseURLResult.error);
-    if (supabaseKeyResult.isErr) return err(supabaseKeyResult.error); 
+    if (supabaseURL==null){
+        return err("Supabase URL is not defined");
+    }
+    if (supabaseKey==null){
+        return err("Supabase Key is not defined");
+    }
 
-    const supabaseClient: SupabaseClient = createClient(supabaseURLResult.value, supabaseKeyResult.value);
+    const supabaseClient: SupabaseClient = createClient(supabaseURL, supabaseKey);
 
     return ok(supabaseClient);
 }

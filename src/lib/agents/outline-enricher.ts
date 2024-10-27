@@ -12,7 +12,7 @@ const SYSTEM_PROMPT = `As a professional SEO blog writer, you will be given:
 1) a list of internal website URLs of a client along with a short summary of the corresponding web page
 2) a detailed outline for an SEO blog post to be written for that client.
 
-Your task is to enrich the outline with atleast around 4 to 5 internal URLs. 
+Your task is to enrich the outline with at least around 4 to 5 internal URLs. 
 The output will be used to write a blog post of length strictly more than 3000 words, so try to preserve the structure of the original outline while being as much detailed as possible.
 
 Make sure the internal links are embedded naturally with the right anchor text throughout the article.
