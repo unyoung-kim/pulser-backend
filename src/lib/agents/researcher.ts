@@ -61,6 +61,6 @@ export async function researcher(query: string): Promise<Result<string,string>> 
     return ok(result.text);
   } catch (error) {
     console.error("Error in researcher:", error);
-    return err("An error has occurred. Please try again.")
+    return err("An error has occured from the researcher")
   }
 }
