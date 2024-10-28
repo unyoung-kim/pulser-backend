@@ -30,7 +30,7 @@ export async function workflow({ projectId, inputTopic }: { projectId: string; i
 
   //
 
-  const topic = inputTopic ?? "Topic generated from topic generator"
+  const topic = inputTopic ?? "Topic generated from topic generator"  // Leaving it as it is for now as we still need to figure out how to generate keywords
 
   const outline: Result<string,string> = await researcher(topic);
 
