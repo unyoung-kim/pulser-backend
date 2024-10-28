@@ -6,11 +6,7 @@ import { writer } from "./agents/writer.js";
 import { outlineEnricher } from "./agents/outline-enricher.js";
 import { getSupabaseClient } from "./get-supabase-client.js";
 import { EnrichedURL } from "./enrich-internal-links.js";
-
-export interface WorkflowResult{
-  answer: string,
-  relatedQueries: { query: string }[]
-}
+import { postFormatter } from "./post-formatter.js";
 
 /**
  * Based on user query, generate a blog post
@@ -20,7 +16,7 @@ export interface WorkflowResult{
  * @param query
  * @returns
  */
-export async function workflow({ projectId, inputTopic }: { projectId: string; inputTopic?: string}): Promise<Result<WorkflowResult, string>> {
+export async function workflow({ projectId, inputTopic }: { projectId: string; inputTopic?: string}): Promise<Result<string, string>> {
   // const action = (await taskManager(query)) ?? { object: { next: 'proceed' } };
 
   // if (action.object.next === 'inquire') {
@@ -32,6 +28,7 @@ export async function workflow({ projectId, inputTopic }: { projectId: string; i
 
   const topic = inputTopic ?? "Topic generated from topic generator"
 
+  // Here researcher should take client details as input as well but keeping a single parameter for now for testing
   const outline: Result<string,string> = await researcher(topic);
 
   if(outline.isErr){
@@ -54,9 +51,9 @@ export async function workflow({ projectId, inputTopic }: { projectId: string; i
     .select('url,summary')
     .eq('project_id',projectId)
 
-    const enrichedURLs: EnrichedURL[] = (enrichedURLsResponse.data ?? []).map(item => ({
-      id: item.url,
-      summary: item.summary,
+  const enrichedURLs: EnrichedURL[] = (enrichedURLsResponse.data ?? []).map(item => ({
+    id: item.url,
+    summary: item.summary,
   }));
 
   const enrichedOutline: Result<string,string> = await outlineEnricher(enrichedURLs, outline.value);
@@ -83,5 +80,11 @@ export async function workflow({ projectId, inputTopic }: { projectId: string; i
     return err(relatedQueries.error)
   }
 
-  return ok({answer: article.value, relatedQueries: relatedQueries.value});
+  const finalPost: Result<string,string> = await postFormatter(`Topic: ${topic}\nArticle: ${article.value}\nRelated Topics: ${relatedQueries.value}`, 'HTML') 
+
+  if(finalPost.isErr){
+    return err(finalPost.error)
+  }
+
+  return ok(finalPost.value);
 }
