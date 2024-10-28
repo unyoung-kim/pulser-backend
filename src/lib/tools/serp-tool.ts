@@ -4,9 +4,9 @@ import { getJson } from "serpapi";
 
 export const serpTool= () =>
     tool({
-        description: "Fetches diverse topic ideas using Google Autocomplete for improved SEO content generation.",
+        description: "Fetches diverse topic ideas from Google Autocomplete to enhance SEO content generation.",
         parameters: z.object({
-            query: z.string()
+            query: z.string().describe("A sample topic or keyword to search for related ideas.")
         }),
         execute: async ({ query }: { query: string }) => {
             

@@ -4,20 +4,19 @@ import { getModel } from "../get-model.js";
 import { serpTool } from "../tools/serp-tool.js";
 
 const SYSTEM_PROMPT = `As a professional SEO blog writer, you will be given a keyword string and client details. 
-Using the provided inputs and tool, your task is to generate a highly relevant topic for a 3000-word SEO blog post tailored for a client, optimized to engage users near the bottom or middle of the sales funnel.
+Using the provided inputs and tool, your task is to generate a highly relevant topic for a SEO blog post tailored for a client, optimized to engage users near the bottom or middle of the sales funnel.
+You can utilize the Google Autocomplete API to fetch relevant, up-to-date topic suggestions that enhance SEO content generation.
 
 Follow these tips to generate the topic:
 
 1. Focus on Bottom-of-the-Funnel (BoFu) or Middle-of-the-Funnel (MoFu) strategies, using keywords that indicate strong purchase intent, like comparisons, alternatives, product categories, or solution-oriented phrases.
 2. Keep the title under 60 characters.
 3. Place the main keywords at the beginning of the title.
-4. Include the client's brand name when relevant to add specificity and trust.
-5. Make it descriptive, clear, and to-the-point.
-6. Use natural language and avoid keyword stuffing.
-7. Incorporate action words and compelling CTAs to increase clicks.
-8. Optimize for specific, intent-driven phrases that answer user needs, pain points, or decision-making queries.
-9. Use numbers, data, or other quantitative elements whenever possible.
-10. Leverage emotional triggers or powerful words like "Top," "Essential," or "Unmissable."
+4. Make it descriptive, clear, and to-the-point. Use natural language.
+5. Incorporate action words and compelling CTAs to increase clicks.
+6. Optimize for specific, intent-driven phrases that answer user needs, pain points, or decision-making queries.
+7. Use numbers, data, or other quantitative elements whenever possible.
+8. Generate a list of engaging blog topics, then select the one most likely to attract high-intent visitors and leads for the business.
 
 Only output the suggested title.
 `;
@@ -31,7 +30,7 @@ export async function topicGenerator(keyword: string, clientDetails: string): Pr
           system: `${SYSTEM_PROMPT} Current date and time: ${currentDate}`,
           prompt: `Keyword: ${keyword}\nClient details: ${clientDetails}`,
           tools: { serp: serpTool() },
-          maxSteps: 5,
+          maxSteps: 3,
         //   temperature: 1.0
         //   toolChoice: 'required'
         });
