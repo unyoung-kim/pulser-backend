@@ -26,6 +26,7 @@ export async function workflow({ projectId, inputTopic }: { projectId: string; i
 
   //
 
+  // Need to include topic generator here, currently just a text as keyword generator is not ready
   const topic = inputTopic ?? "Topic generated from topic generator"
 
   // Here researcher should take client details as input as well but keeping a single parameter for now for testing
@@ -80,11 +81,16 @@ export async function workflow({ projectId, inputTopic }: { projectId: string; i
     return err(relatedQueries.error)
   }
 
+  console.log("Related queries: ", relatedQueries.value);
+
+  
   const finalPost: Result<string,string> = await postFormatter(`Topic: ${topic}\nArticle: ${article.value}\nRelated Topics: ${relatedQueries.value}`, 'HTML') 
 
   if(finalPost.isErr){
     return err(finalPost.error)
   }
+
+  console.log(finalPost.value)
 
   return ok(finalPost.value);
 }
