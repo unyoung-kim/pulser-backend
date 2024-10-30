@@ -2,7 +2,7 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import { Result, err, ok } from "true-myth/result";
 import { outlineEnricher } from "./agents/outline-enricher.js";
 import { querySuggestor } from "./agents/query-suggestor.js";
-import { researcher } from "./agents/researcher.js";
+import { researcherSequential } from "./agents/researcher.js";
 import { writer } from "./agents/writer.js";
 import { EnrichedURL } from "./enrich-internal-links.js";
 import { getSupabaseClient } from "./get-supabase-client.js";
@@ -38,7 +38,7 @@ export async function workflow({
 
   const topic = inputTopic ?? "Topic generated from topic generator"; // Leaving it as it is for now as we still need to figure out how to generate keywords
 
-  const outline: Result<string, string> = await researcher(topic);
+  const outline: Result<string, string> = await researcherSequential(topic);
 
   if (outline.isErr) {
     return err(outline.error);

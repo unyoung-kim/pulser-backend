@@ -75,7 +75,7 @@ You possess the ability to search for any information on the web.
 
 Conduct a deep research on the topic. Then, come up with the initial outline of the blog post based on your research.
 
-For the outline, make sure each sections has all the relevant external links and images associated in the outline. Don't include any other text but the outline itself.
+For the outline, make sure each sections has all the relevant external links and images associated in the outline. Output the outline inside <outline> tags.
 
 Here are a few rules you must follow for the outline:
 
@@ -91,7 +91,7 @@ const FINAL_OUTLINE_PROMPT = `You will be given an outline of an SEO blog post.
 
 You possess the ability to search for any information on the web.
 
-Your task is to conduct further research on sub topics and enrich the outline by adding more details, images and links. Find where resources are lacking and conduct further research on those topics. Only return the outline with the additional research and don't include any explanation text about the task.
+Your task is to conduct further research on sub topics and enrich the outline by adding more details, images and links. Find where resources are lacking and conduct further research on those topics. Only return the outline with the additional research and don't include any explanation text about the task. Output the outline inside <outline> tags.
 
 Here are a few rules you must follow:
 
@@ -124,20 +124,16 @@ export async function researcherSequential(
       maxSteps: 3,
     });
 
-    console.log("firstOutline: ", JSON.stringify(firstOutline, null, 2));
-
     const detailedOutline = await generateText({
       model: getModel(),
       system: `${FINAL_OUTLINE_PROMPT} Current date and time: ${currentDate}`,
-      prompt: firstOutline.text,
+      prompt: `Initial query: ${query}\n\ Outline: ${firstOutline.text}`,
       tools: {
         subtopicSearch: searchSubTopicsTool(),
       },
       maxSteps: 3,
       temperature: 0,
     });
-
-    console.log("detailedOutline: ", JSON.stringify(detailedOutline, null, 2));
 
     return ok(detailedOutline.text);
   } catch (error) {
