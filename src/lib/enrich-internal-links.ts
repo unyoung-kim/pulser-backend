@@ -65,7 +65,7 @@ export async function enrichInternalLinks(projectId: string): Promise<Result<Enr
         summary: item.summary,
     }));
 
-    const { data, error: insertError } = await supabase
+    const { error: insertError } = await supabase
         .from('InternalLink')
         .insert(getEnrichedContents.map((enrichedURL: EnrichedURL) => ({
             org_id: orgId,
@@ -73,7 +73,6 @@ export async function enrichInternalLinks(projectId: string): Promise<Result<Enr
             url: enrichedURL.id,
             summary: enrichedURL.summary,
         })))
-        .select();
 
     if (insertError) {
         return err(`Error inserting internal links: ${insertError.message}`);
