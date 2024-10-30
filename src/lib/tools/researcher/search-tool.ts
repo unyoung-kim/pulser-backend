@@ -21,7 +21,7 @@ export const searchSubTopicsTool = () =>
     parameters: multiSearchSchema,
     execute: async ({
       queries,
-      max_results,
+      // max_results,
       search_depth,
       include_domains,
       exclude_domains,
@@ -30,7 +30,8 @@ export const searchSubTopicsTool = () =>
         queries.map(async (query) => {
           return await tavilySearch(
             query,
-            max_results,
+            3,
+            // max_results,
             "advanced",
             include_domains,
             exclude_domains
