@@ -45,7 +45,7 @@ export async function researcher(
       prompt: query,
       tools: getTools(),
       maxSteps: 10,
-      maxTokens: 7000,
+      maxTokens: 8000,
       // onStepFinish: async (event: {
       //   stepType: string;
       //   toolCalls?: any[];
@@ -122,6 +122,7 @@ export async function researcherSequential(
         // retrieve: retrieveTool(),
       },
       maxSteps: 3,
+      maxTokens: 8000
     });
 
     const detailedOutline = await generateText({
@@ -133,6 +134,7 @@ export async function researcherSequential(
       },
       maxSteps: 3,
       temperature: 0,
+      maxTokens: 8000
     });
 
     return ok(detailedOutline.text);

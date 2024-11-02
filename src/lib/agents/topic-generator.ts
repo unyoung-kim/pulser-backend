@@ -1,7 +1,7 @@
 import { Result, ok, err } from "true-myth/result";
 import { generateText } from "ai";
-import { getModel } from "../get-model.js";
 import { serpTool } from "../tools/serp-tool.js";
+import { openai } from "@ai-sdk/openai";
 
 const SYSTEM_PROMPT = `As a professional SEO blog writer, you will be given a keyword string and client details. 
 Using the provided inputs and tool, your task is to generate a highly relevant topic for a SEO blog post tailored for a client, optimized to engage users near the bottom or middle of the sales funnel.
@@ -26,7 +26,7 @@ export async function topicGenerator(keyword: string, clientDetails: string): Pr
         const currentDate = new Date().toLocaleString();
 
         const result = await generateText({
-          model: getModel(),
+          model: openai("gpt-4o"),
           system: `${SYSTEM_PROMPT} Current date and time: ${currentDate}`,
           prompt: `Keyword: ${keyword}\nClient details: ${clientDetails}`,
           tools: { serp: serpTool() },

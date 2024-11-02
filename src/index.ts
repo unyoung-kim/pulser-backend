@@ -10,6 +10,7 @@ import { createOpenApiDocument } from "./lib/generate-openapi-document.js";
 import swaggerUi from 'swagger-ui-express';
 import { createOpenApiExpressMiddleware } from 'trpc-openapi';
 import { trpcRouter } from "./trpcRouter.js";
+import rateLimit from "express-rate-limit";
 
 
 const PORT = process.env.PORT ?? 8000;
@@ -27,6 +28,18 @@ app.use(express.json()); // This should parse JSON request bodies
 dotenv.config();
 
 const openApiDocument = createOpenApiDocument(baseURL);
+
+// Set up rate limiting
+const apiRateLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 5, // Limit each IP to 5 requests per windowMs
+  message: {
+    error: "Too many requests, please try again later.",
+  },
+});
+
+// Apply rate limiting middleware globally to all routes
+app.use("/", apiRateLimiter);
 
 // Serve OpenAPI UI
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiDocument));
@@ -57,3 +70,49 @@ app.use(
 app.listen(PORT, () => {
   console.log(`💡 Server running on ${baseURL}`);
 });
+
+
+// Rate limiting based on different routes:
+
+// // Define rate limiters for specific route patterns
+// const rateLimiters = {
+//   "hello": rateLimit({
+//     windowMs: 60 * 1000, // 1 minute
+//     max: 10,
+//     message: { error: "Too many requests to hello route, please try again later." },
+//   }),
+//   "auth": rateLimit({
+//     windowMs: 60 * 1000, // 1 minute
+//     max: 5,
+//     message: { error: "Too many requests to auth routes, please try again later." },
+//   }),
+//   "create-post": rateLimit({
+//     windowMs: 60 * 1000, // 1 minute
+//     max: 3,
+//     message: { error: "Too many requests to create-post route, please try again later." },
+//   }),
+// };
+
+// // Middleware to dynamically apply rate limiting based on route pattern
+// const dynamicRateLimiter = (req, res, next) => {
+//   const path = req.path.split("/trpc/")[1]; // Get the tRPC route name
+//   const rateLimiter = Object.entries(rateLimiters).find(([key]) => path.startsWith(key));
+  
+//   if (rateLimiter) {
+//     // Apply the matched rate limiter
+//     rateLimiter[1](req, res, next);
+//   } else {
+//     // No rate limiter for this route, proceed to the next middleware
+//     next();
+//   }
+// };
+
+// // Apply the dynamic rate limiter middleware to the tRPC route
+// app.use(
+//   "/trpc",
+//   dynamicRateLimiter,
+//   trpcExpress.createExpressMiddleware({
+//     router: trpcRouter,
+//     createContext,
+//   })
+// );

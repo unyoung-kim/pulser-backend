@@ -1,12 +1,12 @@
 import { generateObject } from "ai";
-import { getModel } from "../get-model.js";
 import { relatedSchema } from "../schema/related.js";
 import { Result, ok, err } from "true-myth/result";
+import { openai } from "@ai-sdk/openai";
 
 export async function querySuggestor(query: string): Promise<Result<{ query: string; }[],string>> {
   try {
     const { object } = await generateObject({
-      model: getModel(),
+      model: openai("gpt-4o-mini"),
       system: `As a professional web researcher, your task is to generate a set of three queries that explore the subject matter more deeply, building upon the initial query and the information uncovered in its search results.
   
       For instance, if the original query was "Starship's third test flight key milestones", your output should follow this format:
