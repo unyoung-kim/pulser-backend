@@ -7,6 +7,7 @@ import { writer } from "./agents/writer.js";
 import { EnrichedURL } from "./enrich-internal-links.js";
 import { postFormatter } from "./post-formatter.js";
 import { getSupabaseClient } from "./get-supabase-client.js";
+import { extractFirstImageUrl } from "./utility/extractFirstImageUrl.js";
 
 /**
  * Based on user query, generate a blog post
@@ -99,6 +100,41 @@ export async function workflow({
   }
 
   console.log(finalPost.value)
+
+  const firstImageUrl = extractFirstImageUrl(finalPost.value);
+
+  console.log(firstImageUrl);
+
+  const { data: dataContentInsert, error: errorContentInsert } = await supabase
+        .from('Content')
+        .insert([{
+          "status": "draft",
+          "project_id": projectId,
+          "title": topic,
+          "image_url": firstImageUrl
+        },])
+        .select()
+
+  if (errorContentInsert) {
+    return err(`Error saving content: ${errorContentInsert.message}`);
+  }
+  
+  const id: string = dataContentInsert && dataContentInsert.length > 0 ? dataContentInsert[0].id : "";
+
+  if(id.length==0){
+    return err("Error fetching content id")
+  }
+
+  const { error: errorContentBodyInsert } = await supabase
+        .from('ContentBody')
+        .insert([{
+          "content_id": id,
+          "body": finalPost.value,
+        },])
+
+  if (errorContentBodyInsert) {
+    return err(`Error saving content body: ${errorContentBodyInsert.message}`);
+  }
 
   return ok(finalPost.value);
 }

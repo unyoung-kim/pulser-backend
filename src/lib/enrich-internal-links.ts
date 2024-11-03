@@ -38,7 +38,11 @@ export async function enrichInternalLinks(projectId: string): Promise<Result<Enr
     }
 
     const domain: string = Project && Project.length > 0 ? Project[0].domain : "";
-    const orgId: string = Project && Project.length > 0 ? Project[0].org_id : "";
+    // const orgId: string = Project && Project.length > 0 ? Project[0].org_id : "";
+
+    if (domain.length==0) {
+        return err("Error fetching domain/domain unavailable");
+    }
 
     const internalLinks: string[] = await crawlImportantInternalLinks(domain, 30);
 
@@ -68,7 +72,7 @@ export async function enrichInternalLinks(projectId: string): Promise<Result<Enr
     const { data, error: insertError } = await supabase
         .from('InternalLink')
         .insert(getEnrichedContents.map((enrichedURL: EnrichedURL) => ({
-            org_id: orgId,
+            // org_id: orgId,
             project_id: projectId,
             url: enrichedURL.id,
             summary: enrichedURL.summary,
