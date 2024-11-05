@@ -72,17 +72,14 @@ export async function enrichInternalLinks(
     })
   );
 
-  const { data, error: insertError } = await supabase
-    .from("InternalLink")
-    .insert(
-      getEnrichedContents.map((enrichedURL: EnrichedURL) => ({
-        // org_id: orgId,
-        project_id: projectId,
-        url: enrichedURL.id,
-        summary: enrichedURL.summary,
-      }))
-    )
-    .select();
+    const { error: insertError } = await supabase
+        .from('InternalLink')
+        .insert(getEnrichedContents.map((enrichedURL: EnrichedURL) => ({
+            // org_id: orgId,
+            project_id: projectId,
+            url: enrichedURL.id,
+            summary: enrichedURL.summary,
+        })))
 
   if (insertError) {
     return err(`Error inserting internal links: ${insertError.message}`);
