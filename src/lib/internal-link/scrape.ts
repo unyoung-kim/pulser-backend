@@ -1,6 +1,7 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
 import { Set as ImmutableSet } from "immutable"; // Import Immutable.js Set
+import * as puppeteer from "puppeteer";
 import { URL } from "url";
 
 // Define the patterns you want to scrape
@@ -131,7 +132,7 @@ export async function crawlImportantInternalLinks(
   limit: number
 ): Promise<string[]> {
   // Immutable way: reassigning `visited` after every operation
-  const visited = await crawl(
+  const visited = await crawlWithPuppeteer(
     `https://${domain}`,
     domain,
     ImmutableSet<string>()
@@ -180,6 +181,16 @@ async function crawl(
     const $ = cheerio.load(html);
     const links: string[] = [];
 
+    const element = $(".css-1xiconc");
+    // Find all <a> tags inside the selected element
+    const lis = element.find("a");
+
+    // Loop through each <a> tag found and get its href attribute and text
+    lis.each((index, link) => {
+      const href = $(link).attr("href");
+      const text = $(link).text();
+      console.log(`Link ${index + 1}:`, { href, text });
+    });
     $("a").each((_, element) => {
       const href = $(element).attr("href");
       if (href) {
@@ -246,6 +257,73 @@ function sortUrlsByDepth(urls: string[]): string[] {
   return urls.sort((a, b) => calculateDepth(a) - calculateDepth(b));
 }
 
-// Usage example
-// const ans = await crawlImportantInternalLinks("drinkag1.com", 100);
+/**
+ * Cheerio loads only the static HTML of the page, so we need to use Puppeteer to load the dynamic HTML.
+ * @param url
+ * @param domain
+ * @param visited
+ * @returns
+ */
+async function crawlWithPuppeteer(
+  url: string,
+  domain: string,
+  visited: ImmutableSet<string> = ImmutableSet<string>()
+): Promise<ImmutableSet<string>> {
+  // Normalize the URL to `https` and check if it has already been visited
+  url = normalizeUrl(url);
+  if (visited.has(url) || shouldBeExcludedUrl(url)) {
+    return visited;
+  }
+
+  try {
+    visited = visited.add(url); // Add to the immutable set
+
+    // Launch a headless browser with Puppeteer
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+
+    // Navigate to the URL and wait for the page to load
+    await page.goto(url, { waitUntil: "networkidle2" });
+
+    // Get the full rendered HTML after JavaScript has executed
+    const html = await page.content();
+
+    // Load the HTML into Cheerio
+    const $ = cheerio.load(html);
+
+    // Close the browser
+    await browser.close();
+
+    const links: string[] = [];
+
+    // Find all <a> tags and extract URLs
+    $("a").each((_, element) => {
+      const href = $(element).attr("href");
+      if (href) {
+        const fullUrl = resolveUrl(url, href, domain);
+        if (
+          fullUrl &&
+          !visited.has(fullUrl) &&
+          fullUrl.includes(domain) &&
+          isKeyUrl(fullUrl)
+        ) {
+          links.push(normalizeUrl(fullUrl));
+        }
+      }
+    });
+
+    for (const link of links) {
+      visited = await crawl(link, domain, visited);
+    }
+
+    return visited;
+  } catch (error) {
+    console.error(`Failed to crawl ${url}: ${error}`);
+    return visited;
+  }
+}
+
+// console.log("Starting to crawling...");
+// // Usage example
+// const ans = await crawlImportantInternalLinks("www.wearetenet.com", 100);
 // console.log("ANS: ", ans); // Print the final array of crawled URLs
