@@ -32,7 +32,7 @@ const openApiDocument = createOpenApiDocument(baseURL);
 // Set up rate limiting
 const apiRateLimiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute
-  max: 5, // Limit each IP to 5 requests per windowMs
+  max: Number(process.env.MAX_REQUEST_PER_MINUTE_FOR_INTERNAL_APIS) ?? 3, // Setting it to 3 per IP as post generation takes atleast 30 seconds
   message: {
     error: "Too many requests, please try again later.",
   },
