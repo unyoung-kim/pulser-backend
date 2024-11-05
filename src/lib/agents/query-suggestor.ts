@@ -1,5 +1,4 @@
 import { generateObject } from "ai";
-import { getModel } from "../get-model.js";
 import { relatedSchema } from "../schema/related.js";
 import { Result, ok, err } from "true-myth/result";
 import { openai } from "@ai-sdk/openai";

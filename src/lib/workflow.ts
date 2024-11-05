@@ -12,27 +12,27 @@ import { extractFirstImageUrl } from "./utility/extractFirstImageUrl.js";
 
 
 const throttledResearcherSequential = pThrottle({
-  limit: 2, // Number of calls allowed per interval
+  limit: Number(process.env.MAX_CONCURRENT_CALL_TO_CALUDE_LLM) ?? 2, // Number of calls allowed per interval
   interval: 1000, // Interval in milliseconds
 })(researcherSequential);
 
 const throttledOutlineEnricher = pThrottle({
-  limit: 2,
+  limit: Number(process.env.MAX_CONCURRENT_CALL_TO_CALUDE_LLM) ?? 2,
   interval: 1000,
 })(outlineEnricher);
 
 const throttledWriter = pThrottle({
-  limit: 2,
+  limit: Number(process.env.MAX_CONCURRENT_CALL_TO_CALUDE_LLM) ?? 2,
   interval: 1000,
 })(writer);
 
 const throttledQuerySuggestor = pThrottle({
-  limit: 5,
+  limit: Number(process.env.MAX_CONCURRENT_CALL_TO_OPENAI_LLM) ?? 5,
   interval: 1000,
 })(querySuggestor);
 
 const throttledPostFormatter = pThrottle({
-  limit: 5,
+  limit: Number(process.env.MAX_CONCURRENT_CALL_TO_OPENAI_LLM) ?? 5,
   interval: 1000,
 })(postFormatter);
 
