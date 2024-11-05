@@ -1,16 +1,40 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Result, err, ok } from "true-myth/result";
+import pThrottle from 'p-throttle';
 import { outlineEnricher } from "./agents/outline-enricher.js";
 import { querySuggestor } from "./agents/query-suggestor.js";
 import { researcherSequential } from "./agents/researcher.js";
 import { writer } from "./agents/writer.js";
 import { EnrichedURL } from "./enrich-internal-links.js";
+import { postFormatter } from "./post-formatter.js";
 import { getSupabaseClient } from "./get-supabase-client.js";
+import { extractFirstImageUrl } from "./utility/extractFirstImageUrl.js";
 
-export interface WorkflowResult {
-  answer: string;
-  relatedQueries: { query: string }[];
-}
+
+const throttledResearcherSequential = pThrottle({
+  limit: 2, // Number of calls allowed per interval
+  interval: 1000, // Interval in milliseconds
+})(researcherSequential);
+
+const throttledOutlineEnricher = pThrottle({
+  limit: 2,
+  interval: 1000,
+})(outlineEnricher);
+
+const throttledWriter = pThrottle({
+  limit: 2,
+  interval: 1000,
+})(writer);
+
+const throttledQuerySuggestor = pThrottle({
+  limit: 5,
+  interval: 1000,
+})(querySuggestor);
+
+const throttledPostFormatter = pThrottle({
+  limit: 5,
+  interval: 1000,
+})(postFormatter);
 
 /**
  * Based on user query, generate a blog post
@@ -26,7 +50,7 @@ export async function workflow({
 }: {
   projectId: string;
   inputTopic?: string;
-}): Promise<Result<WorkflowResult, string>> {
+}): Promise<Result<string, string>> {
   // const action = (await taskManager(query)) ?? { object: { next: 'proceed' } };
 
   // if (action.object.next === 'inquire') {
@@ -38,7 +62,8 @@ export async function workflow({
 
   const topic = inputTopic ?? "Topic generated from topic generator"; // Leaving it as it is for now as we still need to figure out how to generate keywords
 
-  const outline: Result<string, string> = await researcherSequential(topic);
+  // Here researcher should take client details as input as well but keeping a single parameter for now for testing
+  const outline: Result<string, string> = await throttledResearcherSequential(topic);
 
   if (outline.isErr) {
     return err(outline.error);
@@ -66,7 +91,7 @@ export async function workflow({
     })
   );
 
-  const enrichedOutline: Result<string, string> = await outlineEnricher(
+  const enrichedOutline: Result<string, string> = await throttledOutlineEnricher(
     enrichedURLs,
     outline.value
   );
@@ -77,7 +102,7 @@ export async function workflow({
 
   console.log("Enriched outline: ", enrichedOutline.value);
 
-  const article: Result<string, string> = await writer(enrichedOutline.value);
+  const article: Result<string, string> = await throttledWriter(enrichedOutline.value);
 
   if (article.isErr) {
     return err(article.error);
@@ -85,12 +110,57 @@ export async function workflow({
 
   console.log("Article: ", article.value);
 
-  const relatedQueries: Result<{ query: string }[], string> =
-    await querySuggestor(topic);
+  const relatedQueries: Result<{ query: string }[], string> = await throttledQuerySuggestor(topic);
 
   if (relatedQueries.isErr) {
     return err(relatedQueries.error);
   }
 
-  return ok({ answer: article.value, relatedQueries: relatedQueries.value });
+  console.log("Related queries: ", relatedQueries.value);
+
+  
+  const finalPost: Result<string,string> = await throttledPostFormatter(`Topic: ${topic}\nArticle: ${article.value}\nRelated Topics: ${relatedQueries.value}`, 'HTML') 
+
+  if(finalPost.isErr){
+    return err(finalPost.error)
+  }
+
+  console.log(finalPost.value)
+
+  const firstImageUrl = extractFirstImageUrl(finalPost.value);
+
+  console.log(firstImageUrl);
+
+  const { data: dataContentInsert, error: errorContentInsert } = await supabase
+        .from('Content')
+        .insert([{
+          "status": "draft",
+          "project_id": projectId,
+          "title": topic,
+          "image_url": firstImageUrl
+        },])
+        .select()
+
+  if (errorContentInsert) {
+    return err(`Error saving content: ${errorContentInsert.message}`);
+  }
+  
+  const id: string | null = dataContentInsert?.at(0)?.id ?? null;
+
+  if(id==null || id.length==0){
+    return err("Error fetching content id")
+  }
+
+  const { error: errorContentBodyInsert } = await supabase
+        .from('ContentBody')
+        .insert([{
+          "content_id": id,
+          "body": finalPost.value,
+        },])
+
+  if (errorContentBodyInsert) {
+    return err(`Error saving content body: ${errorContentBodyInsert.message}`);
+  }
+
+  return ok(finalPost.value);
 }
