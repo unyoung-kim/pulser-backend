@@ -2,7 +2,7 @@ import { z } from "zod";
 import { Result } from "true-myth/result";
 import { tRPC } from "../lib/trpc.js";
 import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
-import { workflow, WorkflowResult } from "../lib/workflow.js";
+import { workflow } from "../lib/workflow.js";
 
 export function webRetrievalHandler(t: tRPC, path: string) {
   return (
@@ -25,7 +25,7 @@ export function webRetrievalHandler(t: tRPC, path: string) {
       .output(ApiResponseSchema)
       .mutation(async ({ input }) => {
         try {
-          const result: Result<WorkflowResult,string> = await workflow(input);
+          const result: Result<string,string> = await workflow(input);
           if(result.isErr){
             return {
               success: false,
