@@ -149,12 +149,19 @@ function shouldBeExcludedUrl(url: string): boolean {
   return excludPatterns.some((pattern) => url.includes(pattern));
 }
 
-// Function to normalize URLs by converting `http` to `https`
+// Function to normalize URLs by converting `http` to `https` and remove trailing slash
 function normalizeUrl(url: string): string {
-  if (url.startsWith("http://")) {
-    return url.replace("http://", "https://");
-  }
-  return url;
+  const secureUrl = url.startsWith("http://")
+    ? url.replace("http://", "https://")
+    : url;
+
+  // Remove trailing slash unless it's the root URL
+  const trimmedUrl = secureUrl.endsWith("/")
+    ? secureUrl.slice(0, -1)
+    : secureUrl;
+
+  // Convert to lowercase
+  return trimmedUrl;
 }
 
 // Function to crawl a page + gather all links matching key patterns
@@ -222,7 +229,9 @@ async function crawl(
 function resolveUrl(base: string, href: string, domain: string): string | null {
   try {
     const fullUrl = new URL(href, base).href;
-    return fullUrl.includes(domain) ? fullUrl : null;
+    return fullUrl.startsWith("https") && fullUrl.includes(domain)
+      ? fullUrl
+      : null;
   } catch (e) {
     return null; // Ignore invalid URLs
   }
@@ -304,8 +313,9 @@ async function crawlWithPuppeteer(
         if (
           fullUrl &&
           !visited.has(fullUrl) &&
-          fullUrl.includes(domain) &&
-          isKeyUrl(fullUrl)
+          fullUrl.includes(domain)
+          // &&
+          // isKeyUrl(fullUrl)
         ) {
           links.push(normalizeUrl(fullUrl));
         }
@@ -324,6 +334,6 @@ async function crawlWithPuppeteer(
 }
 
 // console.log("Starting to crawling...");
-// // Usage example
-// const ans = await crawlImportantInternalLinks("www.wearetenet.com", 100);
-// console.log("ANS: ", ans); // Print the final array of crawled URLs
+// Usage example
+const ans = await crawlImportantInternalLinks("wearetenet.com", 100);
+console.log("ANS: ", ans); // Print the final array of crawled URLs
