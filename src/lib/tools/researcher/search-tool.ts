@@ -26,18 +26,21 @@ export const searchSubTopicsTool = () =>
       include_domains,
       exclude_domains,
     }) => {
-      return await Promise.all(
-        queries.map(async (query) => {
-          return await tavilySearch(
-            query,
-            3,
-            // max_results,
-            "advanced",
-            include_domains,
-            exclude_domains
-          );
-        })
-      );
+      try {
+        return await Promise.all(
+          queries.map(async (query) => {
+            return await tavilySearch(
+              query,
+              3,  // max_results,
+              "advanced",
+              include_domains,
+              exclude_domains
+            );
+          })
+        );
+      } catch (error) {
+        throw new Error(`Search sub-topic tool error: ${error}`);
+      }
     },
   });
 
@@ -103,13 +106,7 @@ export const searchTool = () =>
           );
         }
       } catch (error) {
-        console.error("Search API error:", error);
-        searchResult = {
-          results: [],
-          query: query,
-          images: [],
-          number_of_results: 0,
-        };
+        throw new Error(`Search tool error: ${error}`);
       }
       return searchResult;
     },

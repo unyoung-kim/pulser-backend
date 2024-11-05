@@ -25,7 +25,7 @@ export async function outlineEnricher(enrichedURLs: EnrichedURL[], outline: stri
       model: getModel(),
       system: `${SYSTEM_PROMPT} Current date and time: ${currentDate}`,
       prompt: `Enriched URLs: ${enrichedURLs}\nOutline: ${outline}`,
-      maxTokens: 7000,
+      maxTokens: 8000,
     });
 
     console.log("Result: ", result);

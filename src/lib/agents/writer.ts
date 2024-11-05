@@ -25,7 +25,7 @@ export async function writer(outline: string): Promise<Result<string, string>> {
       model: getModel(),
       system: `${SYSTEM_PROMPT} Current date and time: ${currentDate}`,
       prompt: outline,
-      maxTokens: 9000,
+      maxTokens: 8000,
     });
 
     console.log("Result: ", result);

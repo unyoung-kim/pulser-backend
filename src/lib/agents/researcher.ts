@@ -6,6 +6,7 @@ import {
   searchSubTopicsTool,
   searchTool,
 } from "../tools/researcher/search-tool.js";
+import { videoSearchTool } from "../tools/outline-enricher/video-search.js";
 
 // const SYSTEM_PROMPT = `As a professional search expert, you possess the ability to search for any information on the web.
 // For each user query, utilize the search results to their fullest potential to provide additional information and assistance in your response.
@@ -45,7 +46,7 @@ export async function researcher(
       prompt: query,
       tools: getTools(),
       maxSteps: 10,
-      maxTokens: 7000,
+      maxTokens: 8000,
       // onStepFinish: async (event: {
       //   stepType: string;
       //   toolCalls?: any[];
@@ -116,9 +117,11 @@ export async function researcherSequential(
       prompt: query,
       tools: {
         search: searchTool(),
+        videoSearch: videoSearchTool()
         // retrieve: retrieveTool(),
       },
       maxSteps: 3,
+      maxTokens: 8000
     });
 
     const detailedOutline = await generateText({
@@ -127,9 +130,11 @@ export async function researcherSequential(
       prompt: `Initial query: ${query}\n\ Outline: ${firstOutline.text}`,
       tools: {
         subtopicSearch: searchSubTopicsTool(),
+        videoSearch: videoSearchTool()
       },
       maxSteps: 3,
       temperature: 0,
+      maxTokens: 8000
     });
 
     return ok(detailedOutline.text);

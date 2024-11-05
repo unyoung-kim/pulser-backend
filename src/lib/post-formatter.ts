@@ -14,7 +14,8 @@ Please ensure:
 - Maintain a consistent structure throughout the document.
 - Don't provide heading/title in the output, just the body.
 - Include a table of content, along with the corresponding text in the header (using <h3> tag), in the top section just below the main image.
-- Ensure that videos are embedded correctly in the output format.`;
+- Ensure that videos are embedded correctly in the output format.
+Just output the formatted result without any new lines or other special characters.`;
 
 export async function postFormatter(post: string, format: string): Promise<Result<string,string>>{
 
