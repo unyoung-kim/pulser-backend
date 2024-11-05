@@ -145,9 +145,9 @@ export async function workflow({
     return err(`Error saving content: ${errorContentInsert.message}`);
   }
   
-  const id: string = dataContentInsert && dataContentInsert.length > 0 ? dataContentInsert[0].id : "";
+  const id: string | null = dataContentInsert?.at(0)?.id ?? null;
 
-  if(id.length==0){
+  if(id==null || id.length==0){
     return err("Error fetching content id")
   }
 
