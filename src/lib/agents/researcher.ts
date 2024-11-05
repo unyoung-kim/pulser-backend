@@ -78,29 +78,26 @@ Conduct a deep research on the topic. Then, come up with the initial outline of 
 For the outline, make sure each sections has all the relevant external links and images associated in the outline. Output the outline inside <outline> tags.
 
 Here are a few rules you must follow for the outline:
-
-  1) Provide sufficient number of sections, sub-sections, images and links in the outline for a very long blog post.
-  2) Make sure to provide a strong hook, intro to the blog post. The introduction should provide value instantly and mention about the pain point of the audience.
-  3) Use the client details provided in the input and web search results to promote client and its business/service in the blog post by following the Problem - Agitation - Solution copy writing framework. It's important that you generally follow and embed this flow but not explicitly mention it.
-  4) The outline should contain a main image below the title. 
-  5) If relevant, make sure to compare and contrast products and services.
-  6) For each section, add actual images and as many real links from the research in the format of [Link: ...] and [Image: ...]
-`;
+1) Provide sufficient number of sections, sub-sections, images, and links in the outline for a very long blog post.
+2) Make sure to provide a strong hook, intro to the blog post. The introduction should provide value instantly and mention about the pain point of the audience.
+3) Use the client details provided in the input and web search results to promote client and its business/service in the blog post by following the Problem - Agitation - Solution copy writing framework. It's important that you generally follow and embed this flow but not explicitly mention it.
+4) The outline should contain a main image below the title. 
+5) If relevant, make sure to compare and contrast products and services.
+6) For each section, add actual images and as many real links from the research in the format of [Link: ...] and [Image: ...]
+7) Additionally, include relevant videos wherever applicable from the research in the format of [Video: ...].`;
 
 const FINAL_OUTLINE_PROMPT = `You will be given an outline of an SEO blog post.
 
 You possess the ability to search for any information on the web.
 
-Your task is to conduct further research on sub topics and enrich the outline by adding more details, images and links. Find where resources are lacking and conduct further research on those topics. Only return the outline with the additional research and don't include any explanation text about the task. Output the outline inside <outline> tags.
+Your task is to conduct further research on subtopics and enrich the outline by adding more details, images, videos, and links. Find where resources are lacking and conduct further research on those topics. Only return the outline with the additional research and don't include any explanation text about the task. Output the outline inside <outline> tags.
 
 Here are a few rules you must follow:
-
-1) Make sure introduction has multiple links. The introduction should provide value instantly and mention about the pain point of the audience. Make sure when conducting research to find some unique insight about the topic like a quote, statistic, or a surprising fact and add it to the outline with the link.
+1) Make sure the introduction has multiple links. The introduction should provide value instantly and mention about the pain point of the audience. Make sure when conducting research to find some unique insight about the topic like a quote, statistic, or a surprising fact and add it to the outline with the link.
 2) The outline should follow the Problem - Agitation - Solution copy writing framework. It's important that you generally follow and embed this flow but not explicitly mention it.
 3) Make sure to add images and links for subtopics that lack them in the given outline. You will be rewarded extra points for having multiple links per subtopic.
-4) Preserve all of images and links previously provided in the outline. If you have found detailed and useful information, enrich the outline with it. 
-5) Return a full outline with all the sections, sub-sections, images and links without any ommissions from the given outline.
-`;
+4) Preserve all of the images, videos, and links previously provided in the outline. If you have found detailed and useful information, enrich the outline with it. 
+5) Return a full outline with all the sections, sub-sections, images, videos, and links without any omissions from the given outline.`;
 
 /**
  * This is a sequential approach to the researcher agent. This is a more deterministic approach and it also preserves more information from the initial research.
