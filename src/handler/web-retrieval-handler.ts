@@ -19,7 +19,8 @@ export function webRetrievalHandler(t: tRPC, path: string) {
       .input(
         z.object({
           projectId: z.string().describe('Id of the project or which blog post needs to be generated'),
-          inputTopic: z.string().optional().describe('The blog topic')
+          inputTopic: z.string().optional().describe('The blog topic'),
+          keyword: z.string().optional().describe('Keyword to be used to generate the blog post topic'),
         })
       )
       .output(ApiResponseSchema)

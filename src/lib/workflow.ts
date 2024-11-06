@@ -1,6 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js";
-import { Result, err, ok } from "true-myth/result";
-import pThrottle from 'p-throttle';
+import { Result, err, isOk, ok } from "true-myth/result";
+import pThrottle from "p-throttle";
 import { outlineEnricher } from "./agents/outline-enricher.js";
 import { querySuggestor } from "./agents/query-suggestor.js";
 import { researcherSequential } from "./agents/researcher.js";
@@ -9,30 +9,38 @@ import { EnrichedURL } from "./enrich-internal-links.js";
 import { postFormatter } from "./post-formatter.js";
 import { getSupabaseClient } from "./get-supabase-client.js";
 import { extractFirstImageUrl } from "./utility/extractFirstImageUrl.js";
+import { topicGenerator } from "./agents/topic-generator.js";
 
+const maxConcurrentCallToClaudeLLM: number = 2;
+const maxConcurrentCallToOpenAILLM: number = 4;
+
+const throttledTopicGenerator = pThrottle({
+  limit: maxConcurrentCallToOpenAILLM,
+  interval: 1000,
+})(topicGenerator);
 
 const throttledResearcherSequential = pThrottle({
-  limit: Number(process.env.MAX_CONCURRENT_CALL_TO_CALUDE_LLM) ?? 2, // Number of calls allowed per interval
+  limit: maxConcurrentCallToClaudeLLM, // Number of calls allowed per interval
   interval: 1000, // Interval in milliseconds
 })(researcherSequential);
 
 const throttledOutlineEnricher = pThrottle({
-  limit: Number(process.env.MAX_CONCURRENT_CALL_TO_CALUDE_LLM) ?? 2,
+  limit: maxConcurrentCallToClaudeLLM,
   interval: 1000,
 })(outlineEnricher);
 
 const throttledWriter = pThrottle({
-  limit: Number(process.env.MAX_CONCURRENT_CALL_TO_CALUDE_LLM) ?? 2,
+  limit: maxConcurrentCallToClaudeLLM,
   interval: 1000,
 })(writer);
 
 const throttledQuerySuggestor = pThrottle({
-  limit: Number(process.env.MAX_CONCURRENT_CALL_TO_OPENAI_LLM) ?? 5,
+  limit: maxConcurrentCallToOpenAILLM,
   interval: 1000,
 })(querySuggestor);
 
 const throttledPostFormatter = pThrottle({
-  limit: Number(process.env.MAX_CONCURRENT_CALL_TO_OPENAI_LLM) ?? 5,
+  limit: maxConcurrentCallToOpenAILLM,
   interval: 1000,
 })(postFormatter);
 
@@ -47,9 +55,11 @@ const throttledPostFormatter = pThrottle({
 export async function workflow({
   projectId,
   inputTopic,
+  keyword,
 }: {
   projectId: string;
   inputTopic?: string;
+  keyword?: string;
 }): Promise<Result<string, string>> {
   // const action = (await taskManager(query)) ?? { object: { next: 'proceed' } };
 
@@ -60,17 +70,6 @@ export async function workflow({
 
   //
 
-  const topic = inputTopic ?? "Topic generated from topic generator"; // Leaving it as it is for now as we still need to figure out how to generate keywords
-
-  // Here researcher should take client details as input as well but keeping a single parameter for now for testing
-  const outline: Result<string, string> = await throttledResearcherSequential(topic);
-
-  if (outline.isErr) {
-    return err(outline.error);
-  }
-
-  console.log("Outline: ", outline.value);
-
   const supabaseClient: Result<SupabaseClient, string> = getSupabaseClient();
 
   if (supabaseClient.isErr) {
@@ -78,6 +77,61 @@ export async function workflow({
   }
 
   const supabase = supabaseClient.value;
+
+  const { data: clientDetailsResponse, error: clientDetailsError } =
+    await supabase
+      .from("Project")
+      .select("name,domain,background")
+      .eq("id", projectId);
+
+  if (clientDetailsError) {
+    return err(`Error fetching client details: ${clientDetailsError.message}`);
+  }
+
+  const clientName: string | null = clientDetailsResponse?.at(0)?.name ?? null;
+  const clientDomain: string | null =
+    clientDetailsResponse?.at(0)?.domain ?? null;
+  const clientBackground: string | null =
+    clientDetailsResponse?.at(0)?.background ?? null;
+
+  const { data: clientKeywords, error: clientKeywordsError } = await supabase
+    .from("Keyword")
+    .select("keyword")
+    .eq("project_id", projectId);
+
+  if (clientKeywordsError) {
+    return err(`Error fetching client details: ${clientKeywordsError.message}`);
+  }
+
+  const clientKeywordsList: { keyword: string }[] = clientKeywords ?? [];
+
+  const clientDetails = `Client name: ${clientName}\nClient domain: ${clientDomain}\nClient background: ${clientBackground}\nClient keywords: ${clientKeywordsList}`;
+
+  let topic = null;
+  if (inputTopic) {
+    topic = inputTopic;
+  } else if (keyword) {
+    const generatedTopic: Result<string, string> =
+      await throttledTopicGenerator(keyword, clientDetails);
+    if (generatedTopic.isErr) {
+      return err("Error in topic generation");
+    } else {
+      topic = generatedTopic.value;
+    }
+  } else {
+    return err("Kindly provide topic/keyword for blog post generation");
+  }
+
+  const outline: Result<string, string> = await throttledResearcherSequential(
+    topic,
+    clientDetails
+  );
+
+  if (outline.isErr) {
+    return err(outline.error);
+  }
+
+  console.log("Outline: ", outline.value);
 
   const enrichedURLsResponse = await supabase
     .from("InternalLink")
@@ -91,10 +145,8 @@ export async function workflow({
     })
   );
 
-  const enrichedOutline: Result<string, string> = await throttledOutlineEnricher(
-    enrichedURLs,
-    outline.value
-  );
+  const enrichedOutline: Result<string, string> =
+    await throttledOutlineEnricher(enrichedURLs, outline.value);
 
   if (enrichedOutline.isErr) {
     return err(enrichedOutline.error);
@@ -102,7 +154,9 @@ export async function workflow({
 
   console.log("Enriched outline: ", enrichedOutline.value);
 
-  const article: Result<string, string> = await throttledWriter(enrichedOutline.value);
+  const article: Result<string, string> = await throttledWriter(
+    enrichedOutline.value
+  );
 
   if (article.isErr) {
     return err(article.error);
@@ -110,7 +164,10 @@ export async function workflow({
 
   console.log("Article: ", article.value);
 
-  const relatedQueries: Result<{ query: string }[], string> = await throttledQuerySuggestor(topic);
+  const relatedQueries: Result<{ query: string }[], string> =
+    await throttledQuerySuggestor(
+      `${clientDetails}\nBlog Topic for client: ${topic}`
+    );
 
   if (relatedQueries.isErr) {
     return err(relatedQueries.error);
@@ -118,45 +175,51 @@ export async function workflow({
 
   console.log("Related queries: ", relatedQueries.value);
 
-  
-  const finalPost: Result<string,string> = await throttledPostFormatter(`Topic: ${topic}\nArticle: ${article.value}\nRelated Topics: ${relatedQueries.value}`, 'HTML') 
+  const finalPost: Result<string, string> = await throttledPostFormatter(
+    `Topic: ${topic}\nArticle: ${article.value}\nRelated Topics: ${relatedQueries.value}`,
+    "HTML"
+  );
 
-  if(finalPost.isErr){
-    return err(finalPost.error)
+  if (finalPost.isErr) {
+    return err(finalPost.error);
   }
 
-  console.log(finalPost.value)
+  console.log(finalPost.value);
 
   const firstImageUrl = extractFirstImageUrl(finalPost.value);
 
   console.log(firstImageUrl);
 
   const { data: dataContentInsert, error: errorContentInsert } = await supabase
-        .from('Content')
-        .insert([{
-          "status": "draft",
-          "project_id": projectId,
-          "title": topic,
-          "image_url": firstImageUrl
-        },])
-        .select()
+    .from("Content")
+    .insert([
+      {
+        status: "draft",
+        project_id: projectId,
+        title: topic,
+        image_url: firstImageUrl,
+      },
+    ])
+    .select();
 
   if (errorContentInsert) {
     return err(`Error saving content: ${errorContentInsert.message}`);
   }
-  
+
   const id: string | null = dataContentInsert?.at(0)?.id ?? null;
 
-  if(id==null || id.length==0){
-    return err("Error fetching content id")
+  if (id == null || id.length == 0) {
+    return err("Error fetching content id");
   }
 
   const { error: errorContentBodyInsert } = await supabase
-        .from('ContentBody')
-        .insert([{
-          "content_id": id,
-          "body": finalPost.value,
-        },])
+    .from("ContentBody")
+    .insert([
+      {
+        content_id: id,
+        body: finalPost.value,
+      },
+    ]);
 
   if (errorContentBodyInsert) {
     return err(`Error saving content body: ${errorContentBodyInsert.message}`);

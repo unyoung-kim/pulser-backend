@@ -21,7 +21,7 @@ Follow these tips to generate the topic:
 Only output the suggested title.
 `;
 
-export async function topicGenerator(keyword: string, clientDetails: string): Promise<Result<any,string>> {
+export async function topicGenerator(keyword: string, clientDetails: string): Promise<Result<string,string>> {
     try {
         const currentDate = new Date().toLocaleString();
 

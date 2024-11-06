@@ -13,7 +13,7 @@ Please ensure:
 - Lists are formatted as ordered or unordered lists where applicable.
 - Maintain a consistent structure throughout the document.
 - Don't provide heading/title in the output, just the body.
-- Include a table of content, along with the corresponding text in the header(using <h3> tag), in the top section just below the main image.
+- Include a table of contents (using the <ul> tag) with corresponding headers (using <h3> tags) placed in the top section, just below the main image. Ensure that the table of contents does not repeat numbering if sections or subsections are already numbered. Instead, use appropriate nested lists for subsections and apply correct numbering where necessary. Avoid using bullet points (•) in sections that have numbered items.
 Just output the formatted result without any new lines or other special characters.
 `;
 
