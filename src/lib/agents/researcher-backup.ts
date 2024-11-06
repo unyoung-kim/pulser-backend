@@ -1,6 +1,6 @@
-import { generateText } from 'ai'
-import { getTools } from '../tools/get-tools.js'
-import { getModel } from '../get-model.js'
+import { generateText } from "ai";
+import { getTools } from "../tools/researcher/get-tools.js";
+import { getModel } from "../get-model.js";
 
 const SYSTEM_PROMPT = `Persona:
 You are a professional search expert with access to real-time web search capabilities. Your task is to efficiently gather relevant information, links, and images that align with the client’s needs and the blog topic.
@@ -22,14 +22,11 @@ Identify and return URLs of images that are visually relevant to the topic, alon
 
 Search Guidelines:
 1. Ensure that the search results and images align with the target keywords and focus areas provided in the blog topic.
-2. Prioritize credible, high-authority sources and avoid low-quality or spammy links`
-
-
+2. Prioritize credible, high-authority sources and avoid low-quality or spammy links`;
 
 export async function researcherBackup(query: string) {
   try {
-
-    const currentDate = new Date().toLocaleString()
+    const currentDate = new Date().toLocaleString();
     const result = await generateText({
       model: getModel(),
       maxTokens: 3000,
@@ -37,17 +34,19 @@ export async function researcherBackup(query: string) {
       prompt: query,
       tools: getTools(),
       maxSteps: 10,
-    })
-    console.log("research backup called")
-    const initialStep = result.steps.find(step => step.stepType === 'initial');
+    });
+    console.log("research backup called");
+    const initialStep = result.steps.find(
+      (step) => step.stepType === "initial"
+    );
     const images = initialStep?.toolResults[0]?.result.images || [];
     const results = initialStep?.toolResults[0]?.result.results || [];
 
-    return { text: result.text, images, results }
+    return { text: result.text, images, results };
   } catch (error) {
-    console.error('Error in researcher:', error)
+    console.error("Error in researcher:", error);
     return {
-      text: 'An error has occurred. Please try again.',
-    }
+      text: "An error has occurred. Please try again.",
+    };
   }
 }
