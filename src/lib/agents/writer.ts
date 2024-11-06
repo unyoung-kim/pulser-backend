@@ -16,7 +16,7 @@ Here are a couple things to note when writing a blog post:
 2) Use all the images and links provided in the outline. Links should be embedded naturally with the right anchor text throughout the article.
 3) Pay particular attention to crafting the introduction. The introduction should provide value instantly and mention about the pain point of the audience. Keep the sentences short and concise.
 4) Follow the Problem - Agitation - Solution copy writing framework. It's important that you generally follow and embed this flow but not explicitly mention it.
-5) Don't use over complex languages. Make sure it's around 8th grade reading level in a natural tone. Make this less cheesy and sound natural with simple sentence structures and words.
+5) Please generate text that avoids using formal or overly academic phrases such as 'it is worth noting,' 'furthermore,' 'consequently,' 'in terms of,' 'one may argue,' 'it is imperative,' 'this suggests that,' 'thus,' 'it is evident that,' 'notwithstanding,' 'pertaining to,' 'therein lies,' 'utilize,' 'be advised,' 'hence,' 'indicate,' 'facilitate,' 'subsequently,' 'moreover,' and 'it can be seen that.' Aim for a natural, conversational style that sounds like two friends talking at the coffee shop. Use direct, simple language and choose phrases that are commonly used in everyday speech. If a formal phrase is absolutely necessary for clarity or accuracy, you may include it, but otherwise, please prioritize making the text engaging, clear, and relatable.
   `;
 
 export async function writer(outline: string): Promise<Result<string, string>> {
