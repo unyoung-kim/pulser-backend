@@ -11,33 +11,36 @@ import { getSupabaseClient } from "./get-supabase-client.js";
 import { extractFirstImageUrl } from "./utility/extractFirstImageUrl.js";
 import { topicGenerator } from "./agents/topic-generator.js";
 
+const maxConcurrentCallToClaudeLLM: number = 2;
+const maxConcurrentCallToOpenAILLM: number = 4;
+
 const throttledTopicGenerator = pThrottle({
-  limit: Number(process.env.MAX_CONCURRENT_CALL_TO_OPENAI_LLM) || 4,
+  limit: maxConcurrentCallToOpenAILLM,
   interval: 1000,
 })(topicGenerator);
 
 const throttledResearcherSequential = pThrottle({
-  limit: Number(process.env.MAX_CONCURRENT_CALL_TO_CALUDE_LLM) || 2, // Number of calls allowed per interval
+  limit: maxConcurrentCallToClaudeLLM, // Number of calls allowed per interval
   interval: 1000, // Interval in milliseconds
 })(researcherSequential);
 
 const throttledOutlineEnricher = pThrottle({
-  limit: Number(process.env.MAX_CONCURRENT_CALL_TO_CALUDE_LLM) || 2,
+  limit: maxConcurrentCallToClaudeLLM,
   interval: 1000,
 })(outlineEnricher);
 
 const throttledWriter = pThrottle({
-  limit: Number(process.env.MAX_CONCURRENT_CALL_TO_CALUDE_LLM) || 2,
+  limit: maxConcurrentCallToClaudeLLM,
   interval: 1000,
 })(writer);
 
 const throttledQuerySuggestor = pThrottle({
-  limit: Number(process.env.MAX_CONCURRENT_CALL_TO_OPENAI_LLM) || 4,
+  limit: maxConcurrentCallToOpenAILLM,
   interval: 1000,
 })(querySuggestor);
 
 const throttledPostFormatter = pThrottle({
-  limit: Number(process.env.MAX_CONCURRENT_CALL_TO_OPENAI_LLM) || 4,
+  limit: maxConcurrentCallToOpenAILLM,
   interval: 1000,
 })(postFormatter);
 
@@ -75,18 +78,21 @@ export async function workflow({
 
   const supabase = supabaseClient.value;
 
-  const { data: clientDetailsResponse, error: clientDetailsError } = await supabase
-    .from("Project")
-    .select("name,domain,background")
-    .eq("id", projectId);
+  const { data: clientDetailsResponse, error: clientDetailsError } =
+    await supabase
+      .from("Project")
+      .select("name,domain,background")
+      .eq("id", projectId);
 
   if (clientDetailsError) {
     return err(`Error fetching client details: ${clientDetailsError.message}`);
   }
 
   const clientName: string | null = clientDetailsResponse?.at(0)?.name ?? null;
-  const clientDomain: string | null = clientDetailsResponse?.at(0)?.domain ?? null;
-  const clientBackground: string | null = clientDetailsResponse?.at(0)?.background ?? null;
+  const clientDomain: string | null =
+    clientDetailsResponse?.at(0)?.domain ?? null;
+  const clientBackground: string | null =
+    clientDetailsResponse?.at(0)?.background ?? null;
 
   const { data: clientKeywords, error: clientKeywordsError } = await supabase
     .from("Keyword")
@@ -97,28 +103,28 @@ export async function workflow({
     return err(`Error fetching client details: ${clientKeywordsError.message}`);
   }
 
-  const clientKeywordsList: {keyword: string}[] = clientKeywords ?? [];
+  const clientKeywordsList: { keyword: string }[] = clientKeywords ?? [];
 
-  const clientDetails = `Client name: ${clientName}\nClient domain: ${clientDomain}\nClient background: ${clientBackground}\nClient keywords: ${clientKeywordsList}`
+  const clientDetails = `Client name: ${clientName}\nClient domain: ${clientDomain}\nClient background: ${clientBackground}\nClient keywords: ${clientKeywordsList}`;
 
-  let topic=null
-  if(inputTopic){
-    topic=inputTopic
-  }
-  else if(keyword){
-    const generatedTopic: Result<string,string> = await throttledTopicGenerator(keyword,clientDetails)
-    if(generatedTopic.isErr){
-      return err("Error in topic generation")
-    }else{
-      topic=generatedTopic.value
+  let topic = null;
+  if (inputTopic) {
+    topic = inputTopic;
+  } else if (keyword) {
+    const generatedTopic: Result<string, string> =
+      await throttledTopicGenerator(keyword, clientDetails);
+    if (generatedTopic.isErr) {
+      return err("Error in topic generation");
+    } else {
+      topic = generatedTopic.value;
     }
-  }
-  else{
-    return err("Kindly provide topic/keyword for blog post generation")
+  } else {
+    return err("Kindly provide topic/keyword for blog post generation");
   }
 
   const outline: Result<string, string> = await throttledResearcherSequential(
-    topic, clientDetails
+    topic,
+    clientDetails
   );
 
   if (outline.isErr) {
@@ -159,7 +165,9 @@ export async function workflow({
   console.log("Article: ", article.value);
 
   const relatedQueries: Result<{ query: string }[], string> =
-    await throttledQuerySuggestor(`${clientDetails}\nBlog Topic for client: ${topic}`);
+    await throttledQuerySuggestor(
+      `${clientDetails}\nBlog Topic for client: ${topic}`
+    );
 
   if (relatedQueries.isErr) {
     return err(relatedQueries.error);

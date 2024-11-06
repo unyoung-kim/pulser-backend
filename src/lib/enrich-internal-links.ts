@@ -19,8 +19,10 @@ interface ExaResponseItem {
   summary: string; // Adjust the type as necessary
 }
 
+const maxConcurrentCallToExa: number = 4;
+
 export const throttledEnrichInternalLinks = pThrottle({
-    limit: Number(process.env.MAX_CONCURRENT_CALL_TO_EXA) || 4,
+    limit: maxConcurrentCallToExa,
     interval: 1000, // Interval in milliseconds
   })(enrichInternalLinks);
 
