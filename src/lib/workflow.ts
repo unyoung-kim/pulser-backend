@@ -11,6 +11,11 @@ import { getSupabaseClient } from "./get-supabase-client.js";
 import { extractFirstImageUrl } from "./utility/extractFirstImageUrl.js";
 import { topicGenerator } from "./agents/topic-generator.js";
 
+const throttledTopicGenerator = pThrottle({
+  limit: Number(process.env.MAX_CONCURRENT_CALL_TO_OPENAI_LLM) || 4,
+  interval: 1000,
+})(topicGenerator);
+
 const throttledResearcherSequential = pThrottle({
   limit: Number(process.env.MAX_CONCURRENT_CALL_TO_CALUDE_LLM) || 2, // Number of calls allowed per interval
   interval: 1000, // Interval in milliseconds
@@ -27,12 +32,12 @@ const throttledWriter = pThrottle({
 })(writer);
 
 const throttledQuerySuggestor = pThrottle({
-  limit: Number(process.env.MAX_CONCURRENT_CALL_TO_OPENAI_LLM) || 5,
+  limit: Number(process.env.MAX_CONCURRENT_CALL_TO_OPENAI_LLM) || 4,
   interval: 1000,
 })(querySuggestor);
 
 const throttledPostFormatter = pThrottle({
-  limit: Number(process.env.MAX_CONCURRENT_CALL_TO_OPENAI_LLM) || 5,
+  limit: Number(process.env.MAX_CONCURRENT_CALL_TO_OPENAI_LLM) || 4,
   interval: 1000,
 })(postFormatter);
 
@@ -92,7 +97,7 @@ export async function workflow({
     return err(`Error fetching client details: ${clientKeywordsError.message}`);
   }
 
-  const clientKeywordsList: {keyword: string}[] | null = clientKeywords ?? [];
+  const clientKeywordsList: {keyword: string}[] = clientKeywords ?? [];
 
   const clientDetails = `Client name: ${clientName}\nClient domain: ${clientDomain}\nClient background: ${clientBackground}\nClient keywords: ${clientKeywordsList}`
 
@@ -101,7 +106,7 @@ export async function workflow({
     topic=inputTopic
   }
   else if(keyword){
-    const generatedTopic: Result<string,string> = await topicGenerator(keyword,clientDetails)
+    const generatedTopic: Result<string,string> = await throttledTopicGenerator(keyword,clientDetails)
     if(generatedTopic.isErr){
       return err("Error in topic generation")
     }else{
