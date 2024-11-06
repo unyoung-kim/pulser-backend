@@ -3,6 +3,7 @@ import { crawlImportantInternalLinks } from "./internal-link/scrape.js";
 import Exa from "exa-js";
 import { err, ok, Result } from "true-myth/result";
 import { getSupabaseClient } from "./get-supabase-client.js";
+import pThrottle from "p-throttle";
 
 // Define the interface for enriched URL
 export interface EnrichedURL {
@@ -17,6 +18,11 @@ interface ExaResponseItem {
   id: string; // Adjust the type as necessary
   summary: string; // Adjust the type as necessary
 }
+
+export const throttledEnrichInternalLinks = pThrottle({
+    limit: Number(process.env.MAX_CONCURRENT_CALL_TO_EXA) || 4,
+    interval: 1000, // Interval in milliseconds
+  })(enrichInternalLinks);
 
 export async function enrichInternalLinks(
   projectId: string
