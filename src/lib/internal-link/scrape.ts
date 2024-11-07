@@ -335,5 +335,5 @@ async function crawlWithPuppeteer(
 
 // console.log("Starting to crawling...");
 // Usage example
-const ans = await crawlImportantInternalLinks("wearetenet.com", 100);
-console.log("ANS: ", ans); // Print the final array of crawled URLs
+// const ans = await crawlImportantInternalLinks("wearetenet.com", 100);
+// console.log("ANS: ", ans); // Print the final array of crawled URLs
