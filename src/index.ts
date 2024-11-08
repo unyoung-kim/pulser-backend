@@ -7,21 +7,28 @@ import express from "express";
 import helmet from "helmet";
 import { createContext } from "./context.js";
 import { createOpenApiDocument } from "./lib/generate-openapi-document.js";
-import swaggerUi from 'swagger-ui-express';
-import { createOpenApiExpressMiddleware } from 'trpc-openapi';
+import swaggerUi from "swagger-ui-express";
+import { createOpenApiExpressMiddleware } from "trpc-openapi";
 import { trpcRouter } from "./trpcRouter.js";
 import rateLimit from "express-rate-limit";
-
 
 const PORT = process.env.PORT ?? 8000;
 export const baseURL = process.env.BASE_URL ?? `http://localhost:${PORT}`;
 
-
 // Initialize Express app
 const app = express();
 
+// app.set("trust proxy", true);
+
 // Express middlewares
-app.use(cors());
+app.use(
+  cors({
+    origin: "*", // or specify allowed origins
+    methods: ["GET", "POST", "PUT", "DELETE"], // allowed methods
+    allowedHeaders: ["Content-Type", "Authorization"], // allowed headers
+    credentials: true, // if you need to allow credentials
+  })
+);
 app.use(helmet());
 app.use(express.json()); // This should parse JSON request bodies
 
@@ -29,7 +36,7 @@ dotenv.config();
 
 const openApiDocument = createOpenApiDocument(baseURL);
 
-const maxRequestPerMinuteForInternalAPIs: number=5
+const maxRequestPerMinuteForInternalAPIs: number = 5;
 
 // Set up rate limiting
 const apiRateLimiter = rateLimit({
@@ -73,7 +80,6 @@ app.listen(PORT, () => {
   console.log(`💡 Server running on ${baseURL}`);
 });
 
-
 // Rate limiting based on different routes:
 
 // // Define rate limiters for specific route patterns
@@ -99,7 +105,7 @@ app.listen(PORT, () => {
 // const dynamicRateLimiter = (req, res, next) => {
 //   const path = req.path.split("/trpc/")[1]; // Get the tRPC route name
 //   const rateLimiter = Object.entries(rateLimiters).find(([key]) => path.startsWith(key));
-  
+
 //   if (rateLimiter) {
 //     // Apply the matched rate limiter
 //     rateLimiter[1](req, res, next);

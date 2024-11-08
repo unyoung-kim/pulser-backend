@@ -190,6 +190,27 @@ export async function workflow({
 
   console.log(firstImageUrl);
 
+  const { data: dataKeywordInsert, error: errorKeywordInsert } = await supabase
+    .from("Keyword")
+    .insert([
+      {
+        project_id: projectId,
+        keyword: keyword,
+        source: "USER_UPLOADED",
+      },
+    ])
+    .select();
+
+  if (errorKeywordInsert) {
+    return err(`Error in saving keyword: ${errorKeywordInsert.message}`);
+  }
+
+  const keywordId: string | null = dataKeywordInsert?.at(0)?.id ?? null;
+
+  if (keywordId == null || keywordId.length == 0) {
+    return err("Error fetching keyword id");
+  }
+
   const { data: dataContentInsert, error: errorContentInsert } = await supabase
     .from("Content")
     .insert([
@@ -198,6 +219,7 @@ export async function workflow({
         project_id: projectId,
         title: topic,
         image_url: firstImageUrl,
+        keyword_id: keywordId,
       },
     ])
     .select();
