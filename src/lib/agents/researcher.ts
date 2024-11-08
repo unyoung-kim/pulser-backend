@@ -106,7 +106,8 @@ Here are a few rules you must follow:
  * @returns
  */
 export async function researcherSequential(
-  query: string
+  topic: string,
+  clientDetails: string
 ): Promise<Result<string, string>> {
   try {
     const currentDate = new Date().toLocaleString();
@@ -114,7 +115,7 @@ export async function researcherSequential(
     const firstOutline = await generateText({
       model: getModel(),
       system: `${INITIAL_OUTLINE_PROMPT} Current date and time: ${currentDate}`,
-      prompt: query,
+      prompt: `Topic: ${topic}\nClient Details: ${clientDetails}`,
       tools: {
         search: searchTool(),
         videoSearch: videoSearchTool()
@@ -127,7 +128,7 @@ export async function researcherSequential(
     const detailedOutline = await generateText({
       model: getModel(),
       system: `${FINAL_OUTLINE_PROMPT} Current date and time: ${currentDate}`,
-      prompt: `Initial query: ${query}\n\ Outline: ${firstOutline.text}`,
+      prompt: `Initial Topic: ${topic}\nClient Details: ${clientDetails}\n\ Outline: ${firstOutline.text}`,
       tools: {
         subtopicSearch: searchSubTopicsTool(),
         videoSearch: videoSearchTool()

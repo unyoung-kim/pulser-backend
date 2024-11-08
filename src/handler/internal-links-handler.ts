@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { Result } from 'true-myth/result';
 import { tRPC } from "../lib/trpc.js";
-import { EnrichedURL, enrichInternalLinks }  from "../lib/enrich-internal-links.js"
+import { EnrichedURL, throttledEnrichInternalLinks }  from "../lib/enrich-internal-links.js"
 import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
 
 export function internalLinksHandler(t: tRPC, endpoint: string){
@@ -22,7 +22,7 @@ export function internalLinksHandler(t: tRPC, endpoint: string){
         .output(ApiResponseSchema)
         .mutation(async ({ input }) => {
             try {  
-                const result: Result<EnrichedURL[],string> = await enrichInternalLinks(input.projectId);
+                const result: Result<EnrichedURL[],string> = await throttledEnrichInternalLinks(input.projectId);
                 if(result.isErr){
                     return {
                         success: false,
