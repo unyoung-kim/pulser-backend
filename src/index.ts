@@ -23,15 +23,15 @@ const app = express();
 // }
 
 // Express middlewares
-app.use(cors());
-// app.use(
-//   cors({
-//     origin: "*", // or specify allowed origins
-//     methods: ["GET", "POST", "PUT", "DELETE"], // allowed methods
-//     allowedHeaders: ["Content-Type", "Authorization"], // allowed headers
-//     credentials: true, // if you need to allow credentials
-//   })
-// );
+// app.use(cors());
+app.use(
+  cors({
+    origin: "*", // or specify allowed origins
+    methods: ["GET", "POST", "PUT", "DELETE"], // allowed methods
+    allowedHeaders: ["Content-Type", "Authorization"], // allowed headers
+    credentials: true, // if you need to allow credentials
+  })
+);
 app.use(helmet());
 app.use(express.json()); // This should parse JSON request bodies
 
