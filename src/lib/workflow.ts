@@ -81,7 +81,7 @@ export async function workflow({
   const { data: clientDetailsResponse, error: clientDetailsError } =
     await supabase
       .from("Project")
-      .select("name,domain,background")
+      .select("name,domain,background,description")
       .eq("id", projectId);
 
   if (clientDetailsError) {
@@ -93,19 +93,10 @@ export async function workflow({
     clientDetailsResponse?.at(0)?.domain ?? null;
   const clientBackground: string | null =
     clientDetailsResponse?.at(0)?.background ?? null;
+  const clientProjectDescription: string | null =
+    clientDetailsResponse?.at(0)?.description ?? null;
 
-  const { data: clientKeywords, error: clientKeywordsError } = await supabase
-    .from("Keyword")
-    .select("keyword")
-    .eq("project_id", projectId);
-
-  if (clientKeywordsError) {
-    return err(`Error fetching client details: ${clientKeywordsError.message}`);
-  }
-
-  const clientKeywordsList: { keyword: string }[] = clientKeywords ?? [];
-
-  const clientDetails = `Client name: ${clientName}\nClient domain: ${clientDomain}\nClient background: ${clientBackground}\nClient keywords: ${clientKeywordsList}`;
+  const clientDetails = `Client name: ${clientName}\nClient domain: ${clientDomain}\nClient background: ${clientBackground}\nClient's Project description: ${clientProjectDescription}`;
 
   let topic = null;
   if (inputTopic) {
@@ -173,7 +164,7 @@ export async function workflow({
     return err(relatedQueries.error);
   }
 
-  console.log("Related queries: ", relatedQueries.value);
+  // console.log("Related queries: ", relatedQueries.value);
 
   const finalPost: Result<string, string> = await throttledPostFormatter(
     `Topic: ${topic}\nArticle: ${article.value}\nRelated Topics: ${relatedQueries.value}`,
@@ -184,31 +175,34 @@ export async function workflow({
     return err(finalPost.error);
   }
 
-  console.log(finalPost.value);
+  console.log("Final post: " + finalPost.value);
 
   const firstImageUrl = extractFirstImageUrl(finalPost.value);
 
-  console.log(firstImageUrl);
+  let keywordId = null;
 
-  const { data: dataKeywordInsert, error: errorKeywordInsert } = await supabase
-    .from("Keyword")
-    .insert([
-      {
-        project_id: projectId,
-        keyword: keyword,
-        source: "USER_UPLOADED",
-      },
-    ])
-    .select();
+  if (keyword) {
+    const { data: dataKeywordInsert, error: errorKeywordInsert } =
+      await supabase
+        .from("Keyword")
+        .insert([
+          {
+            project_id: projectId,
+            keyword: keyword,
+            source: "USER_UPLOADED",
+          },
+        ])
+        .select();
 
-  if (errorKeywordInsert) {
-    return err(`Error in saving keyword: ${errorKeywordInsert.message}`);
-  }
+    if (errorKeywordInsert) {
+      return err(`Error in saving keyword: ${errorKeywordInsert.message}`);
+    }
 
-  const keywordId: string | null = dataKeywordInsert?.at(0)?.id ?? null;
+    keywordId = dataKeywordInsert?.at(0)?.id ?? null;
 
-  if (keywordId == null || keywordId.length == 0) {
-    return err("Error fetching keyword id");
+    if (keywordId == null || keywordId.length == 0) {
+      return err("Error fetching keyword id");
+    }
   }
 
   const { data: dataContentInsert, error: errorContentInsert } = await supabase

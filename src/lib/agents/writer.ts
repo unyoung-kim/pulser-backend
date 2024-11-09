@@ -1,6 +1,7 @@
 import { generateText } from "ai";
 import { Result, err, ok } from "true-myth/result";
 import { getModel } from "../get-model.js";
+import { openai } from "@ai-sdk/openai";
 
 // const SYSTEM_PROMPT = `As a professional search expert, you possess the ability to search for any information on the web.
 // For each user query, utilize the search results to their fullest potential to provide additional information and assistance in your response.
@@ -24,13 +25,11 @@ export async function writer(outline: string): Promise<Result<string, string>> {
   try {
     const currentDate = new Date().toLocaleString();
     const result = await generateText({
-      model: getModel(),
+      model: openai("gpt-4o"),
       system: `${SYSTEM_PROMPT} Current date and time: ${currentDate}`,
       prompt: outline,
       maxTokens: 8000,
     });
-
-    console.log("Result: ", result);
 
     return ok(result.text);
   } catch (error) {

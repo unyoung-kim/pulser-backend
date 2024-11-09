@@ -123,19 +123,19 @@ export async function researcherSequential(
         // retrieve: retrieveTool(),
       },
       maxSteps: 3,
-      maxTokens: 8000
+      maxTokens: 8000,
     });
 
     const detailedOutline = await generateText({
       model: getModel(),
       system: `${FINAL_OUTLINE_PROMPT} Current date and time: ${currentDate}`,
-      prompt: `Initial Topic: ${topic}\nClient Details: ${clientDetails}\n\ Outline: ${firstOutline.text}`,
+      prompt: `Initial Topic: ${topic}\nClient Details: ${clientDetails}\nOutline: ${firstOutline.text}`,
       tools: {
         subtopicSearch: searchSubTopicsTool(),
       },
       maxSteps: 3,
       temperature: 0,
-      maxTokens: 8000
+      maxTokens: 8000,
     });
 
     return ok(detailedOutline.text);
