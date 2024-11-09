@@ -21,26 +21,26 @@ Follow these tips to generate the topic:
 Only output the suggested title.
 `;
 
-export async function topicGenerator(keyword: string, clientDetails: string): Promise<Result<string,string>> {
-    try {
-        const currentDate = new Date().toLocaleString();
+export async function topicGenerator(
+  keyword: string,
+  clientDetails: string
+): Promise<Result<string, string>> {
+  try {
+    const currentDate = new Date().toLocaleString();
 
-        const result = await generateText({
-          model: openai("gpt-4o"),
-          system: `${SYSTEM_PROMPT} Current date and time: ${currentDate}`,
-          prompt: `Keyword: ${keyword}\nClient details: ${clientDetails}`,
-          tools: { serp: serpTool() },
-          maxSteps: 3,
-        //   temperature: 1.0
-        //   toolChoice: 'required'
-        });
-    
-        console.log("Result: ", result);
-    
-        return ok(result.text);
-    } 
-    catch (error) {
-        console.error("Error in topic generator:", error);
-        return err("An error has occured from the topic generator")
-    }
+    const result = await generateText({
+      model: openai("gpt-4o"),
+      system: `${SYSTEM_PROMPT} Current date and time: ${currentDate}`,
+      prompt: `Keyword: ${keyword}\nClient details: ${clientDetails}`,
+      tools: { serp: serpTool() },
+      maxSteps: 3,
+      //   temperature: 1.0
+      //   toolChoice: 'required'
+    });
+
+    return ok(result.text);
+  } catch (error) {
+    console.error("Error in topic generator:", error);
+    return err("An error has occured from the topic generator");
+  }
 }

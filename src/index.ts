@@ -18,7 +18,9 @@ export const baseURL = process.env.BASE_URL ?? `http://localhost:${PORT}`;
 // Initialize Express app
 const app = express();
 
-// app.set("trust proxy", true);
+// if (process.env.NODE_ENV === "production") {
+//   app.set("trust proxy", true); // Trust all proxies in production
+// }
 
 // Express middlewares
 app.use(

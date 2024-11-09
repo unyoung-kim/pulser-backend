@@ -18,7 +18,10 @@ The output will be used to write a blog post of length strictly more than 3000 w
 Make sure the internal links are embedded naturally with the right anchor text throughout the article.
   `;
 
-export async function outlineEnricher(enrichedURLs: EnrichedURL[], outline: string): Promise<Result<string,string>> {
+export async function outlineEnricher(
+  enrichedURLs: EnrichedURL[],
+  outline: string
+): Promise<Result<string, string>> {
   try {
     const currentDate = new Date().toLocaleString();
     const result = await generateText({
@@ -28,11 +31,9 @@ export async function outlineEnricher(enrichedURLs: EnrichedURL[], outline: stri
       maxTokens: 8000,
     });
 
-    console.log("Result: ", result);
-
     return ok(result.text);
   } catch (error) {
     console.error("Error in outline enricher:", error);
-    return err("An error has occured from the outline enricher")
+    return err("An error has occured from the outline enricher");
   }
 }
