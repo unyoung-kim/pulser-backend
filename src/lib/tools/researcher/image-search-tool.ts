@@ -1,6 +1,6 @@
-import { z } from "zod";
 import { tool } from "ai";
 import { getJson } from "serpapi";
+import { z } from "zod";
 
 export const serpImageSearch = async (query: string) => {
   const apikey = process.env.SERP_API_KEY;
@@ -25,7 +25,7 @@ export const serpImageSearch = async (query: string) => {
       }))
   );
   return result.images_results
-    .slice(0, 5)
+    .slice(0, 25)
     .map(({ title, original }: { title: string; original: string }) => ({
       image_url: original,
       image_title: title,

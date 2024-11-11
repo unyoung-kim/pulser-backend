@@ -26,12 +26,13 @@ export const searchSubTopicsTool = () =>
       include_domains,
       exclude_domains,
     }) => {
+      console.log("QUERIES: ", queries);
       try {
         return await Promise.all(
           queries.map(async (query) => {
             return await tavilySearch(
               query,
-              3,  // max_results,
+              3, // max_results,
               "advanced",
               include_domains,
               exclude_domains
@@ -114,7 +115,7 @@ export const searchTool = () =>
 
 async function tavilySearch(
   query: string,
-  maxResults: number = 10,
+  maxResults: number = 5,
   searchDepth: "basic" | "advanced" = "basic",
   includeDomains: string[] = [],
   excludeDomains: string[] = []

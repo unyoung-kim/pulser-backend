@@ -84,6 +84,23 @@ export function getModel(useSubModel = false) {
   return openai("gpt-4o");
 }
 
+export function getGPT4o() {
+  const openaiApiBase = process.env.OPENAI_API_BASE;
+  const openaiApiKey = process.env.OPENAI_API_KEY;
+  // Fallback to OpenAI instead
+  const openai = createOpenAI({
+    baseURL: openaiApiBase, // optional base URL for proxies etc.
+    apiKey: openaiApiKey, // optional API key, default to env property OPENAI_API_KEY
+    organization: "", // optional organization
+  });
+
+  return openai("gpt-4o");
+}
+
+export function getCaludeSonnet() {
+  return anthropic("claude-3-5-sonnet-20240620");
+}
+
 /**
  * Sanitizes a URL by replacing spaces with '%20'
  * @param url - The URL to sanitize

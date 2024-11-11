@@ -15,14 +15,14 @@ export const serpVideoSearch = async (query: string) => {
   }
   console.log(
     result.video_results
-      .slice(0, 5)
+      .slice(0, 10)
       .map(({ title, link }: { title: string; link: string }) => ({
         title,
         link,
       }))
   );
   return result.video_results
-    .slice(0, 5)
+    .slice(0, 10)
     .map(({ title, link }: { title: string; link: string }) => ({
       title,
       link,
