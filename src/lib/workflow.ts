@@ -182,26 +182,41 @@ export async function workflow({
   let keywordId = null;
 
   if (keyword) {
-    const { data: dataKeywordInsert, error: errorKeywordInsert } =
-      await supabase
-        .from("Keyword")
-        .insert([
-          {
-            project_id: projectId,
-            keyword: keyword,
-            source: "USER_UPLOADED",
-          },
-        ])
-        .select();
+    let { data: selectedKeyword, error: errorSelectingKeyword } = await supabase
+      .from("Keyword")
+      .select("id")
+      .eq("keyword", keyword);
 
-    if (errorKeywordInsert) {
-      return err(`Error in saving keyword: ${errorKeywordInsert.message}`);
+    if (errorSelectingKeyword) {
+      return err(
+        `Error in selecting keyword: ${errorSelectingKeyword.message}`
+      );
     }
 
-    keywordId = dataKeywordInsert?.at(0)?.id ?? null;
+    if (selectedKeyword && selectedKeyword.length > 0) {
+      keywordId = selectedKeyword.at(0)?.id;
+    } else {
+      const { data: dataKeywordInsert, error: errorKeywordInsert } =
+        await supabase
+          .from("Keyword")
+          .insert([
+            {
+              project_id: projectId,
+              keyword: keyword,
+              source: "USER_UPLOADED",
+            },
+          ])
+          .select();
 
-    if (keywordId == null || keywordId.length == 0) {
-      return err("Error fetching keyword id");
+      if (errorKeywordInsert) {
+        return err(`Error in saving keyword: ${errorKeywordInsert.message}`);
+      }
+
+      keywordId = dataKeywordInsert?.at(0)?.id ?? null;
+
+      if (keywordId == null || keywordId.length == 0) {
+        return err("Error fetching keyword id");
+      }
     }
   }
 
