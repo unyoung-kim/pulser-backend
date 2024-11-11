@@ -4,7 +4,9 @@ import { wordpressAuthHandler } from "./handler/wordpress-auth-handler.js";
 import { wordpressTokenHandler } from "./handler/wordpress-token-handler.js";
 import { createPostHandler } from "./handler/wordpress-post-creation.js";
 import { webRetrievalHandler } from "./handler/web-retrieval-handler.js";
-import { internalLinksHandler } from "./handler/internal-links-handler.js"
+import { internalLinksHandler } from "./handler/internal-links-handler.js";
+import { imageSearchHandler } from "./handler/image-search-handler.js";
+import { videoSearchHandler } from "./handler/video-search-handler.js";
 
 /**
  * tRPC routers from here
@@ -14,10 +16,18 @@ import { internalLinksHandler } from "./handler/internal-links-handler.js"
  * mutation => POST methods
  */
 export const trpcRouter = t.router({
-    "hello": testEndpointHandler(t, "hello"),
-    "auth/wordpress/authorize": wordpressAuthHandler(t, "auth/wordpress/authorize"),
-    "auth/wordpress/callback": wordpressTokenHandler(t, "auth/wordpress/callback"),
-    "create-post": createPostHandler(t, "create-post"),
-    "web-retrieval": webRetrievalHandler(t, "web-retrieval"),
-    "internal-links-handler": internalLinksHandler(t, "internal-links-handler")
-  });
+  hello: testEndpointHandler(t, "hello"),
+  "auth/wordpress/authorize": wordpressAuthHandler(
+    t,
+    "auth/wordpress/authorize"
+  ),
+  "auth/wordpress/callback": wordpressTokenHandler(
+    t,
+    "auth/wordpress/callback"
+  ),
+  "create-post": createPostHandler(t, "create-post"),
+  "web-retrieval": webRetrievalHandler(t, "web-retrieval"),
+  "internal-links-handler": internalLinksHandler(t, "internal-links-handler"),
+  "image-search": imageSearchHandler(t, "image-search"),
+  "video-search": videoSearchHandler(t, "video-search"),
+});

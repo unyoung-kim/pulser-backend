@@ -22,9 +22,9 @@ interface ExaResponseItem {
 const maxConcurrentCallToExa: number = 4;
 
 export const throttledEnrichInternalLinks = pThrottle({
-    limit: maxConcurrentCallToExa,
-    interval: 1000, // Interval in milliseconds
-  })(enrichInternalLinks);
+  limit: maxConcurrentCallToExa,
+  interval: 1000, // Interval in milliseconds
+})(enrichInternalLinks);
 
 export async function enrichInternalLinks(
   projectId: string
@@ -36,6 +36,17 @@ export async function enrichInternalLinks(
   }
 
   const supabase = supabaseClient.value;
+
+  const { error: existingInternalLinkDeletingError } = await supabase
+    .from("InternalLink")
+    .delete()
+    .eq("project_id", projectId);
+
+  if (existingInternalLinkDeletingError) {
+    return err(
+      `Error in deleting existing internal links: ${existingInternalLinkDeletingError.message}`
+    );
+  }
 
   const { data: project, error: projectError } = await supabase
     .from("Project")
@@ -80,14 +91,14 @@ export async function enrichInternalLinks(
     })
   );
 
-    const { error: insertError } = await supabase
-        .from('InternalLink')
-        .insert(getEnrichedContents.map((enrichedURL: EnrichedURL) => ({
-            // org_id: orgId,
-            project_id: projectId,
-            url: enrichedURL.id,
-            summary: enrichedURL.summary,
-        })))
+  const { error: insertError } = await supabase.from("InternalLink").insert(
+    getEnrichedContents.map((enrichedURL: EnrichedURL) => ({
+      // org_id: orgId,
+      project_id: projectId,
+      url: enrichedURL.id,
+      summary: enrichedURL.summary,
+    }))
+  );
 
   if (insertError) {
     return err(`Error inserting internal links: ${insertError.message}`);
