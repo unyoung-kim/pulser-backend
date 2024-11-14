@@ -38,6 +38,7 @@
     "p-throttle": "^6.2.0",
     "puppeteer": "^23.7.0",
     "serpapi": "^2.1.0",
+    "stripe": "^17.3.1",
     "swagger-ui-express": "^5.0.1",
     "tailwind-merge": "^2.5.4",
     "trpc-openapi": "^1.2.0",
