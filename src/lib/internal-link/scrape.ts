@@ -131,6 +131,8 @@ export async function crawlImportantInternalLinks(
   domain: string,
   limit: number
 ): Promise<string[]> {
+  console.log("Puppeteer Cache Directory:", process.env.PUPPETEER_CACHE_DIR);
+
   // Immutable way: reassigning `visited` after every operation
   const visited = await crawlWithPuppeteer(
     `https://${domain}`,

@@ -26,8 +26,14 @@ WORKDIR /app
 # Copy project files
 COPY . .
 
+# Clear the Puppeteer cache before installation (optional but useful)
+RUN rm -rf /opt/render/.cache/puppeteer
+
 # Install dependencies
-RUN npm install --legacy-peer-deps && npx puppeteer install
+RUN npm install --legacy-peer-deps
+
+# Install Puppeteer and Chromium
+RUN npx puppeteer install
 
 # Build the project
 RUN npm run build
