@@ -2,7 +2,7 @@ import { z } from "zod";
 import { tRPC } from "../lib/trpc.js";
 import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
 import { Result } from "true-myth";
-import { handleWebhookEvents } from "../lib/handleWebhookEvents.js";
+import { handleWebhookEvents } from "../lib/stripe/handleWebhookEvents.js";
 
 export function stripeWebhook(t: tRPC, path: string) {
   return t.procedure

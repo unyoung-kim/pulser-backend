@@ -7,6 +7,7 @@ export const verifyStripeCheckoutSession = async (
   sessionId: string
 ): Promise<Result<string, string>> => {
   const stripeClientResult = getStripeClient();
+
   if (stripeClientResult.isErr) {
     return err(stripeClientResult.error);
   }

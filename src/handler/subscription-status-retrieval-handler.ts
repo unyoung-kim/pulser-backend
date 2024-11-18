@@ -2,7 +2,7 @@ import { z } from "zod";
 import { tRPC } from "../lib/trpc.js";
 import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
 import { Result } from "true-myth";
-import { getSubscriptionStatusFromStripe } from "../lib/getSubscriptionStatus.js";
+import { getSubscriptionStatusFromStripe } from "../lib/stripe/getSubscriptionStatus.js";
 
 export function subscriptionStatusRetrievalHandler(t: tRPC, path: string) {
   return t.procedure

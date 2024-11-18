@@ -2,7 +2,7 @@ import { z } from "zod";
 import { tRPC } from "../lib/trpc.js";
 import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
 import { Result } from "true-myth";
-import { verifyStripeCheckoutSession } from "../lib/verify-stripe-checkout-session.js";
+import { verifyStripeCheckoutSession } from "../lib/stripe/verify-stripe-checkout-session.js";
 
 export function stripeSessionVerificationHandler(t: tRPC, path: string) {
   return t.procedure

@@ -7,6 +7,10 @@ import { webRetrievalHandler } from "./handler/web-retrieval-handler.js";
 import { internalLinksHandler } from "./handler/internal-links-handler.js";
 import { imageSearchHandler } from "./handler/image-search-handler.js";
 import { videoSearchHandler } from "./handler/video-search-handler.js";
+import { stripeSessionCreationHandler } from "./handler/stripe-session-creation-handler.js";
+import { stripeWebhook } from "./handler/stripe-webhook.js";
+import { stripeSessionVerificationHandler } from "./handler/stripe-session-verification-handler.js";
+import { subscriptionStatusRetrievalHandler } from "./handler/subscription-status-retrieval-handler.js";
 
 /**
  * tRPC routers from here
@@ -30,4 +34,17 @@ export const trpcRouter = t.router({
   "internal-links-handler": internalLinksHandler(t, "internal-links-handler"),
   "image-search": imageSearchHandler(t, "image-search"),
   "video-search": videoSearchHandler(t, "video-search"),
+  "create-stripe-session": stripeSessionCreationHandler(
+    t,
+    "create-stripe-session"
+  ),
+  webhook: stripeWebhook(t, "webhook"),
+  "verify-checkout-session": stripeSessionVerificationHandler(
+    t,
+    "verify-checkout-session"
+  ),
+  "get-subscription-status": subscriptionStatusRetrievalHandler(
+    t,
+    "get-subscription-status"
+  ),
 });
