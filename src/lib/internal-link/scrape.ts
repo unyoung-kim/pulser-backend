@@ -288,7 +288,19 @@ async function crawlWithPuppeteer(
     visited = visited.add(url); // Add to the immutable set
 
     // Launch a headless browser with Puppeteer
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      headless: true, // Change "new" to true or false
+      args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-accelerated-2d-canvas",
+        "--no-first-run",
+        "--no-zygote",
+        "--disable-gpu",
+      ],
+    });
+
     const page = await browser.newPage();
 
     // Navigate to the URL and wait for the page to load
