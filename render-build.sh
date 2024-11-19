@@ -3,7 +3,7 @@
 set -o errexit
 
 # Clean up (optional, only if required by your project)
-npm run cleanse
+# npm run cleanse
 
 # Install dependencies with legacy peer dependency handling
 npm install --legacy-peer-deps
@@ -18,5 +18,5 @@ else
 fi
 
 # Build the project (if necessary)
-# npx puppeteer install
+npx puppeteer install
 npm run build
