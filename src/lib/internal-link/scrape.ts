@@ -292,9 +292,7 @@ async function crawlWithPuppeteer(
     // Launch a headless browser with Puppeteer
     const browser = await puppeteer.launch({
       headless: true,
-      executablePath:
-        process.env.PUPPETEER_EXECUTABLE_PATH ||
-        "/opt/render/.cache/puppeteer/chromium-*.*/chrome",
+      executablePath: "/opt/render/project/puppeteer/chrome/linux-131.0.6778.69/chrome-linux64/chrome",
       args: [
         "--no-sandbox",
         "--disable-setuid-sandbox",
