@@ -1,15 +1,15 @@
 import { SupabaseClient } from "@supabase/supabase-js";
-import { Result, err, isOk, ok } from "true-myth/result";
 import pThrottle from "p-throttle";
-import { outlineEnricher } from "./agents/outline-enricher.js";
-import { querySuggestor } from "./agents/query-suggestor.js";
-import { researcherSequential } from "./agents/researcher.js";
-import { writer } from "./agents/writer.js";
-import { EnrichedURL } from "./enrich-internal-links.js";
-import { postFormatter } from "./post-formatter.js";
-import { getSupabaseClient } from "./get-supabase-client.js";
-import { extractFirstImageUrl } from "./utility/extractFirstImageUrl.js";
-import { topicGenerator } from "./agents/topic-generator.js";
+import { Result, err, ok } from "true-myth/result";
+import { outlineEnricher } from "../agents/outline-enricher.js";
+import { querySuggestor } from "../agents/query-suggestor.js";
+import { researcherSequential } from "../agents/researcher.js";
+import { topicGenerator } from "../agents/topic-generator.js";
+import { writer } from "../agents/writer.js";
+import { EnrichedURL } from "../enrich-internal-links.js";
+import { getSupabaseClient } from "../get-supabase-client.js";
+import { postFormatter } from "../post-formatter.js";
+import { extractFirstImageUrl } from "../utility/extractFirstImageUrl.js";
 
 const maxConcurrentCallToClaudeLLM: number = 2;
 const maxConcurrentCallToOpenAILLM: number = 4;
@@ -55,11 +55,11 @@ const throttledPostFormatter = pThrottle({
 export async function workflow({
   projectId,
   inputTopic,
-  keyword,
+  keywordId,
 }: {
   projectId: string;
   inputTopic?: string;
-  keyword?: string;
+  keywordId?: string;
 }): Promise<Result<string, string>> {
   // const action = (await taskManager(query)) ?? { object: { next: 'proceed' } };
 
@@ -96,12 +96,29 @@ export async function workflow({
   const clientProjectDescription: string | null =
     clientDetailsResponse?.at(0)?.description ?? null;
 
-  const clientDetails = `Client name: ${clientName}\nClient domain: ${clientDomain}\nClient background: ${clientBackground}\nClient's Project description: ${clientProjectDescription}`;
+  const clientDetails = `
+  Client Information:
+  - Name: ${clientName}
+  - Domain: ${clientDomain}
+  - Background: ${clientBackground}
+  - Project Description: ${clientProjectDescription}
+`.trim();
 
   let topic = null;
   if (inputTopic) {
     topic = inputTopic;
-  } else if (keyword) {
+  } else if (keywordId) {
+    const { data: keywordData, error: keywordError } = await supabase
+      .from("Keyword")
+      .select("keyword")
+      .eq("id", keywordId)
+      .single();
+
+    if (keywordError) {
+      return err(`Error fetching keyword: ${keywordError.message}`);
+    }
+
+    const keyword = keywordData?.keyword;
     const generatedTopic: Result<string, string> =
       await throttledTopicGenerator(keyword, clientDetails);
     if (generatedTopic.isErr) {
@@ -178,47 +195,6 @@ export async function workflow({
   console.log("Final post: " + finalPost.value);
 
   const firstImageUrl = extractFirstImageUrl(finalPost.value);
-
-  let keywordId = null;
-
-  if (keyword) {
-    let { data: selectedKeyword, error: errorSelectingKeyword } = await supabase
-      .from("Keyword")
-      .select("id")
-      .eq("keyword", keyword);
-
-    if (errorSelectingKeyword) {
-      return err(
-        `Error in selecting keyword: ${errorSelectingKeyword.message}`
-      );
-    }
-
-    if (selectedKeyword && selectedKeyword.length > 0) {
-      keywordId = selectedKeyword.at(0)?.id;
-    } else {
-      const { data: dataKeywordInsert, error: errorKeywordInsert } =
-        await supabase
-          .from("Keyword")
-          .insert([
-            {
-              project_id: projectId,
-              keyword: keyword,
-              source: "USER_UPLOADED",
-            },
-          ])
-          .select();
-
-      if (errorKeywordInsert) {
-        return err(`Error in saving keyword: ${errorKeywordInsert.message}`);
-      }
-
-      keywordId = dataKeywordInsert?.at(0)?.id ?? null;
-
-      if (keywordId == null || keywordId.length == 0) {
-        return err("Error fetching keyword id");
-      }
-    }
-  }
 
   const { data: dataContentInsert, error: errorContentInsert } = await supabase
     .from("Content")
