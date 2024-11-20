@@ -131,6 +131,8 @@ export async function crawlImportantInternalLinks(
   domain: string,
   limit: number
 ): Promise<string[]> {
+  console.log("Puppeteer Cache Directory:", process.env.PUPPETEER_CACHE_DIR);
+
   // Immutable way: reassigning `visited` after every operation
   const visited = await crawlWithPuppeteer(
     `https://${domain}`,
@@ -288,7 +290,20 @@ async function crawlWithPuppeteer(
     visited = visited.add(url); // Add to the immutable set
 
     // Launch a headless browser with Puppeteer
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      headless: true,
+      executablePath: "/opt/render/project/puppeteer/chrome/linux-131.0.6778.69/chrome-linux64/chrome",
+      args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-accelerated-2d-canvas",
+        "--no-first-run",
+        "--no-zygote",
+        "--disable-gpu",
+      ],
+    });
+
     const page = await browser.newPage();
 
     // Navigate to the URL and wait for the page to load
