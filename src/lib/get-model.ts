@@ -94,7 +94,20 @@ export function getGPT4o() {
     organization: "", // optional organization
   });
 
-  return openai("gpt-4o");
+  return openai("gpt-4o-2024-11-20");
+}
+
+export function getGPTO1Preview() {
+  const openaiApiBase = process.env.OPENAI_API_BASE;
+  const openaiApiKey = process.env.OPENAI_API_KEY;
+  // Fallback to OpenAI instead
+  const openai = createOpenAI({
+    baseURL: openaiApiBase, // optional base URL for proxies etc.
+    apiKey: openaiApiKey, // optional API key, default to env property OPENAI_API_KEY
+    organization: "", // optional organization
+  });
+
+  return openai("o1-preview");
 }
 
 export function getCaludeSonnet() {
