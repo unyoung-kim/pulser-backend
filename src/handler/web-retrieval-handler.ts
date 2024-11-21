@@ -35,6 +35,7 @@ export function webRetrievalHandler(t: tRPC, path: string) {
     .output(ApiResponseSchema)
     .mutation(async ({ input }) => {
       try {
+        console.log("TYPE: ", input.type);
         const result: Result<string, string> =
           input.type === "NORMAL"
             ? await workflow({

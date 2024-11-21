@@ -39,7 +39,7 @@ const throttledQuerySuggestor = pThrottle({
   interval: 1000,
 })(querySuggestor);
 
-const throttledPostFormatter = pThrottle({
+export const throttledPostFormatter = pThrottle({
   limit: maxConcurrentCallToOpenAILLM,
   interval: 1000,
 })(postFormatter);
