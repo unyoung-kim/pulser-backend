@@ -32,7 +32,7 @@ export const handleWebhookEvents = async (
     return err(`Webhook signature verification failed. ${error}`);
   }
 
-  if (!event || !event.id || !event.type) {
+  if (!event || !event.id || !event.type || !event.data.object) {
     return err("Event is not fetched properly");
   }
 
@@ -59,37 +59,19 @@ export const handleWebhookEvents = async (
     .insert({ stripe_event_id: event.id, event_type: event.type });
 
   if (eventIdInsertingError) {
-    console.error(`Error inserting event ID: ${eventIdInsertingError}`);
+    console.error(`Error inserting event ID: ${eventIdInsertingError.message}`);
     return err("Failed to track event.");
   }
 
   // Dispatch event to specific handler
   try {
     switch (event.type) {
-      case "checkout.session.completed":
-        return handleCheckoutSessionCompleted(
-          event.data.object as Stripe.Checkout.Session
-        );
-      case "customer.subscription.created":
-        return handleSubscriptionCreated(
-          event.data.object as Stripe.Subscription,
-          supabase
-        );
       case "invoice.payment_succeeded":
-        return handleInvoicePaid(event.data.object as Stripe.Invoice, supabase);
-      case "payment_intent.succeeded":
-        return handleOneTimePayment(
-          event.data.object as Stripe.PaymentIntent,
-          supabase
+        return handleInvoicePaid(
+          event.data.object as Stripe.Invoice,
+          supabase,
+          stripe as Stripe
         );
-      case "payment_intent.payment_failed":
-        return handlePaymentFailed(event.data.object as Stripe.PaymentIntent);
-      case "customer.subscription.deleted":
-        return handleSubscriptionCancelled(
-          event.data.object as Stripe.Subscription
-        );
-      case "invoice.marked_uncollectible":
-        return handleInvoiceUncollectible(event.data.object as Stripe.Invoice);
       default:
         return logInformationalEvent(event);
     }
@@ -99,143 +81,157 @@ export const handleWebhookEvents = async (
   }
 };
 
-export const handleCheckoutSessionCompleted = async (
-  session: Stripe.Checkout.Session
-): Promise<Result<string, string>> => {
-  const { mode } = session;
-
-  if (mode === "payment") {
-    // One-time payments are handled in `payment_intent.succeeded`.
-    return ok("Handled by payment_intent.succeeded.");
-  }
-
-  if (mode === "subscription") {
-    // Subscriptions are handled by `customer.subscription.created`.
-    return ok("Handled by customer.subscription.created.");
-  }
-
-  return err("Unexpected session mode.");
-};
-
-export const handleSubscriptionCreated = async (
-  subscription: Stripe.Subscription,
-  supabase: SupabaseClient
-): Promise<Result<string, string>> => {
-  const startDate = new Date(subscription.current_period_start * 1000);
-  const endDate = new Date(subscription.current_period_end * 1000);
-
-  if (!startDate || !endDate) {
-    return err("startDate/endDate invalid/not provided.");
-  }
-
-  const { error } = await supabase.from("Usage").insert({
-    stripeSubscriptionId: subscription.id,
-    startdate: startDate.toISOString(),
-    enddate: endDate.toISOString(),
-    credits_charged: subscription.metadata?.credits ?? 0,
-  });
-
-  return error ? err(error.message) : ok("Subscription created successfully.");
-};
-
 export const handleInvoicePaid = async (
   invoice: Stripe.Invoice,
-  supabase: SupabaseClient
+  supabase: SupabaseClient,
+  stripe: Stripe
 ): Promise<Result<string, string>> => {
+  const customer = invoice.customer as string | null;
+
+  if (customer == null) {
+    return err("Customer id not found in invoice");
+  }
+
+  const sessions: Stripe.Checkout.Session[] = (
+    await stripe.checkout.sessions.list({
+      customer: customer,
+    })
+  ).data;
+
+  const sessionList = sessions.filter((s) => s.invoice === invoice.id);
+
+  if (sessionList.length !== 1) {
+    return err("Error geting unique session");
+  }
+
+  const session = sessionList.at(0);
+
+  if (!session || !session.metadata) {
+    return err("Error getting metadata from session");
+  }
+
+  const orgId = session.metadata.orgId;
+  const creditsCharged = parseInt(String(session.metadata.credits ?? "0"), 10);
+  const start = parseInt(
+    String(invoice.lines.data.at(0)?.period.start ?? "0"),
+    10
+  );
+  const end = parseInt(String(invoice.lines.data.at(0)?.period.end ?? "0"), 10);
+  const startDate = new Date(start * 1000);
+  const endDate = new Date(end * 1000);
+
   // Check if it's a subscription payment (subscription ID exists)
   const subscriptionId = invoice.subscription as string | null;
 
-  if (!subscriptionId) {
-    // If no subscription ID, it's not a subscription renewal, so do nothing here.
-    return ok("Not a subscription renewal, skipping invoice payment handling.");
+  // Handle subscription renewal or one-time payment based on subscriptionId
+  if (subscriptionId) {
+    // Handle subscription payment (renewal)
+
+    if (!startDate || !endDate || creditsCharged <= 0) {
+      return err("startDate, endDate, or creditsCharged are invalid/missing.");
+    }
+
+    // Insert into the Usage table for subscription renewals
+    const { error } = await supabase.from("Usage").insert({
+      stripe_subscription_id: subscriptionId,
+      start_date: startDate.toISOString(),
+      end_date: endDate.toISOString(),
+      credits_charged: creditsCharged,
+    });
+
+    return error
+      ? err(error.message)
+      : ok("Invoice payment processed successfully for subscription.");
+  } else {
+    // Handle one-time payment
+
+    if (!orgId || creditsCharged <= 0) {
+      return err("Invalid metadata: orgId or credits are missing/invalid.");
+    }
+
+    const { data: customerId, error: stripeCustomerIdFetchError } =
+      await supabase
+        .from("Organization")
+        .select("stripe_customer_id")
+        .eq("org_id", orgId)
+        .single();
+
+    if (stripeCustomerIdFetchError) {
+      return err("Error in fetching stripe cutomer id from database");
+    }
+
+    if (!customerId.stripe_customer_id) {
+      return err("Stripe customer id not found in database");
+    }
+
+    const subscription = await stripe.subscriptions.list({
+      customer: customerId.stripe_customer_id,
+      status: "active",
+    });
+
+    if (!subscription?.data || subscription.data.length === 0) {
+      return err("Error in fetching subscription id");
+    }
+
+    const subscriptionData = subscription.data.at(0);
+    if (!subscriptionData) {
+      return err("No active subscription found.");
+    }
+
+    const subscriptionId = subscriptionData.id;
+
+    // Fetch the current billing cycle entry in `Usage`
+    const { data, error: usageError } = await supabase
+      .from("Usage")
+      .select("*")
+      .eq("stripe_subscription_id", subscriptionId)
+      .lte("start_date", new Date().toISOString())
+      .gte("end_date", new Date().toISOString())
+      .single();
+
+    if (usageError || !data) {
+      return err("Failed to fetch current billing cycle for orgId.");
+    }
+
+    // Update the `additionalCreditsCharged` field
+    const { error: updateError } = await supabase
+      .from("Usage")
+      .update({
+        additional_credits_charged:
+          data.additional_credits_charged + creditsCharged,
+      })
+      .eq("id", data.id);
+
+    return updateError
+      ? err(updateError.message)
+      : ok("One-time payment processed successfully.");
   }
-
-  const startDate = new Date(invoice.period_start * 1000);
-  const endDate = new Date(invoice.period_end * 1000);
-
-  // Retrieve the credits charged from metadata (this could apply to both subscriptions and one-time payments)
-  const creditsCharged = parseInt(invoice.metadata?.credits ?? "0", 10);
-
-  if (!startDate || !endDate || creditsCharged <= 0) {
-    return err("startDate, endDate, or creditsCharged are invalid/missing.");
-  }
-
-  // Insert into the Usage table for subscription renewals
-  const { error } = await supabase.from("Usage").insert({
-    stripeSubscriptionId: subscriptionId,
-    startdate: startDate.toISOString(),
-    enddate: endDate.toISOString(),
-    credits_charged: creditsCharged,
-  });
-
-  return error
-    ? err(error.message)
-    : ok("Invoice payment processed successfully for subscription.");
-};
-
-export const handleOneTimePayment = async (
-  paymentIntent: Stripe.PaymentIntent,
-  supabase: SupabaseClient
-): Promise<Result<string, string>> => {
-  // Retrieve relevant metadata
-  const orgId = paymentIntent.metadata?.orgId;
-  const credits = parseInt(paymentIntent.metadata?.credits ?? "0", 10);
-
-  // Check for missing or invalid credits
-  if (!orgId || credits <= 0) {
-    return err("Invalid metadata: orgId or credits are missing/invalid.");
-  }
-
-  // Fetch the current billing cycle entry in `Usage`
-  const { data, error: usageError } = await supabase
-    .from("Usage")
-    .select("*")
-    .eq("orgId", orgId)
-    .lte("startdate", new Date().toISOString())
-    .gte("enddate", new Date().toISOString())
-    .single();
-
-  if (usageError || !data) {
-    return err("Failed to fetch current billing cycle for orgId.");
-  }
-
-  // Update the `additionalCreditsCharged` field
-  const { error: updateError } = await supabase
-    .from("Usage")
-    .update({
-      additionalCreditsCharged: data.additionalCreditsCharged + credits,
-    })
-    .eq("id", data.id);
-
-  return updateError
-    ? err(updateError.message)
-    : ok("One-time payment processed successfully.");
-};
-
-export const handlePaymentFailed = async (
-  paymentIntent: Stripe.PaymentIntent
-): Promise<Result<string, string>> => {
-  console.log("Payment failed for PaymentIntent:", paymentIntent.id);
-  return ok("Payment failure logged.");
-};
-
-export const handleSubscriptionCancelled = async (
-  subscription: Stripe.Subscription
-): Promise<Result<string, string>> => {
-  console.log("Subscription cancelled for ID:", subscription.id);
-  return ok("Subscription cancellation logged.");
-};
-
-export const handleInvoiceUncollectible = async (
-  invoice: Stripe.Invoice
-): Promise<Result<string, string>> => {
-  console.log("Invoice marked uncollectible for ID:", invoice.id);
-  return ok("Invoice uncollectible logged.");
 };
 
 export const logInformationalEvent = async (
   event: Stripe.Event
 ): Promise<Result<string, string>> => {
-  console.log(`Informational event received: ${event.type}`);
-  return ok("Event logged successfully.");
+  console.log(`Informational event received:`);
+  console.log(`Event ID: ${event.id}`);
+  console.log(`Event Type: ${event.type}`);
+
+  // Log the object that triggered the event
+  if (event.data && event.data.object) {
+    console.log(`Event Object:`, event.data.object);
+  } else {
+    console.log(`Event Object: Not Available`);
+  }
+
+  // Log additional metadata if available
+  if ("metadata" in event.data.object) {
+    console.log(`Metadata:`, event.data.object.metadata);
+  } else {
+    console.log(`Metadata: Not Available`);
+  }
+
+  // Log timestamp of the event for better tracking
+  const eventTimestamp = new Date(event.created * 1000).toISOString();
+  console.log(`Event Timestamp: ${eventTimestamp}`);
+
+  return ok("Event logged successfully with details.");
 };

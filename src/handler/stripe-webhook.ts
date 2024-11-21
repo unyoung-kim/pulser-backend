@@ -17,34 +17,40 @@ export function stripeWebhook(t: tRPC, path: string) {
     })
     .input(
       z.object({
-        body: z.string().describe("Raw body of the webhook event"),
-        headers: z.object({
-          "stripe-signature": z.string().describe("Stripe signature header"),
-        }),
+        body: z.unknown().optional(), // Raw body does not have a strict schema
+        headers: z
+          .object({
+            "stripe-signature": z.string().describe("Stripe signature header"),
+          })
+          .passthrough()
+          .optional(),
       })
     )
     .output(ApiResponseSchema)
-    .mutation(async ({ input }) => {
+    .mutation(async ({ ctx }) => {
       try {
-        const signature = input.headers["stripe-signature"];
-        const result: Result<string, string> = await handleWebhookEvents(
-          signature,
-          input.body
-        );
+        const signature = ctx.req.headers["stripe-signature"];
+        const rawBody = ctx.rawBody;
+
+        const result = await handleWebhookEvents(signature, rawBody);
+
         if (result.isErr) {
+          console.error(`Error processing webhook event: ${result.error}`);
           return {
-            success: true,
+            success: false,
             data: result.error,
           };
         }
+
         return {
           success: true,
           data: result.value,
         };
       } catch (error) {
+        console.error(`Unexpected error in webhook handler: ${error}`);
         return {
           success: false,
-          data: String(error),
+          data: `Unexpected error: ${String(error)}`,
         };
       }
     });
