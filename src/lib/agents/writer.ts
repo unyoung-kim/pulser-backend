@@ -1,6 +1,6 @@
 import { generateText } from "ai";
 import { Result, err, ok } from "true-myth/result";
-import { getModel } from "../get-model.js";
+import { getGPT4o, getModel } from "../get-model.js";
 
 // const SYSTEM_PROMPT = `As a professional search expert, you possess the ability to search for any information on the web.
 // For each user query, utilize the search results to their fullest potential to provide additional information and assistance in your response.
@@ -9,7 +9,7 @@ import { getModel } from "../get-model.js";
 
 const SYSTEM_PROMPT = `As a professional SEO blog writer, you will be given an detailed outline for an SEO blog post.
 
-Your task is to write a blog post, of length strictly more than 3000 words, based on the outline.
+Your task is to write a very long and detailed blog post, of length strictly more than 3000 words, based on the outline.
 
 Here are a couple things to note when writing a blog post:
 1) Word count of the blog post must around 3500 words. Follow this very strictly.
@@ -29,6 +29,26 @@ export async function writer(outline: string): Promise<Result<string, string>> {
       prompt: outline,
       maxTokens: 8000,
       temperature: 0.25,
+    });
+
+    return ok(result.text);
+  } catch (error) {
+    console.error("Error in researcher:", error);
+    return err("An error has occurred. Please try again.");
+  }
+}
+
+export async function writerGPT(
+  outline: string
+): Promise<Result<string, string>> {
+  try {
+    const currentDate = new Date().toLocaleString();
+    const result = await generateText({
+      model: getGPT4o(),
+      system: `${SYSTEM_PROMPT} Current date and time: ${currentDate}`,
+      prompt: outline,
+      maxTokens: 8000,
+      temperature: 1,
     });
 
     return ok(result.text);

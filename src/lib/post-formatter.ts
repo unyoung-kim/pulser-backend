@@ -11,7 +11,7 @@ Your task is to format the given blog post in the specified format without losin
 Please ensure:
 - Images are resized appropriately and maintain aspect ratio. Use a maximum width of 100% for responsiveness.
 - Paragraphs are properly spaced and easy to read.
-- Headings and subheadings are clearly defined with appropriate tags, but **do not include the main header of the post (e.g., the <h1> tag)**.
+- Headings and subheadings are clearly defined with appropriate tags.
 - Lists are formatted as ordered or unordered lists where applicable.
 - Maintain a consistent structure throughout the document.
 - Don't provide heading/title in the output, just the body.

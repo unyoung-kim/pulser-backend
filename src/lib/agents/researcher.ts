@@ -104,7 +104,7 @@ Here are a few rules you must follow:
 3) Make sure to add images and links for subtopics that lack them in the given outline. You will be rewarded extra points for having multiple links per subtopic.
 4) Preserve all of images and links previously provided in the outline. If you have found detailed and useful information, enrich the outline with it. 
 5) Return a full outline with all the sections, sub-sections, images and links without any ommissions from the given outline.
-6) It is very important to conduct research focusing especially on the sections that directly answers and are relevant to the topic of the article. (e.g. if the topic is about "Top B2B website design agencies", then you should focus on researching the sections about the top B2B website design agencies.)
+6) It is very important to conduct research focusing especially on the sections that most directly answer the topic of the article. This way, you can ensure that the outline has longer outline for this specific section. (e.g. if the topic is about "Top B2B website design agencies", then you should focus on researching the sections about the top B2B website design agencies over other sections like the future of website design.)
 </Rules>
 `;
 
@@ -133,6 +133,8 @@ export async function researcherSequential(
       maxTokens: 8000,
     });
 
+    console.log("FIRST OUTLINE: ", firstOutline.text);
+
     const detailedOutline = await generateText({
       model: getGPT4o(),
       system: `${FINAL_OUTLINE_PROMPT} Current date and time: ${currentDate}`,
@@ -144,6 +146,8 @@ export async function researcherSequential(
       temperature: 0,
       maxTokens: 8000,
     });
+
+    console.log("DETAILED OUTLINE: ", detailedOutline.text);
 
     return ok(detailedOutline.text);
   } catch (error) {
