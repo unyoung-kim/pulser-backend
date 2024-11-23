@@ -47,6 +47,7 @@ export function initializeOrgHandler(t: tRPC, path: string) {
           .from("Organization")
           .upsert({
             org_id: orgId,
+            created_at: new Date().toISOString().split("T")[0],
           })
           .select();
 
