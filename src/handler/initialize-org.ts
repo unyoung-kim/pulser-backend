@@ -60,7 +60,7 @@ export function initializeOrgHandler(t: tRPC, path: string) {
         const { data: usage, error: usageError } = await supabase
           .from("Usage")
           .insert({
-            orgId: orgId,
+            org_id: orgId,
             start_date: new Date().toISOString().split("T")[0],
             credits_used: 0,
             credits_charged: 0,
