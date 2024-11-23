@@ -78,7 +78,7 @@ export function initializeOrgHandler(t: tRPC, path: string) {
         const { error: updateError } = await supabase
           .from("organizations")
           .update({ current_usage_id: usage.id })
-          .eq("id", orgId);
+          .eq("org_id", orgId);
 
         if (updateError) {
           console.log(
