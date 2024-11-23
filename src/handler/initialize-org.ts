@@ -46,7 +46,7 @@ export function initializeOrgHandler(t: tRPC, path: string) {
         const { data: organization, error: orgError } = await supabase
           .from("Organization")
           .upsert({
-            id: orgId,
+            org_id: orgId,
           })
           .select();
 
