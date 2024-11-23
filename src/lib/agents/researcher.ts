@@ -87,6 +87,7 @@ Here are a few rules you must follow for the outline:
   5) If relevant, make sure to compare and contrast products and services.
   6) For each section, add actual images and as many real links from the research in the format of [Link: ...] and [Image: ...]
   7) Make sure to focus on the topic of the article and provide relevant information at the front of the article.
+  8) If client background includes social proof, make sure to include it in the introduction outline to build credibility.
 </Rules>
 `;
 

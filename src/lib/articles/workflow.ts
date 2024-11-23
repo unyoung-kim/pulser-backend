@@ -8,7 +8,7 @@ import { topicGenerator } from "../agents/topic-generator.js";
 import { writer } from "../agents/writer.js";
 import { EnrichedURL } from "../enrich-internal-links.js";
 import { getSupabaseClient } from "../get-supabase-client.js";
-import { postFormatter } from "../post-formatter.js";
+import { postFormatterAndHumanizer } from "../post-formatter.js";
 import { extractFirstImageUrl } from "../utility/extractFirstImageUrl.js";
 
 const maxConcurrentCallToClaudeLLM: number = 2;
@@ -42,7 +42,7 @@ const throttledQuerySuggestor = pThrottle({
 export const throttledPostFormatter = pThrottle({
   limit: maxConcurrentCallToOpenAILLM,
   interval: 1000,
-})(postFormatter);
+})(postFormatterAndHumanizer);
 
 /**
  * Based on user query, generate a blog post

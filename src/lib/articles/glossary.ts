@@ -4,6 +4,7 @@ import { Result } from "true-myth";
 import { err, ok } from "true-myth/result";
 import { getGPT4o } from "../get-model.js";
 import { getSupabaseClient } from "../get-supabase-client.js";
+import { incrementUsageCredit } from "../supabase/usage.js";
 import { throttledPostFormatter } from "./workflow.js";
 
 const GLOSSARY_SYSTEM_PROMPT = `You are an expert in writing glossary articles for brands for SEO purposes. 
@@ -339,7 +340,7 @@ export async function glossaryWorkflow({
     // Fetch project data from Supabase
     const { data: project, error } = await supabase
       .from("Project")
-      .select("name, background")
+      .select("name, background, org_id")
       .eq("id", projectId)
       .single();
 
@@ -434,8 +435,13 @@ export async function glossaryWorkflow({
         },
       ]);
 
-    // Now you can use project.name and project.background
-    // Replace this with your actual implementation
+    const incrementUsageCreditResult: Result<string, string> =
+      await incrementUsageCredit(supabase, project?.org_id ?? "");
+
+    if (incrementUsageCreditResult.isErr) {
+      return err(incrementUsageCreditResult.error);
+    }
+
     return ok("Successfully created and saved glossary article");
   } catch (error) {
     console.error("Error in glossary workflow:", error);
