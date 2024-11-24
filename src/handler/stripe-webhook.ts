@@ -2,7 +2,7 @@ import { z } from "zod";
 import { tRPC } from "../lib/trpc.js";
 import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
 import { Result } from "true-myth";
-import { handleWebhookEvents } from "../lib/stripe/handleWebhookEvents.js";
+import { handleWebhookEvents } from "../lib/stripe/handle-webhook-events.js";
 
 export function stripeWebhook(t: tRPC, path: string) {
   return t.procedure
@@ -32,7 +32,10 @@ export function stripeWebhook(t: tRPC, path: string) {
         const signature = ctx.req.headers["stripe-signature"];
         const rawBody = ctx.rawBody;
 
-        const result = await handleWebhookEvents(signature, rawBody);
+        const result: Result<string, string> = await handleWebhookEvents(
+          signature,
+          rawBody
+        );
 
         if (result.isErr) {
           console.error(`Error processing webhook event: ${result.error}`);

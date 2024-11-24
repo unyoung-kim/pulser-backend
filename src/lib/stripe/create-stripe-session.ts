@@ -2,6 +2,8 @@ import Result, { err, ok } from "true-myth/result";
 import { getStripeClient } from "./get-stripe-client.js";
 import { getOrCreateCustomer } from "./get-or-create-customer.js";
 import Stripe from "stripe";
+import { getSupabaseClient } from "../get-supabase-client.js";
+import { SupabaseClient } from "@supabase/supabase-js";
 
 export const createStripeSession = async (
   orgId: string,
@@ -9,6 +11,18 @@ export const createStripeSession = async (
   credits: number,
   mode: "payment" | "subscription"
 ): Promise<Result<string, string>> => {
+  const supabaseClient: Result<SupabaseClient, string> = getSupabaseClient();
+  if (supabaseClient.isErr) {
+    return err(supabaseClient.error);
+  }
+  const supabase = supabaseClient.value;
+
+  const { error } = await supabase.from("Usage").delete().eq("org_Id", orgId);
+
+  if (error) {
+    return err("Error deleting default/free credits");
+  }
+
   const stripeClientResult = getStripeClient();
 
   if (stripeClientResult.isErr) {

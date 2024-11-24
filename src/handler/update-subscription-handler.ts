@@ -1,30 +1,36 @@
 import { z } from "zod";
-import { tRPC } from "../lib/trpc.js";
+import { t, tRPC } from "../lib/trpc.js";
 import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
 import { Result } from "true-myth";
-import { getSubscriptionStatusFromStripe } from "../lib/stripe/get-subscription-status.js";
+import { err } from "true-myth/result";
+import { updateSubscription } from "../lib/stripe/update-subscription.js";
 
-export function subscriptionStatusRetrievalHandler(t: tRPC, path: string) {
+export function updateSubscriptionHandler(t: tRPC, path: string) {
   return t.procedure
     .meta({
       openapi: {
         method: "POST",
-        path: "/get-subscription-status",
-        summary: "Subscription status endpoint",
-        description: "Retreives the subscription status for an Organization",
+        path: "/update-subscription",
+        summary: "Subscription update endpoint",
+        description: "Update a subscription",
         tags: ["Stripe"],
       },
     })
     .input(
       z.object({
-        orgId: z.string().describe("Organization id to query status for"),
+        orgId: z.string(),
+        priceId: z.string(),
+        credits: z.string(),
       })
     )
     .output(ApiResponseSchema)
     .mutation(async ({ input }) => {
       try {
-        const result: Result<string, string> =
-          await getSubscriptionStatusFromStripe(input.orgId);
+        const result: Result<string, string> = await updateSubscription(
+          input.orgId,
+          input.priceId,
+          input.credits
+        );
         if (result.isErr) {
           return {
             success: false,
