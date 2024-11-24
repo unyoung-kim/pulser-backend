@@ -60,7 +60,9 @@ export const updateSubscription = async (
       newCredits: credits,
       forUpdate: "true",
     },
+  });
 
+  await stripe.subscriptions.update(subscriptionId, {
     items: [
       {
         id: subscriptionItemId,

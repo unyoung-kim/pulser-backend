@@ -21,7 +21,7 @@ export async function getSubscriptionStatusFromStripe(
       .single();
 
   if (currentUsageIdFetchError || !currentUsageIdData?.current_usage_id) {
-    return err("Error in fetching stripe customer id");
+    return err("Error in fetching currnet usage id");
   }
 
   const { data: currentUsageData, error: currentUsageFetchError } =
@@ -40,7 +40,9 @@ export async function getSubscriptionStatusFromStripe(
       "subscribed": "false",
       "credits_used": ${currentUsageData.credits_used},
       "credits_charged": ${currentUsageData.credits_charged},
-      "additional_credits": ${currentUsageData.additional_credits_charged}`);
+      "additional_credits": ${currentUsageData.additional_credits_charged},
+      "start_date": ${currentUsageData.start_date},
+      "end_date": ${currentUsageData.end_date}`);
   } else {
     const stripeClientResult = getStripeClient();
     if (stripeClientResult.isErr) {
@@ -68,6 +70,8 @@ export async function getSubscriptionStatusFromStripe(
       "subscription_name": ${product.name},
       "credits_used": ${currentUsageData.credits_used},
       "credits_charged": ${currentUsageData.credits_charged},
-      "additional_credits": ${currentUsageData.additional_credits_charged}`);
+      "additional_credits": ${currentUsageData.additional_credits_charged},
+      "start_date": ${currentUsageData.start_date},
+      "end_date": ${currentUsageData.end_date}`);
   }
 }

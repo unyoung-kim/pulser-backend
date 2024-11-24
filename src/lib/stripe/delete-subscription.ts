@@ -25,7 +25,7 @@ export const deleteSubscription = async (
     return err("Error in fetching stripe customer id");
   }
 
-  if (currentUsageIdData?.current_usage_id) {
+  if (!currentUsageIdData?.current_usage_id) {
     return err("Current usage id not found");
   }
 

@@ -12,6 +12,8 @@ import { wordpressAuthHandler } from "./handler/wordpress-auth-handler.js";
 import { createPostHandler } from "./handler/wordpress-post-creation.js";
 import { wordpressTokenHandler } from "./handler/wordpress-token-handler.js";
 import { t } from "./lib/trpc.js";
+import { deleteSubscriptionHandler } from "./handler/delete-subscription-handler.js";
+import { updateSubscriptionHandler } from "./handler/update-subscription-handler.js";
 
 /**
  * tRPC routers from here
@@ -48,5 +50,7 @@ export const trpcRouter = t.router({
     t,
     "get-subscription-status"
   ),
+  "delete-subscription": deleteSubscriptionHandler(t, "delete-subscription"),
+  "update-subscription": updateSubscriptionHandler(t, "update-subscription"),
   "initialize-org": initializeOrgHandler(t, "initialize-org"),
 });

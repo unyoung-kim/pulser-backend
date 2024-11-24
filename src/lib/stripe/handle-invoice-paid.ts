@@ -59,7 +59,7 @@ export const handleInvoicePaid = async (
     }
 
     if (!forUpdate) {
-      if (sessionList.length != 0) {
+      if (sessionList.length !== 0) {
         // Handle subscription creation
         if (sessionList.length !== 1) {
           return err("Error getting unique session");
@@ -81,16 +81,33 @@ export const handleInvoicePaid = async (
         }
 
         // Insert into the Usage table for subscription creation
-        const { error } = await supabase.from("Usage").insert({
-          stripe_subscription_id: subscriptionId,
-          start_date: startDate.toISOString(),
-          end_date: endDate.toISOString(),
-          credits_charged: creditsCharged,
-        });
+        const { data: newUsageInsertData, error: newUsageInsertError } =
+          await supabase
+            .from("Usage")
+            .insert({
+              stripe_subscription_id: subscriptionId,
+              start_date: startDate.toISOString(),
+              end_date: endDate.toISOString(),
+              credits_charged: creditsCharged,
+              org_id: orgId,
+            })
+            .select("id")
+            .single();
 
-        return error
-          ? err(error.message)
-          : ok("Invoice payment processed successfully for subscription.");
+        if (newUsageInsertError) {
+          return err("Error inserting new usage record");
+        }
+
+        const { error: usageIdUpdateError } = await supabase
+          .from("Organization")
+          .update({ current_usage_id: newUsageInsertData?.id })
+          .eq("org_id", orgId);
+
+        if (usageIdUpdateError) {
+          return err("Error updating new usage id in Organization table");
+        }
+
+        return ok("Invoice payment processed successfully for subscription.");
       } else {
         // Handle subscription renewals
         if (!current_usage_id) {
@@ -104,22 +121,37 @@ export const handleInvoicePaid = async (
             .eq("id", current_usage_id)
             .single();
 
-        if (creditsChargedError || !creditsChargedData?.credits_charged) {
+        if (creditsChargedError || !creditsChargedData) {
           return err("Error fetching current credits charged");
         }
 
-        const { error: usageInsertError } = await supabase
-          .from("Usage")
-          .insert({
-            stripe_subscription_id: subscriptionId,
-            start_date: startDate.toISOString(),
-            end_date: endDate.toISOString(),
-            credits_charged: parseInt(creditsChargedData.credits_charged, 10),
-          });
+        const { data: newUsageInsertData, error: newUsageInsertError } =
+          await supabase
+            .from("Usage")
+            .insert({
+              stripe_subscription_id: subscriptionId,
+              start_date: startDate.toISOString(),
+              end_date: endDate.toISOString(),
+              credits_charged: parseInt(creditsChargedData.credits_charged, 10),
+              org_id: orgId,
+            })
+            .select("id")
+            .single();
 
-        return usageInsertError
-          ? err(usageInsertError.message)
-          : ok("Invoice payment processed successfully for subscription.");
+        if (newUsageInsertError) {
+          return err("Error inserting new usage record");
+        }
+
+        const { error: usageIdUpdateError } = await supabase
+          .from("Organization")
+          .update({ current_usage_id: newUsageInsertData?.id })
+          .eq("org_id", orgId);
+
+        if (usageIdUpdateError) {
+          return err("Error updating new usage id in Organization table");
+        }
+
+        return ok("Invoice payment processed successfully for subscription.");
       }
     } else {
       //Handle subcription update
@@ -133,12 +165,7 @@ export const handleInvoicePaid = async (
         .eq("id", current_usage_id)
         .single();
 
-      if (
-        usageError ||
-        !usageData?.credits_charged ||
-        !usageData?.additional_credits_charged ||
-        !usageData?.credits_used
-      ) {
+      if (usageError || !usageData) {
         return err("Error fetching current credits details");
       }
 
@@ -157,22 +184,43 @@ export const handleInvoicePaid = async (
       if (existingUsageEndDateUpdateError) {
         return err("Error updating existing subscription usage date");
       }
-      const { error: usageInsertError } = await supabase.from("Usage").insert({
-        stripe_subscription_id: subscriptionId,
-        start_date: startDate.toISOString(),
-        end_date: endDate.toISOString(),
-        credits_charged: newCredits,
-        additional_credits_charged: creditsLeft,
-      });
+      const { data: newUsageInsertData, error: newUsageInsertError } =
+        await supabase
+          .from("Usage")
+          .insert({
+            stripe_subscription_id: subscriptionId,
+            start_date: startDate.toISOString(),
+            end_date: endDate.toISOString(),
+            credits_charged: newCredits,
+            additional_credits_charged: creditsLeft,
+            org_id: orgId,
+          })
+          .select("id")
+          .single();
+
+      if (newUsageInsertError) {
+        return err(
+          `Error inserting new usage record: ${newUsageInsertError.message}`
+        );
+      }
+
+      const { error: usageIdUpdateError } = await supabase
+        .from("Organization")
+        .update({ current_usage_id: newUsageInsertData?.id })
+        .eq("org_id", orgId);
+
+      if (usageIdUpdateError) {
+        return err("Error updating new usage id in Organization table");
+      }
 
       // Reset the metadata as the update is done
       await stripe.subscriptions.update(subscriptionId, {
         metadata: {},
       });
 
-      return usageInsertError
-        ? err(usageInsertError.message)
-        : ok("Invoice payment processed successfully for subscription update.");
+      return ok(
+        "Invoice payment processed successfully for subscription update."
+      );
     }
   } else {
     // Handle one-time payment
@@ -215,22 +263,19 @@ export const handleInvoicePaid = async (
       .eq("id", currentUsageIdData.current_usage_id)
       .single();
 
-    if (
-      additionalCreditsChargedError ||
-      !additionalCreditsChargedData?.additional_credits_charged
-    ) {
+    if (additionalCreditsChargedError || !additionalCreditsChargedData) {
       return err("Error fetching current additional credits");
     }
+
+    const currentAdditionalCredits =
+      additionalCreditsChargedData.additional_credits_charged;
 
     // Update the `additionalCreditsCharged` field
     const { error: updateError } = await supabase
       .from("Usage")
       .update({
         additional_credits_charged:
-          parseInt(
-            additionalCreditsChargedData.additional_credits_charged,
-            10
-          ) + creditsCharged,
+          parseInt(currentAdditionalCredits, 10) + creditsCharged,
       })
       .eq("id", currentUsageIdData?.current_usage_id);
 
