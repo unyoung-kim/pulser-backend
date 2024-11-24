@@ -2,6 +2,7 @@ import { imageSearchHandler } from "./handler/image-search-handler.js";
 import { initializeOrgHandler } from "./handler/initialize-org.js";
 import { internalLinksHandler } from "./handler/internal-links-handler.js";
 import { testEndpointHandler } from "./handler/test-handler.js";
+import { topicGenerationHandler } from "./handler/topic-generation-handler.js";
 import { videoSearchHandler } from "./handler/video-search-handler.js";
 import { webRetrievalHandler } from "./handler/web-retrieval-handler.js";
 import { wordpressAuthHandler } from "./handler/wordpress-auth-handler.js";
@@ -32,4 +33,5 @@ export const trpcRouter = t.router({
   "image-search": imageSearchHandler(t, "image-search"),
   "video-search": videoSearchHandler(t, "video-search"),
   "initialize-org": initializeOrgHandler(t, "initialize-org"),
+  "generate-topic": topicGenerationHandler(t, "generate-topic"),
 });

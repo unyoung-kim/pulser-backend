@@ -9,6 +9,8 @@ import helmet from "helmet";
 import { createOpenApiExpressMiddleware } from "trpc-openapi";
 import { createContext } from "./context.js";
 import { trpcRouter } from "./trpcRouter.js";
+import { createOpenApiDocument } from "./lib/generate-openapi-document.js";
+import swaggerUi from "swagger-ui-express";
 
 const PORT = process.env.PORT ?? 8000;
 export const baseURL = process.env.BASE_URL ?? `http://localhost:${PORT}`;
@@ -35,7 +37,7 @@ app.use(express.json()); // This should parse JSON request bodies
 
 dotenv.config();
 
-// const openApiDocument = createOpenApiDocument(baseURL);
+const openApiDocument = createOpenApiDocument(baseURL);
 
 const maxRequestPerMinuteForInternalAPIs: number = 5;
 
@@ -52,7 +54,7 @@ const apiRateLimiter = rateLimit({
 app.use("/", apiRateLimiter);
 
 // Serve OpenAPI UI
-// app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiDocument));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiDocument));
 
 // Handle OpenAPI requests
 app.use(

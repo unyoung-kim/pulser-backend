@@ -21,9 +21,20 @@ export function initializeOrgHandler(t: tRPC, path: string) {
         summary: "Webhook for Clerk to initialize organization",
         description:
           "This webhook is used to initialize an organization when a new user signs up",
+        tags: ["Clerk Webhook"],
       },
     })
-    .input(z.any())
+    .input(
+      z.object({
+        type: z.string(),
+        data: z
+          .object({
+            id: z.string(),
+          })
+          .passthrough(),
+      })
+    )
+    .output(z.void())
     .mutation(async ({ input }) => {
       try {
         if (input.type !== "organization.created") {

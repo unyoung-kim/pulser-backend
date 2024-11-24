@@ -4,7 +4,6 @@ import { Result, err, ok } from "true-myth/result";
 import { outlineEnricher } from "../agents/outline-enricher.js";
 import { querySuggestor } from "../agents/query-suggestor.js";
 import { researcherSequential } from "../agents/researcher.js";
-import { topicGenerator } from "../agents/topic-generator.js";
 import { writer } from "../agents/writer.js";
 import { EnrichedURL } from "../enrich-internal-links.js";
 import { getSupabaseClient } from "../get-supabase-client.js";
@@ -14,11 +13,6 @@ import { extractFirstImageUrl } from "../utility/extractFirstImageUrl.js";
 
 const maxConcurrentCallToClaudeLLM: number = 2;
 const maxConcurrentCallToOpenAILLM: number = 4;
-
-const throttledTopicGenerator = pThrottle({
-  limit: maxConcurrentCallToOpenAILLM,
-  interval: 1000,
-})(topicGenerator);
 
 const throttledResearcherSequential = pThrottle({
   limit: maxConcurrentCallToClaudeLLM, // Number of calls allowed per interval
@@ -59,7 +53,7 @@ export async function workflowV2({
   keywordId,
 }: {
   projectId: string;
-  inputTopic?: string;
+  inputTopic: string;
   keywordId?: string;
 }): Promise<Result<string, string>> {
   const supabaseClient: Result<SupabaseClient, string> = getSupabaseClient();
@@ -90,34 +84,8 @@ export async function workflowV2({
   - Background Information: ${JSON.stringify(projectBackground, null, 2)}
 `.trim();
 
-  let topic = null;
-  if (inputTopic) {
-    topic = inputTopic;
-  } else if (keywordId) {
-    const { data: keywordData, error: keywordError } = await supabase
-      .from("Keyword")
-      .select("keyword")
-      .eq("id", keywordId)
-      .single();
-
-    if (keywordError) {
-      return err(`Error fetching keyword: ${keywordError.message}`);
-    }
-
-    const keyword = keywordData?.keyword;
-    const generatedTopic: Result<string, string> =
-      await throttledTopicGenerator(keyword, clientDetails);
-    if (generatedTopic.isErr) {
-      return err("Error in topic generation");
-    } else {
-      topic = generatedTopic.value;
-    }
-  } else {
-    return err("Kindly provide topic/keyword for blog post generation");
-  }
-
   const outline: Result<string, string> = await throttledResearcherSequential(
-    topic,
+    inputTopic,
     clientDetails
   );
 
@@ -160,7 +128,7 @@ export async function workflowV2({
 
   const relatedQueries: Result<{ query: string }[], string> =
     await throttledQuerySuggestor(
-      `${clientDetails}\nBlog Topic for client: ${topic}`
+      `${clientDetails}\nBlog Topic for client: ${inputTopic}`
     );
 
   if (relatedQueries.isErr) {
@@ -170,7 +138,7 @@ export async function workflowV2({
   // console.log("Related queries: ", relatedQueries.value);
 
   const finalPost: Result<string, string> = await throttledPostFormatter(
-    `Topic: ${topic}\nArticle: ${article.value}\nRelated Topics: ${relatedQueries.value}`,
+    `Topic: ${inputTopic}\nArticle: ${article.value}\nRelated Topics: ${relatedQueries.value}`,
     "HTML"
   );
 
@@ -188,7 +156,7 @@ export async function workflowV2({
       {
         status: "draft",
         project_id: projectId,
-        title: topic,
+        title: inputTopic,
         image_url: firstImageUrl,
         keyword_id: keywordId,
       },

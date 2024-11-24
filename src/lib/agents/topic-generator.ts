@@ -2,36 +2,59 @@ import { Result, ok, err } from "true-myth/result";
 import { generateText } from "ai";
 import { serpTool } from "../tools/serp-tool.js";
 import { openai } from "@ai-sdk/openai";
+import { SupabaseClient } from "@supabase/supabase-js";
+import { getSupabaseClient } from "../get-supabase-client.js";
 
-const SYSTEM_PROMPT = `As a professional SEO blog writer, you will be given a keyword string and client details. 
-Using the provided inputs and tool, your task is to generate a highly relevant topic for a SEO blog post tailored for a client, optimized to engage users near the bottom or middle of the sales funnel.
+const SYSTEM_PROMPT = `As a professional SEO blog writer, you will be given a keyword string and client background. 
+Using the provided inputs and tool, your task is to generate a list of 5 highly relevant topic for a SEO blog post tailored for a client, optimized to engage users near the bottom or middle of the sales funnel.
 You can utilize the Google Autocomplete API to fetch relevant, up-to-date topic suggestions that enhance SEO content generation.
 
 Follow these tips to generate the topic:
 
 1. Focus on Bottom-of-the-Funnel (BoFu) or Middle-of-the-Funnel (MoFu) strategies, using keywords that indicate strong purchase intent, like comparisons, alternatives, product categories, or solution-oriented phrases.
 2. Keep the title under 60 characters.
-3. Place the main keywords at the beginning of the title.
+3. Place the main keyword at the beginning of the title.
 4. Make it descriptive, clear, and to-the-point. Use natural language.
 5. Incorporate action words and compelling CTAs to increase clicks.
 6. Optimize for specific, intent-driven phrases that answer user needs, pain points, or decision-making queries.
 7. Use numbers, data, or other quantitative elements whenever possible.
 8. Generate a list of engaging blog topics, then select the one most likely to attract high-intent visitors and leads for the business.
 
-Only output the suggested title.
+Only output the suggested titles in a structured JSON string array.
 `;
 
 export async function topicGenerator(
   keyword: string,
-  clientDetails: string
+  projectId: string
 ): Promise<Result<string, string>> {
   try {
+    const supabaseClient: Result<SupabaseClient, string> = getSupabaseClient();
+
+    if (supabaseClient.isErr) {
+      return err(supabaseClient.error);
+    }
+
+    const supabase = supabaseClient.value;
+
+    const { data: backgroundData, error: backgroundError } = await supabase
+      .from("Project")
+      .select("background")
+      .eq("id", projectId)
+      .single();
+
+    if (backgroundError) {
+      return err(`Error in fetching background ${backgroundError.message}`);
+    }
+    if (!backgroundData?.background) {
+      return err(`Background not available for projectId: ${projectId}`);
+    }
+
     const currentDate = new Date().toLocaleString();
 
     const result = await generateText({
       model: openai("gpt-4o"),
       system: `${SYSTEM_PROMPT} Current date and time: ${currentDate}`,
-      prompt: `Keyword: ${keyword}\nClient details: ${clientDetails}`,
+      prompt: `Keyword: ${keyword}\nClient background: ${backgroundData?.background}`,
       tools: { serp: serpTool() },
       maxSteps: 3,
       //   temperature: 1.0
