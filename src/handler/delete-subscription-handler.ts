@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { t, tRPC } from "../lib/trpc.js";
+import { tRPC } from "../lib/trpc.js";
 import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
 import { Result } from "true-myth";
 import { deleteSubscription } from "../lib/stripe/delete-subscription.js";

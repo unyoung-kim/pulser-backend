@@ -14,19 +14,32 @@ export const deleteSubscription = async (
   }
   const supabase = supabaseClient.value;
 
-  const { data: stripeCustomerIdData, error: stripeCustomerIdFetchError } =
+  const { data: currentUsageIdData, error: currentUsageIdIdError } =
     await supabase
       .from("Organization")
-      .select("stripe_customer_id")
+      .select("current_usage_id")
       .eq("org_id", orgId)
       .single();
 
-  if (stripeCustomerIdFetchError) {
+  if (currentUsageIdIdError) {
     return err("Error in fetching stripe customer id");
   }
 
-  if (stripeCustomerIdData?.stripe_customer_id) {
-    return err("Stripe customer id not found");
+  if (currentUsageIdData?.current_usage_id) {
+    return err("Current usage id not found");
+  }
+
+  const { data: stripeSubscriptionIdData, error: stripeSubscriptionIdError } =
+    await supabase
+      .from("Usage")
+      .select("stripe_subscription_id")
+      .eq("id", currentUsageIdData.current_usage_id)
+      .single();
+
+  const subscriptionId = stripeSubscriptionIdData?.stripe_subscription_id;
+
+  if (stripeSubscriptionIdError || !subscriptionId) {
+    return err("Error retrieving active subscription");
   }
 
   const stripeClientResult = getStripeClient();
@@ -34,19 +47,6 @@ export const deleteSubscription = async (
     return err(stripeClientResult.error);
   }
   const stripe = stripeClientResult.value;
-
-  const subscriptions: Stripe.Subscription[] = (
-    await stripe.subscriptions.list({
-      customer: stripeCustomerIdData.stripe_customer_id,
-      status: "active",
-    })
-  ).data;
-
-  const subscriptionId = subscriptions.at(0)?.id;
-
-  if (subscriptions.length != 1 || !subscriptionId) {
-    return err("Error retrieving active subscription");
-  }
 
   await stripe.subscriptions.update(subscriptionId, {
     cancel_at_period_end: true, // Mark subscription for cancellation at the end of the period

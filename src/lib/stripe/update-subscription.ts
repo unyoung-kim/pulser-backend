@@ -47,16 +47,8 @@ export const updateSubscription = async (
 
   const subscriptionId = activeSubscription?.id;
   const subscriptionItemId = activeSubscription?.items.data[0].id;
-  const subscriptionPriceId = activeSubscription?.items.data[0].price.id;
-  const oldBillingCycleAnchor = activeSubscription?.billing_cycle_anchor;
 
-  if (
-    subscriptions.length != 1 ||
-    !subscriptionId ||
-    !subscriptionItemId ||
-    !subscriptionPriceId ||
-    !oldBillingCycleAnchor
-  ) {
+  if (subscriptions.length != 1 || !subscriptionId || !subscriptionItemId) {
     return err("Error fetching active subscription details");
   }
 

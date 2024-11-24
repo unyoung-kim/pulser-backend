@@ -15,13 +15,6 @@ export const createStripeSession = async (
   if (supabaseClient.isErr) {
     return err(supabaseClient.error);
   }
-  const supabase = supabaseClient.value;
-
-  const { error } = await supabase.from("Usage").delete().eq("org_Id", orgId);
-
-  if (error) {
-    return err("Error deleting default/free credits");
-  }
 
   const stripeClientResult = getStripeClient();
 

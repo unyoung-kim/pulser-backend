@@ -27,18 +27,15 @@ export const getOrCreateCustomer = async (
       .from("Organization")
       .select("stripe_customer_id")
       .eq("org_id", orgId)
-      .limit(1);
+      .single();
 
   if (customerFetchError) {
     return err("Error fetching customer from DB.");
   }
 
-  if (existingCustomerData?.length > 0) {
+  if (existingCustomerData.stripe_customer_id) {
     // Customer already exists in your database
-    const customerId = existingCustomerData.at(0);
-    if (customerId) {
-      return ok(customerId.stripe_customer_id);
-    }
+    return ok(existingCustomerData.stripe_customer_id);
   }
 
   // Create a new customer in Stripe
@@ -49,10 +46,11 @@ export const getOrCreateCustomer = async (
       metadata: { orgId },
     });
 
-    // Store the new customer in your database
+    // Store the stripe customer id in the database
     const { error: insertError } = await supabase
       .from("Organization")
-      .insert({ org_id: orgId, stripe_customer_id: customer.id });
+      .update({ stripe_customer_id: customer.id })
+      .eq("org_id", orgId);
 
     if (insertError) {
       // To check race condition
@@ -60,7 +58,7 @@ export const getOrCreateCustomer = async (
         console.log("Conflict detected, fetching existing record...");
         const { data: existingData, error: fetchError } = await supabase
           .from("Organization")
-          .select("*")
+          .select("stripe_customer_id")
           .eq("org_id", orgId)
           .single();
 
@@ -68,7 +66,7 @@ export const getOrCreateCustomer = async (
           return err(`Error fetching existing customer: ${fetchError.message}`);
         }
 
-        return existingData;
+        return existingData.stripe_customer_id;
       }
 
       return err(`Error saving customer to database: ${insertError.message}`);

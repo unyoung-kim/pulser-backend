@@ -13,48 +13,35 @@ export async function getSubscriptionStatusFromStripe(
   }
   const supabase = supabaseClient.value;
 
-  const { data: stripeCustomerIdData, error: stripeCustomerIdFetchError } =
+  const { data: currentUsageIdData, error: currentUsageIdFetchError } =
     await supabase
       .from("Organization")
-      .select("stripe_customer_id")
-      .eq("org_id", orgId);
+      .select("current_usage_id")
+      .eq("org_id", orgId)
+      .single();
 
-  if (stripeCustomerIdFetchError || !stripeCustomerIdData) {
+  if (currentUsageIdFetchError || !currentUsageIdData?.current_usage_id) {
     return err("Error in fetching stripe customer id");
   }
 
-  if (stripeCustomerIdData.length == 0) {
-    const { data: usageData, error: usageError } = await supabase
+  const { data: currentUsageData, error: currentUsageFetchError } =
+    await supabase
       .from("Usage")
       .select("*")
-      .eq("org_id", orgId)
-      .lte("start_date", new Date().toISOString())
-      .gte("end_date", new Date().toISOString())
+      .eq("id", currentUsageIdData.current_usage_id)
       .single();
 
-    if (usageError || !usageData) {
-      return err("Error fetching usage data");
-    }
+  if (currentUsageFetchError || !currentUsageData) {
+    return err("Error in fetching current usage record");
+  }
 
+  if (!currentUsageData.stripe_subscription_id) {
     return ok(`
       "subscribed": "false",
-      "credits_used": ${usageData.credits_used},
-      "credits_charged": ${usageData.credits_charged},
-      "additional_credits": ${usageData.additional_credits_charged}`);
+      "credits_used": ${currentUsageData.credits_used},
+      "credits_charged": ${currentUsageData.credits_charged},
+      "additional_credits": ${currentUsageData.additional_credits_charged}`);
   } else {
-    const { data: usageData, error: usageError } = await supabase
-      .from("Usage")
-      .select("*")
-      .eq("org_id", orgId)
-      .lte("start_date", new Date().toISOString())
-      .gte("end_date", new Date().toISOString())
-      .single();
-
-    if (usageError || !usageData) {
-      return err("Error fetching usage data");
-    }
-    const subscriptionId = usageData.stripe_subscription_id;
-
     const stripeClientResult = getStripeClient();
     if (stripeClientResult.isErr) {
       return err(stripeClientResult.error);
@@ -62,7 +49,9 @@ export async function getSubscriptionStatusFromStripe(
     const stripe = stripeClientResult.value;
 
     const subscription: Stripe.Subscription =
-      await stripe.subscriptions.retrieve(subscriptionId);
+      await stripe.subscriptions.retrieve(
+        currentUsageData.stripe_subscription_id
+      );
 
     const productId = subscription.items.data.at(0)?.plan.product;
 
@@ -77,8 +66,8 @@ export async function getSubscriptionStatusFromStripe(
     return ok(`
       "subscribed": "true",
       "subscription_name": ${product.name},
-      "credits_used": ${usageData.credits_used},
-      "credits_charged": ${usageData.credits_charged},
-      "additional_credits": ${usageData.additional_credits_charged}`);
+      "credits_used": ${currentUsageData.credits_used},
+      "credits_charged": ${currentUsageData.credits_charged},
+      "additional_credits": ${currentUsageData.additional_credits_charged}`);
   }
 }
