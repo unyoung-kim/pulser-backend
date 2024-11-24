@@ -32,7 +32,7 @@ export const searchSubTopicsTool = () =>
           queries.map(async (query) => {
             return await tavilySearch(
               query,
-              3, // max_results,
+              2, // max_results,
               "advanced",
               include_domains,
               exclude_domains

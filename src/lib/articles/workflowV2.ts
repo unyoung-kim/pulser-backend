@@ -9,6 +9,7 @@ import { writer } from "../agents/writer.js";
 import { EnrichedURL } from "../enrich-internal-links.js";
 import { getSupabaseClient } from "../get-supabase-client.js";
 import { postFormatterAndHumanizer } from "../post-formatter.js";
+import { incrementUsageCredit } from "../supabase/usage.js";
 import { extractFirstImageUrl } from "../utility/extractFirstImageUrl.js";
 
 const maxConcurrentCallToClaudeLLM: number = 2;
@@ -52,7 +53,7 @@ export const throttledPostFormatter = pThrottle({
  * @param query
  * @returns
  */
-export async function workflow({
+export async function workflowV2({
   projectId,
   inputTopic,
   keywordId,
@@ -61,15 +62,6 @@ export async function workflow({
   inputTopic?: string;
   keywordId?: string;
 }): Promise<Result<string, string>> {
-  // const action = (await taskManager(query)) ?? { object: { next: 'proceed' } };
-
-  // if (action.object.next === 'inquire') {
-  //   const inquiry = await inquire(query);
-  //   return { type: 'inquiry', asnwer: inquiry };
-  // }
-
-  //
-
   const supabaseClient: Result<SupabaseClient, string> = getSupabaseClient();
 
   if (supabaseClient.isErr) {
@@ -78,30 +70,24 @@ export async function workflow({
 
   const supabase = supabaseClient.value;
 
-  const { data: clientDetailsResponse, error: clientDetailsError } =
-    await supabase
-      .from("Project")
-      .select("name,domain,background,description")
-      .eq("id", projectId);
+  const { data: project, error: projectError } = await supabase
+    .from("Project")
+    .select("name,domain,background,description,org_id")
+    .eq("id", projectId);
 
-  if (clientDetailsError) {
-    return err(`Error fetching client details: ${clientDetailsError.message}`);
+  if (projectError) {
+    return err(`Error fetching project details: ${projectError.message}`);
   }
 
-  const clientName: string | null = clientDetailsResponse?.at(0)?.name ?? null;
-  const clientDomain: string | null =
-    clientDetailsResponse?.at(0)?.domain ?? null;
-  const clientBackground: string | null =
-    clientDetailsResponse?.at(0)?.background ?? null;
-  const clientProjectDescription: string | null =
-    clientDetailsResponse?.at(0)?.description ?? null;
+  const projectName: string | null = project?.at(0)?.name ?? null;
+
+  const projectBackground: Record<string, any> | null =
+    project?.at(0)?.background ?? null;
 
   const clientDetails = `
   Client Information:
-  - Name: ${clientName}
-  - Domain: ${clientDomain}
-  - Background: ${clientBackground}
-  - Project Description: ${clientProjectDescription}
+  - Name: ${projectName}
+  - Background Information: ${JSON.stringify(projectBackground, null, 2)}
 `.trim();
 
   let topic = null;
@@ -230,6 +216,13 @@ export async function workflow({
 
   if (errorContentBodyInsert) {
     return err(`Error saving content body: ${errorContentBodyInsert.message}`);
+  }
+
+  const incrementUsageCreditResult: Result<string, string> =
+    await incrementUsageCredit(supabase, project.at(0)?.org_id ?? "");
+
+  if (incrementUsageCreditResult.isErr) {
+    return err(incrementUsageCreditResult.error);
   }
 
   return ok(finalPost.value);

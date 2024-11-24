@@ -1,7 +1,7 @@
 import { Result } from "true-myth/result";
 import { z } from "zod";
 import { glossaryWorkflow } from "../lib/articles/glossary.js";
-import { workflow } from "../lib/articles/workflow.js";
+import { workflowV2 } from "../lib/articles/workflowV2.js";
 import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
 import { tRPC } from "../lib/trpc.js";
 
@@ -18,6 +18,7 @@ export function webRetrievalHandler(t: tRPC, path: string) {
     })
     .input(
       z.object({
+        orgId: z.string().describe("Org's Clerk Id"),
         projectId: z
           .string()
           .describe(
@@ -38,7 +39,7 @@ export function webRetrievalHandler(t: tRPC, path: string) {
         console.log("TYPE: ", input.type);
         const result: Result<string, string> =
           input.type === "NORMAL"
-            ? await workflow({
+            ? await workflowV2({
                 projectId: input.projectId,
                 inputTopic: input.inputTopic,
                 keywordId: input.keywordId,
@@ -55,6 +56,7 @@ export function webRetrievalHandler(t: tRPC, path: string) {
             data: result.error,
           };
         }
+
         return {
           success: true,
           data: result.value,
