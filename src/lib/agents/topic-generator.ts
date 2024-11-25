@@ -17,9 +17,9 @@ Follow these tips to generate the topic:
 4. Make it descriptive, clear, and to-the-point. Use natural language.
 5. Incorporate action words and compelling CTAs to increase clicks.
 6. Optimize for specific, intent-driven phrases that answer user needs, pain points, or decision-making queries.
-7. Generate a list of engaging blog topics, then select the one most likely to attract high-intent visitors and leads for the business.
+7. Use numbers, data, or other quantitative elements whenever possible.
 
-Only output the suggested titles in a structured JSON string array.
+Strictly output only the suggested titles in ["topic1","topic2",..] format.
 `;
 
 export async function topicGenerator(
