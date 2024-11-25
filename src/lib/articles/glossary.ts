@@ -442,6 +442,11 @@ export async function glossaryWorkflow({
       return err(incrementUsageCreditResult.error);
     }
 
+    console.log(
+      "Successfully created and saved glossary article for",
+      project.name
+    );
+
     return ok("Successfully created and saved glossary article");
   } catch (error) {
     console.error("Error in glossary workflow:", error);
