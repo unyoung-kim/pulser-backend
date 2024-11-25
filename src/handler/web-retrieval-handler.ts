@@ -18,7 +18,6 @@ export function webRetrievalHandler(t: tRPC, path: string) {
     })
     .input(
       z.object({
-        orgId: z.string().describe("Org's Clerk Id"),
         projectId: z
           .string()
           .describe(

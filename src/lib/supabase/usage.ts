@@ -16,7 +16,7 @@ export async function incrementUsageCredit(
   const { data: org, error: orgError } = await supabase
     .from("Organization")
     .select("current_usage_id")
-    .eq("id", orgId)
+    .eq("org_id", orgId)
     .single();
 
   if (orgError) {
