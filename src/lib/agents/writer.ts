@@ -27,7 +27,7 @@ export async function writer(outline: string): Promise<Result<string, string>> {
       model: getCaludeSonnet(),
       system: `${SYSTEM_PROMPT} Current date and time: ${currentDate}`,
       prompt: outline,
-      maxTokens: 9000,
+      maxTokens: 9500,
       temperature: 0.7,
     });
 
