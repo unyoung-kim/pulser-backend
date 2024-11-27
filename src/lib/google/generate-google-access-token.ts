@@ -3,6 +3,7 @@ import { Result } from "true-myth";
 import { err, ok } from "true-myth/result";
 import { getSupabaseClient } from "../get-supabase-client.js";
 import { SupabaseClient } from "@supabase/supabase-js";
+import { decrypt, encrypt } from "../utility/encrypt-and-decrypt-function.js";
 
 export const generateGoogleAccessToken = async (
   projectId: string,
@@ -41,18 +42,21 @@ export const generateGoogleAccessToken = async (
       );
     }
 
-    google_refresh_token = existingTokenData.google_refresh_token;
+    google_refresh_token = decrypt(existingTokenData.google_refresh_token);
   }
 
   if (!google_access_token || !google_token_expiry_date) {
     return err("Error getting valid tokens");
   }
 
+  const encryptedAccessToken = encrypt(google_access_token);
+  const encryptedRefreshToken = encrypt(google_refresh_token);
+
   const { error: tokenError } = await supabase.from("Token").upsert(
     {
       project_id: projectId,
-      google_refresh_token,
-      google_access_token,
+      google_refresh_token: encryptedRefreshToken,
+      google_access_token: encryptedAccessToken,
       google_token_expiry_date,
     },
     { onConflict: "project_id" }

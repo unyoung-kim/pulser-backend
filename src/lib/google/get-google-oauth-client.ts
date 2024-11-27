@@ -4,6 +4,7 @@ import { getSupabaseClient } from "../get-supabase-client.js";
 import { err, ok } from "true-myth/result";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { OAuth2Client } from "google-auth-library";
+import { decrypt, encrypt } from "../utility/encrypt-and-decrypt-function.js";
 
 export const getGoogleOAuthClient = async (
   projectId: string
@@ -28,13 +29,16 @@ export const getGoogleOAuthClient = async (
     );
   }
 
-  let accessToken = googleTokenData.google_access_token;
-  const refreshToken = googleTokenData.google_refresh_token;
-  let expiryDate = googleTokenData.google_token_expiry_date;
+  const encryptedAccessToken = googleTokenData.google_access_token;
+  const encryptedRefreshToken = googleTokenData.google_refresh_token;
+  const expiryDate = googleTokenData.google_token_expiry_date;
 
-  if (!accessToken || !refreshToken || !expiryDate) {
+  if (!encryptedAccessToken || !encryptedRefreshToken || !expiryDate) {
     return err("Error fetching google access token for this projectId");
   }
+
+  const accessToken = decrypt(encryptedAccessToken);
+  const refreshToken = decrypt(encryptedRefreshToken);
 
   if (
     !process.env.GOOGLE_CLIENT_ID ||
@@ -60,17 +64,21 @@ export const getGoogleOAuthClient = async (
       console.log("Access token expired. Attempting to refresh...");
       const { credentials } = await oAuth2Client.refreshAccessToken();
 
-      accessToken = credentials.access_token;
-      expiryDate = credentials.expiry_date;
-      if (!accessToken || !expiryDate) {
-        return err("Error: New token data is incomplete");
+      if (!credentials?.access_token || !credentials?.expiry_date) {
+        return err("Error: new token data is incomplete");
       }
+
+      // Preserve the existing refresh_token if not returned
+      credentials.refresh_token = credentials.refresh_token || refreshToken;
+
+      const newEncryptedAccessToken = encrypt(credentials.access_token);
+      const newExpiryDate = credentials.expiry_date;
 
       await supabase
         .from("Token")
         .update({
-          google_access_token: accessToken,
-          google_token_expiry_date: expiryDate,
+          google_access_token: newEncryptedAccessToken,
+          google_token_expiry_date: newExpiryDate,
         })
         .eq("project_id", projectId);
 
