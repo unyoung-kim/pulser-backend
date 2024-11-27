@@ -1,3 +1,7 @@
+import { googleAuthHandler } from "./handler/google-auth-handler.js";
+import { googleDocCreationHandler } from "./handler/google-doc-creation-handler.js";
+import { googleDocSharingHandler } from "./handler/google-doc-sharing-handler.js";
+import { googleTokenGenerationHandler } from "./handler/google-token-generation-handler.js";
 import { imageSearchHandler } from "./handler/image-search-handler.js";
 import { initializeOrgHandler } from "./handler/initialize-org.js";
 import { internalLinksHandler } from "./handler/internal-links-handler.js";
@@ -7,7 +11,7 @@ import { videoSearchHandler } from "./handler/video-search-handler.js";
 import { webRetrievalHandler } from "./handler/web-retrieval-handler.js";
 import { wordpressAuthHandler } from "./handler/wordpress-auth-handler.js";
 import { createPostHandler } from "./handler/wordpress-post-creation.js";
-import { wordpressTokenHandler } from "./handler/wordpress-token-handler.js";
+import { wordpressTokenGenerationHandler } from "./handler/wordpress-token-generation-handler.js";
 import { t } from "./lib/trpc.js";
 
 /**
@@ -23,7 +27,7 @@ export const trpcRouter = t.router({
     t,
     "auth/wordpress/authorize"
   ),
-  "auth/wordpress/callback": wordpressTokenHandler(
+  "auth/wordpress/callback": wordpressTokenGenerationHandler(
     t,
     "auth/wordpress/callback"
   ),
@@ -34,4 +38,11 @@ export const trpcRouter = t.router({
   "video-search": videoSearchHandler(t, "video-search"),
   "initialize-org": initializeOrgHandler(t, "initialize-org"),
   "generate-topic": topicGenerationHandler(t, "generate-topic"),
+  "auth/google/authorize": googleAuthHandler(t, "auth/google/authorize"),
+  "auth/google/callback": googleTokenGenerationHandler(
+    t,
+    "auth/google/callback"
+  ),
+  "create-google-doc": googleDocCreationHandler(t, "create-google-doc"),
+  "share-google-doc": googleDocSharingHandler(t, "share-google-doc"),
 });
