@@ -1,5 +1,6 @@
 import { generateText } from "ai";
 import { Result, err, ok } from "true-myth/result";
+import { MAX_CLAUDE_SONNET_TOKENS } from "../ai/ai-token.js";
 import { getCaludeSonnet } from "../get-model.js";
 
 const SYSTEM_PROMPT = `<Task>
@@ -27,7 +28,7 @@ export async function writer(outline: string): Promise<Result<string, string>> {
       model: getCaludeSonnet(),
       system: `${SYSTEM_PROMPT} Current date and time: ${currentDate}`,
       prompt: outline,
-      maxTokens: 9500,
+      maxTokens: MAX_CLAUDE_SONNET_TOKENS,
       temperature: 0.7,
     });
 
