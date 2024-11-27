@@ -25,14 +25,16 @@ export function initializeOrgHandler(t: tRPC, path: string) {
       },
     })
     .input(
-      z.object({
-        type: z.string(),
-        data: z
-          .object({
-            id: z.string(),
-          })
-          .passthrough(),
-      })
+      z
+        .object({
+          type: z.string(),
+          data: z
+            .object({
+              id: z.string(),
+            })
+            .passthrough(),
+        })
+        .passthrough()
     )
     .output(z.void())
     .mutation(async ({ input }) => {

@@ -65,7 +65,7 @@ app.use(
   })
 );
 app.use(helmet());
-app.use(express.json()); // General JSON parsing for all other routes
+app.use(express.json()); // This should parse JSON request bodies
 
 // Serve OpenAPI UI
 const openApiDocument = createOpenApiDocument(baseURL);

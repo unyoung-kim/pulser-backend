@@ -2,6 +2,7 @@ import { imageSearchHandler } from "./handler/image-search-handler.js";
 import { initializeOrgHandler } from "./handler/initialize-org.js";
 import { internalLinksHandler } from "./handler/internal-links-handler.js";
 import { testEndpointHandler } from "./handler/test-handler.js";
+import { topicGenerationHandler } from "./handler/topic-generation-handler.js";
 import { videoSearchHandler } from "./handler/video-search-handler.js";
 import { stripeSessionCreationHandler } from "./handler/stripe-session-creation-handler.js";
 import { stripeWebhook } from "./handler/stripe-webhook.js";
@@ -53,4 +54,5 @@ export const trpcRouter = t.router({
   "delete-subscription": deleteSubscriptionHandler(t, "delete-subscription"),
   "update-subscription": updateSubscriptionHandler(t, "update-subscription"),
   "initialize-org": initializeOrgHandler(t, "initialize-org"),
+  "generate-topic": topicGenerationHandler(t, "generate-topic"),
 });
