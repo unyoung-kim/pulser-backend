@@ -1,0 +1,1 @@
+export const MAX_CLAUDE_SONNET_TOKENS = 8100;

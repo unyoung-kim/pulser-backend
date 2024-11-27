@@ -1,5 +1,6 @@
 import { generateText } from "ai";
 import { Result, err, ok } from "true-myth/result";
+import { MAX_CLAUDE_SONNET_TOKENS } from "../ai/ai-token.js";
 import { getCaludeSonnet } from "../get-model.js";
 
 const SYSTEM_PROMPT = `<Task>
@@ -9,7 +10,7 @@ Your task is to write a very long and detailed blog post, of length around 3000 
 </Task>
 
 <Rules>
-1. Word count of the blog post must around 3000 words. Follow this very strictly.
+1. Word count of the blog post must around 3500 words. Follow this very strictly.
 2. Use all the images and links provided in the outline. Use [Image: <image_url>] and [link: link_url] right next to the text that you want to anchor. You will be rewarded by using all the links and images provided by the outline. (E.g. If you have any questions, contact us [link: <some_contact_us_url>] via email.)
 3. Pay particular attention to crafting the introduction. The introduction should provide value instantly and mention about the pain point of the audience. Keep the sentences short and concise. Also make sure it's not too salesy.
 4. Follow the Problem - Agitation - Solution copy writing framework. It's important that you generally follow and embed this flow but not explicitly mention it.
@@ -27,7 +28,7 @@ export async function writer(outline: string): Promise<Result<string, string>> {
       model: getCaludeSonnet(),
       system: `${SYSTEM_PROMPT} Current date and time: ${currentDate}`,
       prompt: outline,
-      maxTokens: 9000,
+      maxTokens: MAX_CLAUDE_SONNET_TOKENS,
       temperature: 0.7,
     });
 
