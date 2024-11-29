@@ -11,6 +11,7 @@ import { createContext } from "./context.js";
 import { trpcRouter } from "./trpcRouter.js";
 import { createOpenApiDocument } from "./lib/generate-openapi-document.js";
 import swaggerUi from "swagger-ui-express";
+import multer from "multer";
 
 const PORT = process.env.PORT ?? 8000;
 export const baseURL = process.env.BASE_URL ?? `http://localhost:${PORT}`;
@@ -68,7 +69,16 @@ app.use(
   })
 );
 
-// TODO: I should probably add auth here too but I can do this later.
+const upload = multer({ dest: "uploads/" });
+
+app.post(
+  "/upload-docx",
+  upload.single("file"), // Accept a single file with the key "file"
+  (req: any, res: any, next: any) => {
+    req.file = req.file; // Attach the file to the request object
+    next();
+  }
+);
 
 // Apply the tRPC middleware on the '/trpc' route
 app.use(

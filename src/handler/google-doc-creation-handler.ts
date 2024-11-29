@@ -2,6 +2,7 @@ import { z } from "zod";
 import { tRPC } from "../lib/trpc.js";
 import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
 import { createGoogleDoc } from "../lib/google/create-google-doc.js";
+import { Result } from "true-myth";
 
 export function googleDocCreationHandler(t: tRPC, path: string) {
   return t.procedure
@@ -26,14 +27,21 @@ export function googleDocCreationHandler(t: tRPC, path: string) {
     .output(ApiResponseSchema)
     .mutation(async ({ input }) => {
       try {
-        const result = await createGoogleDoc(
+        const result: Result<string, string> = await createGoogleDoc(
           input.filename,
           input.content,
           input.projectId
         );
+
+        if (result.isErr) {
+          return {
+            success: false,
+            error: result.error,
+          };
+        }
         return {
           success: true,
-          data: result,
+          data: result.value,
         };
       } catch (error) {
         return {

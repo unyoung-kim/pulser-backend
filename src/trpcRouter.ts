@@ -7,6 +7,7 @@ import { initializeOrgHandler } from "./handler/initialize-org.js";
 import { internalLinksHandler } from "./handler/internal-links-handler.js";
 import { testEndpointHandler } from "./handler/test-handler.js";
 import { topicGenerationHandler } from "./handler/topic-generation-handler.js";
+import { uploadDocxHandler } from "./handler/upload-docx-handler.js";
 import { videoSearchHandler } from "./handler/video-search-handler.js";
 import { webRetrievalHandler } from "./handler/web-retrieval-handler.js";
 import { wordpressAuthHandler } from "./handler/wordpress-auth-handler.js";
@@ -45,4 +46,5 @@ export const trpcRouter = t.router({
   ),
   "create-google-doc": googleDocCreationHandler(t, "create-google-doc"),
   "share-google-doc": googleDocSharingHandler(t, "share-google-doc"),
+  "upload-docx": uploadDocxHandler(t, "upload-docx"),
 });

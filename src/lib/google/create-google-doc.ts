@@ -2,7 +2,8 @@ import { Result } from "true-myth";
 import { err, ok } from "true-myth/result";
 import { getGoogleOAuthClient } from "./get-google-oauth-client.js";
 import { OAuth2Client } from "google-auth-library";
-import { google } from "googleapis";
+import { google, docs_v1 } from "googleapis";
+import { convertHtmlToGoogleDocsRequests } from "./convert-html-to-google-doc-requests.js";
 
 export const createGoogleDoc = async (
   filename: string,
@@ -10,6 +11,12 @@ export const createGoogleDoc = async (
   projectId: string
 ): Promise<Result<string, string>> => {
   try {
+    const convertedContent: Result<docs_v1.Schema$Request[], string> =
+      await convertHtmlToGoogleDocsRequests(content);
+    if (convertedContent.isErr) {
+      return err("Error converting HTML content to google doc requests");
+    }
+
     const googleOAuth2ClientResult: Result<OAuth2Client, string> =
       await getGoogleOAuthClient(projectId);
 
@@ -40,14 +47,7 @@ export const createGoogleDoc = async (
     await docs.documents.batchUpdate({
       documentId,
       requestBody: {
-        requests: [
-          {
-            insertText: {
-              endOfSegmentLocation: {},
-              text: content,
-            },
-          },
-        ],
+        requests: convertedContent.value,
       },
     });
 
