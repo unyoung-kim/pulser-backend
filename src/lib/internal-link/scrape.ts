@@ -322,9 +322,10 @@ async function crawlWithPuppeteer(
     // Find all <a> tags and extract URLs
     $("a").each((_, element) => {
       const href = $(element).attr("href");
-      console.log("HREF: ", href);
       if (href) {
         const fullUrl = resolveUrl(url, href, domain);
+
+        console.log("FULL URL: ", fullUrl);
         if (
           fullUrl &&
           !visited.has(fullUrl) &&
