@@ -1,16 +1,19 @@
 // Express server, entry point.
 
+import express from "express";
+import bodyParser from "body-parser";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import cors from "cors";
-import dotenv from "dotenv";
-import express from "express";
-import rateLimit from "express-rate-limit";
 import helmet from "helmet";
-import { createOpenApiExpressMiddleware } from "trpc-openapi";
-import { createContext } from "./context.js";
-import { trpcRouter } from "./trpcRouter.js";
-import { createOpenApiDocument } from "./lib/generate-openapi-document.js";
+import dotenv from "dotenv";
+import rateLimit from "express-rate-limit";
 import swaggerUi from "swagger-ui-express";
+import { createOpenApiExpressMiddleware } from "trpc-openapi";
+import { trpcRouter } from "./trpcRouter.js"; // Replace with your actual router import
+import { createContext } from "./context.js";
+import { createOpenApiDocument } from "./lib/generate-openapi-document.js";
+
+dotenv.config();
 
 const PORT = process.env.PORT ?? 8000;
 export const baseURL = process.env.BASE_URL ?? `http://localhost:${PORT}`;
@@ -18,12 +21,41 @@ export const baseURL = process.env.BASE_URL ?? `http://localhost:${PORT}`;
 // Initialize Express app
 const app = express();
 
-// if (process.env.NODE_ENV === "production") {
-//   app.set("trust proxy", true); // Trust all proxies in production
-// }
+// Rate limiting
+const maxRequestPerMinuteForInternalAPIs: number = 5;
+const apiRateLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: maxRequestPerMinuteForInternalAPIs, // 5 requests per minute
+  message: {
+    error: "Too many requests, please try again later.",
+  },
+});
 
-// Express middlewares
-// app.use(cors());
+const maxRequestPerMinuteForWebhook: number = 25;
+const webhookRateLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: maxRequestPerMinuteForWebhook, // 25 requests per minute
+  message: {
+    error: "Too many requests, please try again later.",
+  },
+});
+
+// Middleware for Stripe webhook: Raw body required for signature validation
+app.post(
+  "/webhook",
+  webhookRateLimiter, // Apply specific rate limiter for /webhook
+  bodyParser.raw({ type: "application/json" }) // Raw body for Stripe
+);
+
+// Apply general rate limiter to all other routes
+app.use((req: any, res: any, next: any) => {
+  if (req.path !== "/webhook") {
+    return apiRateLimiter(req, res, next);
+  }
+  next();
+});
+
+// General middlewares
 app.use(
   cors({
     origin: "*", // or specify allowed origins
@@ -35,25 +67,8 @@ app.use(
 app.use(helmet());
 app.use(express.json()); // This should parse JSON request bodies
 
-dotenv.config();
-
-const openApiDocument = createOpenApiDocument(baseURL);
-
-const maxRequestPerMinuteForInternalAPIs: number = 5;
-
-// Set up rate limiting
-const apiRateLimiter = rateLimit({
-  windowMs: 60 * 1000, // 1 minute
-  max: maxRequestPerMinuteForInternalAPIs, // Setting it to 5 per IP as post generation takes atleast 30 seconds
-  message: {
-    error: "Too many requests, please try again later.",
-  },
-});
-
-// Apply rate limiting middleware globally to all routes
-app.use("/", apiRateLimiter);
-
 // Serve OpenAPI UI
+const openApiDocument = createOpenApiDocument(baseURL);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiDocument));
 
 // Handle OpenAPI requests
@@ -68,9 +83,7 @@ app.use(
   })
 );
 
-// TODO: I should probably add auth here too but I can do this later.
-
-// Apply the tRPC middleware on the '/trpc' route
+// tRPC middleware for other routes
 app.use(
   trpcExpress.createExpressMiddleware({
     router: trpcRouter,
@@ -82,48 +95,3 @@ app.use(
 app.listen(PORT, () => {
   console.log(`💡 Server running on ${baseURL}`);
 });
-
-// Rate limiting based on different routes:
-
-// // Define rate limiters for specific route patterns
-// const rateLimiters = {
-//   "hello": rateLimit({
-//     windowMs: 60 * 1000, // 1 minute
-//     max: 10,
-//     message: { error: "Too many requests to hello route, please try again later." },
-//   }),
-//   "auth": rateLimit({
-//     windowMs: 60 * 1000, // 1 minute
-//     max: 5,
-//     message: { error: "Too many requests to auth routes, please try again later." },
-//   }),
-//   "create-post": rateLimit({
-//     windowMs: 60 * 1000, // 1 minute
-//     max: 3,
-//     message: { error: "Too many requests to create-post route, please try again later." },
-//   }),
-// };
-
-// // Middleware to dynamically apply rate limiting based on route pattern
-// const dynamicRateLimiter = (req, res, next) => {
-//   const path = req.path.split("/trpc/")[1]; // Get the tRPC route name
-//   const rateLimiter = Object.entries(rateLimiters).find(([key]) => path.startsWith(key));
-
-//   if (rateLimiter) {
-//     // Apply the matched rate limiter
-//     rateLimiter[1](req, res, next);
-//   } else {
-//     // No rate limiter for this route, proceed to the next middleware
-//     next();
-//   }
-// };
-
-// // Apply the dynamic rate limiter middleware to the tRPC route
-// app.use(
-//   "/trpc",
-//   dynamicRateLimiter,
-//   trpcExpress.createExpressMiddleware({
-//     router: trpcRouter,
-//     createContext,
-//   })
-// );
