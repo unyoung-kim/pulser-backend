@@ -323,12 +323,8 @@ async function crawlWithPuppeteer(
     $("a").each((_, element) => {
       const href = $(element).attr("href");
       if (href) {
-        console.log("URL: ", url);
-        console.log("HREF: ", href);
-        console.log("Domain: ", domain);
         const fullUrl = resolveUrl(url, href, domain);
 
-        console.log("FULL URL: ", fullUrl);
         if (
           fullUrl &&
           !visited.has(fullUrl) &&
@@ -336,7 +332,7 @@ async function crawlWithPuppeteer(
           // &&
           // isKeyUrl(fullUrl)
         ) {
-          console.log("PUSHING: ", fullUrl);
+          console.log("FOUND: ", fullUrl);
           links.push(normalizeUrl(fullUrl));
         }
       }

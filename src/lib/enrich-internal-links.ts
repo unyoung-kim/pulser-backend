@@ -4,6 +4,7 @@ import pThrottle from "p-throttle";
 import { err, ok, Result } from "true-myth/result";
 import { getSupabaseClient } from "./get-supabase-client.js";
 import { crawlImportantInternalLinks } from "./internal-link/scrape.js";
+import { extractDomain } from "./internal-link/util.js";
 
 // Define the interface for enriched URL
 export interface EnrichedURL {
@@ -57,13 +58,15 @@ export async function enrichInternalLinks(
     return err(`Error fetching project: ${projectError.message}`);
   }
 
-  const domain: string | null =
+  const companyURL: string | null =
     project?.at(0)?.background.basic.companyUrl ?? null;
-  // const orgId: string = (project && project.length > 0) ? project.at(0).org_id : "";
 
-  if (domain == null || domain.length == 0) {
+  if (companyURL == null || companyURL.length == 0) {
     return err("Error fetching domain/domain unavailable");
   }
+
+  const domain = extractDomain(companyURL);
+  // const orgId: string = (project && project.length > 0) ? project.at(0).org_id : "";
 
   const internalLinks: string[] = await crawlImportantInternalLinks(domain, 30);
 
