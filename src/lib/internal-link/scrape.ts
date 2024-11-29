@@ -333,6 +333,7 @@ async function crawlWithPuppeteer(
           // &&
           // isKeyUrl(fullUrl)
         ) {
+          console.log("PUSHING: ", fullUrl);
           links.push(normalizeUrl(fullUrl));
         }
       }
