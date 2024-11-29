@@ -28,7 +28,7 @@ export async function postFormatter(
 ): Promise<Result<string, string>> {
   try {
     const result = await generateText({
-      model: openai("gpt-4o-mini"),
+      model: openai("gpt-4o-mini-2024-07-18"),
       temperature: 0,
       maxTokens: 8000,
       system: SYSTEM_PROMPT,
@@ -51,6 +51,8 @@ Writing Style Rules:
 - When introducing a new product or concept, avoid using overly formal or forced phrases like "Meet X" or "Enter Y." Aim for a more natural and conversational approach.
 - Don't use phrases and words like "In today's fast paced world", "In today's digital age", "dive", "evolve", "Think about it", "embark", "gone are the days", or anything similar - this sounds unnatural and robotic.
 - Remove any rhetorical questions into normal simple sentences that gets directly to the point.
+- Preserve all images and links.
+- You are welcome to rephrase sentences completely to make it more natural and follow the rules above.
 
 Example Tone of Writing - You will be rewarded by mimicking the style of voice of the example below
 <h1>Digital Marketing</h1>

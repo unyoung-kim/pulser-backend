@@ -133,12 +133,10 @@ export async function crawlImportantInternalLinks(
 ): Promise<string[]> {
   console.log("Puppeteer Cache Directory:", process.env.PUPPETEER_CACHE_DIR);
 
+  const url: string = normalizeInputUrl(domain);
+
   // Immutable way: reassigning `visited` after every operation
-  const visited = await crawlWithPuppeteer(
-    `https://${domain}`,
-    domain,
-    ImmutableSet<string>()
-  );
+  const visited = await crawlWithPuppeteer(url, domain, ImmutableSet<string>());
 
   const sortedUrls = sortUrlsByDepth(visited.toArray());
 
@@ -292,7 +290,8 @@ async function crawlWithPuppeteer(
     // Launch a headless browser with Puppeteer
     const browser = await puppeteer.launch({
       headless: true,
-      executablePath: "/opt/render/project/puppeteer/chrome/linux-131.0.6778.69/chrome-linux64/chrome",
+      executablePath:
+        "/opt/render/project/puppeteer/chrome/linux-131.0.6778.69/chrome-linux64/chrome",
       args: [
         "--no-sandbox",
         "--disable-setuid-sandbox",
@@ -323,6 +322,7 @@ async function crawlWithPuppeteer(
     // Find all <a> tags and extract URLs
     $("a").each((_, element) => {
       const href = $(element).attr("href");
+      console.log("HREF: ", href);
       if (href) {
         const fullUrl = resolveUrl(url, href, domain);
         if (
@@ -346,6 +346,32 @@ async function crawlWithPuppeteer(
     console.error(`Failed to crawl ${url}: ${error}`);
     return visited;
   }
+}
+
+export function normalizeInputUrl(input: string): string {
+  // Trim and lowercase
+  input = input.trim().toLowerCase();
+
+  // Remove existing protocol if present
+  input = input.replace(/^(https?:\/\/)/, "");
+
+  // Remove www. if present
+  input = input.replace(/^www\./, "");
+
+  // Split domain and potential path
+  const parts = input.split("/");
+  const domain = parts[0];
+  const path = parts.slice(1).join("/");
+
+  // Reconstruct URL
+  let normalizedUrl = `https://${domain}`;
+
+  // Add path if exists
+  if (path) {
+    normalizedUrl += `/${path}`;
+  }
+
+  return normalizedUrl;
 }
 
 // console.log("Starting to crawling...");
