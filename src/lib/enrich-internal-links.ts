@@ -1,9 +1,10 @@
 import { SupabaseClient } from "@supabase/supabase-js";
-import { crawlImportantInternalLinks } from "./internal-link/scrape.js";
 import Exa from "exa-js";
+import pThrottle from "p-throttle";
 import { err, ok, Result } from "true-myth/result";
 import { getSupabaseClient } from "./get-supabase-client.js";
-import pThrottle from "p-throttle";
+import { crawlImportantInternalLinks } from "./internal-link/scrape.js";
+import { extractDomain } from "./internal-link/util.js";
 
 // Define the interface for enriched URL
 export interface EnrichedURL {
@@ -50,25 +51,30 @@ export async function enrichInternalLinks(
 
   const { data: project, error: projectError } = await supabase
     .from("Project")
-    .select("domain")
+    .select("domain, background")
     .eq("id", projectId);
 
   if (projectError) {
     return err(`Error fetching project: ${projectError.message}`);
   }
 
-  const domain: string | null = project?.at(0)?.domain ?? null;
-  // const orgId: string = (project && project.length > 0) ? project.at(0).org_id : "";
+  const companyURL: string | null =
+    project?.at(0)?.background.basic.companyUrl ?? null;
 
-  if (domain == null || domain.length == 0) {
+  if (companyURL == null || companyURL.length == 0) {
     return err("Error fetching domain/domain unavailable");
   }
+
+  const domain = extractDomain(companyURL);
+  // const orgId: string = (project && project.length > 0) ? project.at(0).org_id : "";
 
   const internalLinks: string[] = await crawlImportantInternalLinks(domain, 30);
 
   if (!internalLinks || internalLinks.length == 0) {
     return err("No internal links found from crawler");
   }
+
+  console.log("Found ", internalLinks.length, " internal links for ", domain);
 
   // @ts-ignore
   const exa = new Exa(process.env.EXA_API_KEY ?? "");
@@ -103,6 +109,8 @@ export async function enrichInternalLinks(
   if (insertError) {
     return err(`Error inserting internal links: ${insertError.message}`);
   }
+
+  console.log("Successfully enriched internal links for ", domain);
 
   return ok(getEnrichedContents);
 }

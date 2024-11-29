@@ -37,7 +37,7 @@ export async function topicGenerator(
 
     const { data: backgroundData, error: backgroundError } = await supabase
       .from("Project")
-      .select("background")
+      .select("background, name")
       .eq("id", projectId)
       .single();
 
@@ -45,7 +45,7 @@ export async function topicGenerator(
       return err(`Error in fetching background ${backgroundError.message}`);
     }
     if (!backgroundData?.background) {
-      return err(`Background not available for projectId: ${projectId}`);
+      return err(`Please complete the background information of the project "${backgroundData?.name}" to get AI suggestions.`);
     }
 
     const currentDate = new Date().toLocaleString();

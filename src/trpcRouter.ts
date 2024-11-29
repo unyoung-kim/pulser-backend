@@ -9,11 +9,17 @@ import { testEndpointHandler } from "./handler/test-handler.js";
 import { topicGenerationHandler } from "./handler/topic-generation-handler.js";
 import { uploadDocxHandler } from "./handler/upload-docx-handler.js";
 import { videoSearchHandler } from "./handler/video-search-handler.js";
+import { stripeSessionCreationHandler } from "./handler/stripe-session-creation-handler.js";
+import { stripeWebhook } from "./handler/stripe-webhook.js";
+import { stripeSessionVerificationHandler } from "./handler/stripe-session-verification-handler.js";
+import { subscriptionStatusRetrievalHandler } from "./handler/subscription-status-retrieval-handler.js";
 import { webRetrievalHandler } from "./handler/web-retrieval-handler.js";
 import { wordpressAuthHandler } from "./handler/wordpress-auth-handler.js";
 import { createPostHandler } from "./handler/wordpress-post-creation.js";
 import { wordpressTokenGenerationHandler } from "./handler/wordpress-token-generation-handler.js";
 import { t } from "./lib/trpc.js";
+import { deleteSubscriptionHandler } from "./handler/delete-subscription-handler.js";
+import { updateSubscriptionHandler } from "./handler/update-subscription-handler.js";
 
 /**
  * tRPC routers from here
@@ -37,6 +43,21 @@ export const trpcRouter = t.router({
   "internal-links-handler": internalLinksHandler(t, "internal-links-handler"),
   "image-search": imageSearchHandler(t, "image-search"),
   "video-search": videoSearchHandler(t, "video-search"),
+  "create-stripe-session": stripeSessionCreationHandler(
+    t,
+    "create-stripe-session"
+  ),
+  webhook: stripeWebhook(t, "webhook"),
+  "verify-checkout-session": stripeSessionVerificationHandler(
+    t,
+    "verify-checkout-session"
+  ),
+  "get-subscription-status": subscriptionStatusRetrievalHandler(
+    t,
+    "get-subscription-status"
+  ),
+  "delete-subscription": deleteSubscriptionHandler(t, "delete-subscription"),
+  "update-subscription": updateSubscriptionHandler(t, "update-subscription"),
   "initialize-org": initializeOrgHandler(t, "initialize-org"),
   "generate-topic": topicGenerationHandler(t, "generate-topic"),
   "auth/google/authorize": googleAuthHandler(t, "auth/google/authorize"),

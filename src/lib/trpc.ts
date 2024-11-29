@@ -14,8 +14,16 @@ export const t = initTRPC
   .context<inferAsyncReturnType<typeof createContext>>()
   .create({
     errorFormatter(opts) {
-      // You can change the error messages here if you want
       const { shape, error } = opts;
+
+      // Log the error details to the console for debugging purposes
+      if (error.code === "BAD_REQUEST" && error.cause instanceof ZodError) {
+        console.error("Zod Error: ", error.cause.issues); // Log the issues (validation errors) from Zod
+      } else {
+        console.error("Unexpected Error: ", error); // Log any unexpected errors
+      }
+
+      // Return the formatted error response
       return {
         ...shape,
         zodErrors:
