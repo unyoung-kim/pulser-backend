@@ -7,7 +7,7 @@ import { researcherSequential } from "../agents/researcher.js";
 import { writer } from "../agents/writer.js";
 import { EnrichedURL } from "../enrich-internal-links.js";
 import { getSupabaseClient } from "../get-supabase-client.js";
-import { postFormatterAndHumanizer } from "../post-formatter.js";
+import { postFormatter, postFormatterAndHumanizer } from "../post-formatter.js";
 import { extractFirstImageUrl } from "../utility/extractFirstImageUrl.js";
 
 const maxConcurrentCallToClaudeLLM: number = 2;
@@ -33,10 +33,15 @@ const throttledQuerySuggestor = pThrottle({
   interval: 1000,
 })(querySuggestor);
 
-export const throttledPostFormatter = pThrottle({
+export const throttledPostFormatterAndHumanizer = pThrottle({
   limit: maxConcurrentCallToOpenAILLM,
   interval: 1000,
 })(postFormatterAndHumanizer);
+
+export const throttledPostFormatter = pThrottle({
+  limit: maxConcurrentCallToOpenAILLM,
+  interval: 1000,
+})(postFormatter);
 
 /**
  * Based on user query, generate a blog post
@@ -142,10 +147,11 @@ export async function workflow({
 
   // console.log("Related queries: ", relatedQueries.value);
 
-  const finalPost: Result<string, string> = await throttledPostFormatter(
-    `Topic: ${inputTopic}\nArticle: ${article.value}\nRelated Topics: ${relatedQueries.value}`,
-    "HTML"
-  );
+  const finalPost: Result<string, string> =
+    await throttledPostFormatterAndHumanizer(
+      `Topic: ${inputTopic}\nArticle: ${article.value}\nRelated Topics: ${relatedQueries.value}`,
+      "HTML"
+    );
 
   if (finalPost.isErr) {
     return err(finalPost.error);

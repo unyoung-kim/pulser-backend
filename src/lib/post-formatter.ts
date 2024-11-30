@@ -11,10 +11,9 @@ Your task is to format the given blog post in the specified format without losin
 Please ensure:
 - Images are resized appropriately and maintain aspect ratio. Use a maximum width of 100% for responsiveness.
 - Paragraphs are properly spaced and easy to read.
-- Headings and subheadings are clearly defined with appropriate tags.
+- Headings and subheadings are clearly defined with appropriate tags. The title should be in <h1> tag.
 - Lists are formatted as ordered or unordered lists where applicable.
 - Maintain a consistent structure throughout the document.
-- Don't provide heading/title in the output, just the body.
 - Links are properly formatted with the <a> tag.
 Just output the formatted result without any new lines or other special characters.
 `;
@@ -103,10 +102,9 @@ Example Tone of Writing - You will be rewarded by mimicking the style of voice o
 Formatting Rules:
 - Images are resized appropriately and maintain aspect ratio. Use a maximum width of 100% for responsiveness.
 - Paragraphs are properly spaced and easy to read.
-- Headings and subheadings are clearly defined with appropriate tags.
+- Headings and subheadings are clearly defined with appropriate tags. The title should be in <h1> tag.
 - Lists are formatted as ordered or unordered lists where applicable.
 - Maintain a consistent structure throughout the document.
-- Don't provide heading/title in the output, just the body.
 - Links are properly formatted with the <a> tag.
 Just output the formatted result without any new lines or other special characters.
 `;
