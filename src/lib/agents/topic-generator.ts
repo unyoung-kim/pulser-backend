@@ -1,9 +1,9 @@
-import { Result, ok, err } from "true-myth/result";
-import { generateText } from "ai";
-import { serpTool } from "../tools/serp-tool.js";
 import { openai } from "@ai-sdk/openai";
 import { SupabaseClient } from "@supabase/supabase-js";
+import { generateText } from "ai";
+import { Result, err, ok } from "true-myth/result";
 import { getSupabaseClient } from "../get-supabase-client.js";
+import { serpTool } from "../tools/serp-tool.js";
 
 const SYSTEM_PROMPT = `As a professional SEO blog writer, you will be given a keyword string and client background. 
 Using the provided inputs and tool, your task is to generate a list of 5 highly relevant topic for a SEO blog post tailored for a client, optimized to engage users near the bottom or middle of the sales funnel.
@@ -11,13 +11,11 @@ You can utilize the Google Autocomplete API to fetch relevant, up-to-date topic 
 
 Follow these tips to generate the topic:
 
-1. Focus on Bottom-of-the-Funnel (BoFu) or Middle-of-the-Funnel (MoFu) strategies, using keywords that indicate strong purchase intent, like comparisons, alternatives, product categories, or solution-oriented phrases.
-2. Keep the title under 60 characters.
-3. Place the main keyword at the beginning of the title.
-4. Make it descriptive, clear, and to-the-point. Use natural language.
-5. Incorporate action words and compelling CTAs to increase clicks.
-6. Optimize for specific, intent-driven phrases that answer user needs, pain points, or decision-making queries.
-7. Use numbers, data, or other quantitative elements whenever possible.
+1. Use Keywords Strategically: include all the keywords in the near start of the title. 
+2. Add power words: Use emotional or action-driven words like "Proven", "Ultimate", "Fast", or "Easy". (e.g. "10 Proven Tips to Increase Traffic in 2024", "Ultimate Guide to Writing Click-Worth Titles", "5 Fastest Ways to Boost Your SEO that Drive Results")
+3. Keep It Short & Clear: under 60 characters. Avoid jargon.
+4. Make it engaging and compelling CTAs to increase clicks.
+5. Understand Your Audience: Know your target reader's pain points, interest, and language, then create titles that address their needs or solve their problems.
 
 Strictly output only the suggested titles in ["topic1","topic2",..] format.
 `;
@@ -45,7 +43,9 @@ export async function topicGenerator(
       return err(`Error in fetching background ${backgroundError.message}`);
     }
     if (!backgroundData?.background) {
-      return err(`Please complete the background information of the project "${backgroundData?.name}" to get AI suggestions.`);
+      return err(
+        `Please complete the background information of the project "${backgroundData?.name}" to get AI suggestions.`
+      );
     }
 
     const currentDate = new Date().toLocaleString();
