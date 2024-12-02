@@ -121,6 +121,11 @@ const excludPatterns = [
   "terms-and-conditions",
 ];
 
+// Add these constants at the top with other constants
+const MAX_DEPTH = 4; // Maximum depth to crawl
+const MAX_URLS = 1000; // Maximum number of URLs to process
+const RATE_LIMIT_MS = 1000; // Delay between requests in milliseconds
+
 /**
  * Use me!
  * Entry point to start the crawling process and return an array
@@ -168,8 +173,14 @@ function normalizeUrl(url: string): string {
 async function crawl(
   url: string,
   domain: string,
-  visited: ImmutableSet<string> = ImmutableSet<string>()
+  visited: ImmutableSet<string> = ImmutableSet<string>(),
+  depth: number = 0
 ): Promise<ImmutableSet<string>> {
+  // Add depth check
+  if (depth >= MAX_DEPTH || visited.size >= MAX_URLS) {
+    return visited;
+  }
+
   // Normalize the URL to `https` and check if it has already been visited
   url = normalizeUrl(url);
   if (visited.has(url) || shouldBeExcludedUrl(url)) {
@@ -179,6 +190,9 @@ async function crawl(
   try {
     // Immutable operation: always reassign the result to `visited`
     visited = visited.add(url); // Add to the immutable set
+
+    // Add rate limiting
+    await new Promise((resolve) => setTimeout(resolve, RATE_LIMIT_MS));
 
     // Fetch the page content
     const response = await axios.get(url);
@@ -215,7 +229,9 @@ async function crawl(
 
     // Recursively crawl each key link and reassign the `visited` set to keep it immutable
     for (const link of links) {
-      visited = await crawl(link, domain, visited); // Recursively update the immutable set
+      visited = await crawl(link, domain, visited, depth + 1); // Recursively update the immutable set
+      // Break early if we hit the URL limit
+      if (visited.size >= MAX_URLS) break;
     }
 
     return visited;
@@ -276,8 +292,13 @@ function sortUrlsByDepth(urls: string[]): string[] {
 async function crawlWithPuppeteer(
   url: string,
   domain: string,
-  visited: ImmutableSet<string> = ImmutableSet<string>()
+  visited: ImmutableSet<string> = ImmutableSet<string>(),
+  depth: number = 0
 ): Promise<ImmutableSet<string>> {
+  if (depth >= MAX_DEPTH || visited.size >= MAX_URLS) {
+    return visited;
+  }
+
   // Normalize the URL to `https` and check if it has already been visited
   url = normalizeUrl(url);
   if (visited.has(url) || shouldBeExcludedUrl(url)) {
@@ -339,7 +360,8 @@ async function crawlWithPuppeteer(
     });
 
     for (const link of links) {
-      visited = await crawl(link, domain, visited);
+      visited = await crawl(link, domain, visited, depth + 1);
+      if (visited.size >= MAX_URLS) break;
     }
 
     return visited;
