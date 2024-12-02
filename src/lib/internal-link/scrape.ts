@@ -340,7 +340,7 @@ async function crawlWithPuppeteer(
 
     const links: string[] = [];
 
-    // Find all <a> tags and extract URLs
+    // Find all <a> tags and extract URLs.
     $("a").each((_, element) => {
       const href = $(element).attr("href");
       if (href) {
