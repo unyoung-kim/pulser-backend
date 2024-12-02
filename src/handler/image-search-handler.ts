@@ -11,7 +11,7 @@ export function imageSearchHandler(t: tRPC, path: string) {
         path: "/image-search",
         summary: "Image search API endpoint",
         description: "Retrieves image search results",
-        tags: ["Image search"],
+        tags: ["Image"],
       },
     })
     .input(
