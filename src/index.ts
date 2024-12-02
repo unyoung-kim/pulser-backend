@@ -8,6 +8,7 @@ import helmet from "helmet";
 import dotenv from "dotenv";
 import rateLimit from "express-rate-limit";
 import swaggerUi from "swagger-ui-express";
+import multer from "multer";
 import { createOpenApiExpressMiddleware } from "trpc-openapi";
 import { trpcRouter } from "./trpcRouter.js"; // Replace with your actual router import
 import { createContext } from "./context.js";
@@ -83,7 +84,18 @@ app.use(
   })
 );
 
-// tRPC middleware for other routes
+const upload = multer({ dest: "uploads/" });
+
+app.post(
+  "/upload-docx",
+  upload.single("file"), // Accept a single file with the key "file"
+  (req: any, res: any, next: any) => {
+    req.file = req.file; // Attach the file to the request object
+    next();
+  }
+);
+
+// Apply the tRPC middleware on the '/trpc' route
 app.use(
   trpcExpress.createExpressMiddleware({
     router: trpcRouter,
