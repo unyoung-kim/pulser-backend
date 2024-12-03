@@ -1,9 +1,8 @@
 import fs from "fs";
 import path from "path";
-import Lucide from "lucide";
 import { getLucideIconSVG } from "./get-lucide-icon-svg.js";
 
-export const getImage = (argumentObject: Record<string, string>): string => {
+export const getSVGImage = (argumentObject: Record<string, string>): string => {
   const templatePath = path.resolve(
     `./templates/${argumentObject["template_name"]}.svg`
   );

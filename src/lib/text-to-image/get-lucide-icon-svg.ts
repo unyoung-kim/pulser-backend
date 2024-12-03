@@ -20,7 +20,7 @@ export const getLucideIconSVG = (iconName: string): string => {
 
     return result; // Convert the icon array to an SVG string
   } else if (camelCase in LucideLab) {
-    const icon = LucideLab[iconName as keyof typeof LucideLab];
+    const icon = LucideLab[camelCase as keyof typeof LucideLab];
     let result = "";
 
     if (icon && Array.isArray(icon)) {

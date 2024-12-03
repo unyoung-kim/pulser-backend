@@ -74,6 +74,8 @@ export const getTemplateAndArguments = async (
       return err("Error getting json from LLM output");
     }
 
+    console.log(jsonFromLLM);
+
     return ok(jsonFromLLM);
   } catch (error) {
     console.error("Error in template arguments generation:", error);
