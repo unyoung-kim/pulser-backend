@@ -65,7 +65,8 @@
     //     "transform": "typia/lib/transform"
     //   }
     // ],
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "types": ["node", "express", "body-parser", "multer"]
   },
   // Do we need to include zen here explicitly? IDK! It works without it??
   "include": ["src/**/*.ts", "index.ts"],
