@@ -119,6 +119,9 @@ const keyPatterns = [
 const excludPatterns = [
   "#", // Exclude URLs with fragment identifiers
   "terms-and-conditions",
+  "privacy",
+  "terms",
+  "login",
 ];
 
 // Add these constants at the top with other constants
@@ -148,6 +151,7 @@ export async function crawlImportantInternalLinks(
     ImmutableSet<string>()
   );
   console.log("Successfully crawled: ", visited.size, " URLs");
+  console.log("URLs Found: ", visited.toArray());
 
   const sortedUrls = sortUrlsByDepth(visited.toArray());
   console.log("Sorted URLs");
@@ -157,7 +161,7 @@ export async function crawlImportantInternalLinks(
 
 // Function to check if a URL should be excluded based on exclusion patterns
 function shouldBeExcludedUrl(url: string): boolean {
-  return excludPatterns.some((pattern) => url.includes(pattern));
+  return excludPatterns.some((pattern) => url.endsWith(pattern));
 }
 
 // Function to normalize URLs by converting `http` to `https` and remove trailing slash
@@ -232,7 +236,7 @@ export async function crawl(
           // &&
           // isKeyUrl(fullUrl)
         ) {
-          console.log("FOUND 2: ", fullUrl);
+          // console.log("FOUND 2: ", fullUrl);
           links.push(normalizeUrl(fullUrl)); // Normalize URLs before adding to the list
         }
       }
