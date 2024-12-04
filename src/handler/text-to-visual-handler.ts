@@ -4,12 +4,12 @@ import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
 import { Result } from "true-myth";
 import { convertTextToImage } from "../lib/text-to-image/convert-text-to-image.js";
 
-export function textToImageConversionHandler(t: tRPC, path: string) {
+export function textToVisualHandler(t: tRPC, path: string) {
   return t.procedure
     .meta({
       openapi: {
         method: "POST",
-        path: "/convert-text-to-image",
+        path: "/text-to-visual",
         summary: "Text to image converter endpoint",
         description: "Converts text to images",
         tags: ["Image"],

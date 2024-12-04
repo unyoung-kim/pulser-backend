@@ -20,7 +20,7 @@ import { wordpressTokenGenerationHandler } from "./handler/wordpress-token-gener
 import { t } from "./lib/trpc.js";
 import { deleteSubscriptionHandler } from "./handler/delete-subscription-handler.js";
 import { updateSubscriptionHandler } from "./handler/update-subscription-handler.js";
-import { textToImageConversionHandler } from "./handler/text-to-image-conversion-handler.js";
+import { textToVisualHandler } from "./handler/text-to-visual-handler.js";
 
 /**
  * tRPC routers from here
@@ -61,10 +61,7 @@ export const trpcRouter = t.router({
   "update-subscription": updateSubscriptionHandler(t, "update-subscription"),
   "initialize-org": initializeOrgHandler(t, "initialize-org"),
   "generate-topic": topicGenerationHandler(t, "generate-topic"),
-  "convert-text-to-image": textToImageConversionHandler(
-    t,
-    "convert-text-to-image"
-  ),
+  "text-to-visual": textToVisualHandler(t, "text-to-visual"),
   "auth/google/authorize": googleAuthHandler(t, "auth/google/authorize"),
   "auth/google/callback": googleTokenGenerationHandler(
     t,
