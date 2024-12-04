@@ -122,9 +122,9 @@ Formatting Rules:
 - Headings and subheadings are clearly defined with appropriate tags. The title should be in <h1> tag.
 - Lists are formatted as ordered or unordered lists where applicable.
 - Maintain a consistent structure throughout the document.
-- Links are properly formatted with the <a> tag.
+- All links should be properly formatted with the <a> tag with a natural anchor text.
 - Make statistics and numbers in a bold font.
-- 
+
 
 Writing Style Rules:
 - Avoid using formal or overly academic phrases such as 'it is worth noting,' 'furthermore,' 'consequently,' 'in terms of,' 'one may argue,' 'it is imperative,' 'this suggests that,' 'thus,' 'it is evident that,' 'notwithstanding,' 'pertaining to,' 'therein lies,' 'utilize,' 'be advised,' 'hence,' 'indicate,' 'facilitate,' 'subsequently,' 'moreover,' and 'it can be seen that.' Aim for a natural, conversational style that sounds like two friends talking at the coffee shop. Use direct, simple language and choose phrases that are commonly used in everyday speech. If a formal phrase is absolutely necessary for clarity or accuracy, you may include it, but otherwise, please prioritize making the text engaging, clear, and relatable.
