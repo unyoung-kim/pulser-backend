@@ -81,12 +81,13 @@ For the outline, make sure each sections has all the relevant external links and
 Here are a few rules you must follow for the outline:
 
 <General>
-  1) Provide sufficient number of sections, sub-sections, images and links in the outline for a long blog post. Make sure images that you include provide value to the content.
+  1) Provide sufficient number of sections, sub-sections, images and links in the outline for a long blog post. Make sure images that you include provide value to the content or else don't include them.
   2) Use the client details provided in the input and web search results to promote client and its business/service in the blog post by following the Problem - Agitation - Solution copy writing framework. It's important that you generally follow and embed this flow but not explicitly mention it.
   3) The outline should contain a main image below the title. 
   4) If relevant, make sure to compare and contrast products and services.
   5) Make sure to focus on the topic of the article and provide relevant information at the front of the article.
   6) Avoid being too salesy - this means that don't promote the client's products or services more than three times in the outline. 
+  7) IMPORTANT: Make sure to stick to the topic of the article. Content that directly answers the topic should be placed at the earliest section after introduction, and if you want to add relevant subtopics, make sure to add them later in the outline.
 </General>
 
   <Introduction>
