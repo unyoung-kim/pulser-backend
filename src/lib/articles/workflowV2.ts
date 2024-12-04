@@ -108,7 +108,9 @@ export async function workflowV2({
   );
 
   const enrichedOutline: Result<string, string> =
-    await throttledOutlineEnricher(enrichedURLs, outline.value);
+    enrichedURLs.length === 0
+      ? ok(outline.value)
+      : await throttledOutlineEnricher(enrichedURLs, outline.value);
 
   if (enrichedOutline.isErr) {
     return err(enrichedOutline.error);
