@@ -1,6 +1,6 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-import { Set as ImmutableSet } from "immutable"; // Import Immutable.js Set
+import { Set as ImmutableSet, Set } from "immutable"; // Import Immutable.js Set
 import * as puppeteer from "puppeteer";
 import { URL } from "url";
 
@@ -141,10 +141,16 @@ export async function crawlImportantInternalLinks(
   const url: string = normalizeInputUrl(domain);
 
   // Immutable way: reassigning `visited` after every operation
-  const visited = await crawlWithPuppeteer(url, domain, ImmutableSet<string>());
+  console.log("Starting to crawl...");
+  const visited: Set<string> = await crawlWithPuppeteer(
+    url,
+    domain,
+    ImmutableSet<string>()
+  );
+  console.log("Successfully crawled: ", visited.size, " URLs");
 
   const sortedUrls = sortUrlsByDepth(visited.toArray());
-
+  console.log("Sorted URLs");
   // If the number of URLs exceeds the limit, return only the first X URLs
   return sortedUrls.slice(0, limit);
 }
