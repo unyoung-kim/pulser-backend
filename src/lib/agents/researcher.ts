@@ -156,7 +156,7 @@ export async function researcherSequential(
       tools: {
         subtopicSearch: searchSubTopicsTool(),
       },
-      maxSteps: 1,
+      maxSteps: 2,
       temperature: 0,
       maxTokens: 8000,
     });
