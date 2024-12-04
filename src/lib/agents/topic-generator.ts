@@ -12,10 +12,11 @@ You can utilize the Google Autocomplete API to fetch relevant, up-to-date topic 
 Follow these tips to generate the topic:
 
 1. Use Keywords Strategically: include all the keywords in the near start of the title. 
-2. Add power words: Use emotional or action-driven words like "Proven", "Ultimate", "Fast", or "Easy". (e.g. "10 Proven Tips to Increase Traffic in 2024", "Ultimate Guide to Writing Click-Worth Titles", "5 Fastest Ways to Boost Your SEO that Drive Results")
-3. Keep It Short & Clear: under 60 characters. Avoid jargon.
-4. Make it engaging and compelling CTAs to increase clicks.
-5. Understand Your Audience: Know your target reader's pain points, interest, and language, then create titles that address their needs or solve their problems.
+2. Add power words: Use emotional or action-driven words like "Proven", "Ultimate", "Fast", or "Easy". (e.g. "Ultimate Guide to Writing Click-Worth Titles") 
+3. If it's or could be a listicle, add a number in the title (e.g. "10 Proven Tips to Increase Traffic in 2024", "5 Fastest Ways to Boost Your SEO that Drive Results")
+4. Keep It Short & Clear: under 50 characters. Avoid jargon.
+5. Make it engaging and compelling CTAs to increase clicks.
+6. Understand Your Audience: Know your target reader's pain points, interest, and language, then create titles that address their needs or solve their problems.
 
 Strictly output only the suggested titles in ["topic1","topic2",..] format.
 `;

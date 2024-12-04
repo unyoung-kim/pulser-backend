@@ -21,6 +21,7 @@ Your task is to enrich the outline so that it includes at least around 4 to 5 in
 2. Make sure the internal links are embedded naturally with the right anchor text throughout the article.
 3. Do not change the title of the outline.
 4. Preserve as much of the original outline as possible while adding the internal links.
+5. Don't include internal links like "privacy policy", "disclaimer", "terms of service", but one's like "contact us" are good.
 </Rules>`;
 
 export async function outlineEnricher(

@@ -1,6 +1,6 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-import { Set as ImmutableSet } from "immutable"; // Import Immutable.js Set
+import { Set as ImmutableSet, Set } from "immutable"; // Import Immutable.js Set
 import * as puppeteer from "puppeteer";
 import { URL } from "url";
 
@@ -119,11 +119,14 @@ const keyPatterns = [
 const excludPatterns = [
   "#", // Exclude URLs with fragment identifiers
   "terms-and-conditions",
+  "privacy",
+  "terms",
+  "login",
 ];
 
 // Add these constants at the top with other constants
-const MAX_DEPTH = 4; // Maximum depth to crawl
-const MAX_URLS = 1000; // Maximum number of URLs to process
+const MAX_DEPTH = 3; // Maximum depth to crawl
+const MAX_URLS = 150; // Maximum number of URLs to process
 const RATE_LIMIT_MS = 1000; // Delay between requests in milliseconds
 
 /**
@@ -141,17 +144,24 @@ export async function crawlImportantInternalLinks(
   const url: string = normalizeInputUrl(domain);
 
   // Immutable way: reassigning `visited` after every operation
-  const visited = await crawlWithPuppeteer(url, domain, ImmutableSet<string>());
+  console.log("Starting to crawl...");
+  const visited: Set<string> = await crawlWithPuppeteer(
+    url,
+    domain,
+    ImmutableSet<string>()
+  );
+  console.log("Successfully crawled: ", visited.size, " URLs");
+  console.log("URLs Found: ", visited.toArray());
 
   const sortedUrls = sortUrlsByDepth(visited.toArray());
-
+  console.log("Sorted URLs");
   // If the number of URLs exceeds the limit, return only the first X URLs
   return sortedUrls.slice(0, limit);
 }
 
 // Function to check if a URL should be excluded based on exclusion patterns
 function shouldBeExcludedUrl(url: string): boolean {
-  return excludPatterns.some((pattern) => url.includes(pattern));
+  return excludPatterns.some((pattern) => url.endsWith(pattern));
 }
 
 // Function to normalize URLs by converting `http` to `https` and remove trailing slash
@@ -170,11 +180,11 @@ function normalizeUrl(url: string): string {
 }
 
 // Function to crawl a page + gather all links matching key patterns
-async function crawl(
+export async function crawl(
   url: string,
   domain: string,
   visited: ImmutableSet<string> = ImmutableSet<string>(),
-  depth: number = 0
+  depth: number = 3
 ): Promise<ImmutableSet<string>> {
   // Add depth check
   if (depth >= MAX_DEPTH || visited.size >= MAX_URLS) {
@@ -202,16 +212,19 @@ async function crawl(
     const $ = cheerio.load(html);
     const links: string[] = [];
 
-    const element = $(".css-1xiconc");
-    // Find all <a> tags inside the selected element
-    const lis = element.find("a");
+    // const element = $(".css-1xiconc");
+    // // Find all <a> tags inside the selected element
+    // const lis = element.find("a");
 
-    // Loop through each <a> tag found and get its href attribute and text
-    lis.each((index, link) => {
-      const href = $(link).attr("href");
-      const text = $(link).text();
-      console.log(`Link ${index + 1}:`, { href, text });
-    });
+    // console.log("lis: ", lis.length);
+
+    // // Loop through each <a> tag found and get its href attribute and text
+    // lis.each((index, link) => {
+    //   const href = $(link).attr("href");
+    //   const text = $(link).text();
+    //   console.log(`Link ${index + 1}:`, { href, text });
+    // });
+
     $("a").each((_, element) => {
       const href = $(element).attr("href");
       if (href) {
@@ -219,9 +232,11 @@ async function crawl(
         if (
           fullUrl &&
           !visited.has(fullUrl) &&
-          fullUrl.includes(domain) &&
-          isKeyUrl(fullUrl)
+          new URL(fullUrl).hostname.includes(domain)
+          // &&
+          // isKeyUrl(fullUrl)
         ) {
+          // console.log("FOUND 2: ", fullUrl);
           links.push(normalizeUrl(fullUrl)); // Normalize URLs before adding to the list
         }
       }
@@ -245,7 +260,9 @@ async function crawl(
 function resolveUrl(base: string, href: string, domain: string): string | null {
   try {
     const fullUrl = new URL(href, base).href;
-    return fullUrl.startsWith("https") && fullUrl.includes(domain)
+    // Check if the URL's hostname matches the domain
+    const urlHostname = new URL(fullUrl).hostname;
+    return fullUrl.startsWith("https") && urlHostname.includes(domain)
       ? fullUrl
       : null;
   } catch (e) {
@@ -289,7 +306,7 @@ function sortUrlsByDepth(urls: string[]): string[] {
  * @param visited
  * @returns
  */
-async function crawlWithPuppeteer(
+export async function crawlWithPuppeteer(
   url: string,
   domain: string,
   visited: ImmutableSet<string> = ImmutableSet<string>(),
@@ -310,18 +327,18 @@ async function crawlWithPuppeteer(
 
     // Launch a headless browser with Puppeteer
     const browser = await puppeteer.launch({
-      headless: true,
-      executablePath:
-        "/opt/render/project/puppeteer/chrome/linux-131.0.6778.85/chrome-linux64/chrome",
-      args: [
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--disable-dev-shm-usage",
-        "--disable-accelerated-2d-canvas",
-        "--no-first-run",
-        "--no-zygote",
-        "--disable-gpu",
-      ],
+      // headless: true,
+      // executablePath:
+      //   "/opt/render/project/puppeteer/chrome/linux-131.0.6778.85/chrome-linux64/chrome",
+      // args: [
+      //   "--no-sandbox",
+      //   "--disable-setuid-sandbox",
+      //   "--disable-dev-shm-usage",
+      //   "--disable-accelerated-2d-canvas",
+      //   "--no-first-run",
+      //   "--no-zygote",
+      //   "--disable-gpu",
+      // ],
     });
 
     const page = await browser.newPage();
@@ -349,7 +366,8 @@ async function crawlWithPuppeteer(
         if (
           fullUrl &&
           !visited.has(fullUrl) &&
-          fullUrl.includes(domain)
+          new URL(fullUrl).hostname.includes(domain)
+
           // &&
           // isKeyUrl(fullUrl)
         ) {
@@ -360,9 +378,12 @@ async function crawlWithPuppeteer(
     });
 
     for (const link of links) {
+      console.log("Crawling: ", link);
       visited = await crawl(link, domain, visited, depth + 1);
       if (visited.size >= MAX_URLS) break;
     }
+
+    console.log("Visited: ", visited.toArray());
 
     return visited;
   } catch (error) {
