@@ -81,12 +81,13 @@ For the outline, make sure each sections has all the relevant external links and
 Here are a few rules you must follow for the outline:
 
 <General>
-  1) Provide sufficient number of sections, sub-sections, images and links in the outline for a long blog post. Make sure images that you include provide value to the content.
+  1) Provide sufficient number of sections, sub-sections, images and links in the outline for a long blog post. Make sure images that you include provide value to the content or else don't include them.
   2) Use the client details provided in the input and web search results to promote client and its business/service in the blog post by following the Problem - Agitation - Solution copy writing framework. It's important that you generally follow and embed this flow but not explicitly mention it.
   3) The outline should contain a main image below the title. 
   4) If relevant, make sure to compare and contrast products and services.
   5) Make sure to focus on the topic of the article and provide relevant information at the front of the article.
   6) Avoid being too salesy - this means that don't promote the client's products or services more than three times in the outline. 
+  7) IMPORTANT: Make sure to stick to the topic of the article. Content that directly answers the topic should be placed at the earliest section after introduction, and if you want to add relevant subtopics, make sure to add them later in the outline.
 </General>
 
   <Introduction>
@@ -95,7 +96,7 @@ Here are a few rules you must follow for the outline:
   </Introduction>
 
   <Images & Links>
-  1) Strictly analyze the images provided by the researcher and add them if they are relevant. You should not include any images that might include or be promoting competitors, unless it is part of the topic.
+  1) Strictly analyze the images provided by the researcher and a few images throughout the outline. Only add images if they are valuable or insightful to the content. You should not include any images that might include or be promoting competitors, unless it is part of the topic.
   2) Make sure to include [Link: ...] and [Image: ...] for each section.
   3) You must include a main image in the introduction section.
   4) Include as many links / sources as many sources through out the article in the [Link: ...] format.
@@ -111,14 +112,14 @@ You possess the ability to search for any information on the web.
 
 Your task is to conduct further research on sub topics and enrich the outline by adding more details, images and links. Find where resources are lacking and conduct further research on those topics. Only return the outline with the additional research and don't include any explanation text about the task. Output the outline inside <outline> tags. Make sure to write in markdown format. 
 
-Here are a few rules you must follow:
+RULES: 
 
 1) Make sure introduction has multiple links. The introduction should provide value instantly and mention about the pain point of the audience. Make sure when conducting research to find some unique insight about the topic like a quote, statistic, or a surprising fact and add it to the outline with the link.
 2) The outline should follow the Problem - Agitation - Solution copy writing framework. It's important that you generally follow and embed this flow but not explicitly mention it.
-3) Make sure to add images (only if relevant and important) and links for subtopics that lack them in the given outline. You will be rewarded extra points for having multiple links per subtopic.
+3) Make sure to add links and a few images (only if valuable or insightful to the content) for subtopics that lack them in the given outline. You will be rewarded extra points for having multiple links per subtopic.
 4) Preserve all of images and links previously provided in the outline. If you have found detailed and useful information, enrich the outline with it. 
 5) Return a full outline with all the sections, sub-sections, images and links without any ommissions from the given outline.
-6) It is very important to conduct research focusing especially on the sections that most directly answer the topic of the article. This way, you can ensure that the outline has longer outline for this specific section. (e.g. if the topic is about "Top B2B website design agencies", then you should focus on researching the sections about the top B2B website design agencies over other sections like the future of website design.)
+6) Focus research efforts on sections that most directly address the article's central topic. You will be rewarded extra points for this.
 `;
 
 /**
@@ -155,7 +156,7 @@ export async function researcherSequential(
       tools: {
         subtopicSearch: searchSubTopicsTool(),
       },
-      maxSteps: 3,
+      maxSteps: 2,
       temperature: 0,
       maxTokens: 8000,
     });

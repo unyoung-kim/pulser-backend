@@ -52,6 +52,9 @@ Writing Style Rules:
 - Remove any rhetorical questions into normal simple sentences that gets directly to the point.
 - Preserve all images and links.
 - You are welcome to rephrase sentences completely to make it more natural and follow the rules above.
+- Don't change the title at all.
+- Don't sound salesy. Don't exaggerate or over-promise because it sounds too salesy. (e.g. "The future of ... is here")
+- Avoid saying things like “In today’s environment, in today’s business world, rapidly changing, In the competitive business environment, being inclusive, etc.". Also avoid saying things like "In today’s digital age, in today’s digital era, You're not alone, That's right - ..., Let's paint a picture, Picture this, The future of ... is here, "In the ever-changing world of ...", etc.
 
 Example Tone of Writing - You will be rewarded by mimicking the style of voice of the example below
 <h1>Digital Marketing</h1>
