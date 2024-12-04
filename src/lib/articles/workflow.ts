@@ -136,20 +136,20 @@ export async function workflow({
 
   console.log("Article: ", article.value);
 
-  const relatedQueries: Result<{ query: string }[], string> =
-    await throttledQuerySuggestor(
-      `${clientDetails}\nBlog Topic for client: ${inputTopic}`
-    );
+  // const relatedQueries: Result<{ query: string }[], string> =
+  //   await throttledQuerySuggestor(
+  //     `${clientDetails}\nBlog Topic for client: ${inputTopic}`
+  //   );
 
-  if (relatedQueries.isErr) {
-    return err(relatedQueries.error);
-  }
+  // if (relatedQueries.isErr) {
+  //   return err(relatedQueries.error);
+  // }
 
   // console.log("Related queries: ", relatedQueries.value);
 
   const finalPost: Result<string, string> =
     await throttledPostFormatterAndHumanizer(
-      `Topic: ${inputTopic}\nArticle: ${article.value}\nRelated Topics: ${relatedQueries.value}`,
+      `Topic: ${inputTopic}\nArticle: ${article.value}`,
       "HTML"
     );
 

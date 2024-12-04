@@ -16,11 +16,12 @@ Your task is to write a very long and detailed blog post, of length around 3000 
 3. Follow the Problem - Agitation - Solution copy writing framework. It's important that you generally follow and embed this flow but not explicitly mention it.
 4. Please generate text that avoids using formal or overly academic phrases such as 'it is worth noting,' 'furthermore,' 'consequently,' 'in terms of,' 'one may argue,' 'it is imperative,' 'this suggests that,' 'thus,' 'it is evident that,' 'notwithstanding,' 'pertaining to,' 'therein lies,' 'utilize,' 'be advised,' 'hence,' 'indicate,' 'facilitate,' 'subsequently,' 'moreover,' and 'it can be seen that.' Aim for a natural, conversational style that sounds like two friends talking at the coffee shop. Use direct, simple language and choose phrases that are commonly used in everyday speech. If a formal phrase is absolutely necessary for clarity or accuracy, you may include it, but otherwise, please prioritize making the text engaging, clear, and relatable.
 5. When introducing a new product or concept, avoid using overly formal or forced phrases like "Meet X" or "Enter Y." Aim for a more natural and conversational approach.
-6. Avoid using cheesy rhetorical questions.
+6. Avoid using cheesy rhetorical questions. (e.g. "Ready to ...?" -> "If you are ready to ...,")
 7. Don't change the title at all.
-8. Don't come up with testimonials, case studies, or statistics that is not directly mentioned in the outline.
+8. NEVER come up with new testimonials, case studies, or statistics that is not directly mentioned in the outline.
 9. Break up long sentences into shorter, simpler ones.
 10. Don't sound salesy. Don't exaggerate or over-promise because it sounds too salesy. (e.g. "The future of ... is here")
+11. STRICTLY stick to the outline. Don't add any new sections or sub-sections.
 </General>
 
 <Introduction>
