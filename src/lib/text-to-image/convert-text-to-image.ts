@@ -2,18 +2,26 @@ import { Result } from "true-myth";
 import { err, ok } from "true-myth/result";
 import { getSVGImage } from "./get-svg-image.js";
 import { convertSVGToJPG } from "./convert-svg-to-jpg.js";
+import { replacePlaceholders } from "./replace-placeholders.js";
 
 export const convertTextToImage = async (
   text: string
 ): Promise<Result<string, string>> => {
   try {
-    const svgImage: Result<string, string> = await getSVGImage(text);
+    const argumentsObject: Result<
+      Record<string, string>,
+      string
+    > = await getSVGImage(text);
 
-    if (svgImage.isErr) {
-      return err(svgImage.error);
+    if (argumentsObject.isErr) {
+      return err(argumentsObject.error);
     }
 
-    const result: string = await convertSVGToJPG(svgImage.value);
+    console.log("Generated template arguments: " + argumentsObject.value);
+
+    const svgImage: string = replacePlaceholders(argumentsObject.value);
+
+    const result: string = await convertSVGToJPG(svgImage);
     return ok(result);
   } catch (error) {
     return err(`Unexpected error in converting text to image: ${error}`);

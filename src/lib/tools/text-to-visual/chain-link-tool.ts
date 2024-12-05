@@ -46,7 +46,6 @@ export const chainLinkTool = () =>
         .describe("The name of the Lucide icon for the fifth link."),
     }),
     execute: async (input) => {
-      console.log(input);
-      return replacePlaceholders({ ...input, template_name: "chain-link" });
+      return { ...input, template_name: "chain-link" };
     },
   });

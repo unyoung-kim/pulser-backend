@@ -42,7 +42,6 @@ export const vennDiagramTool = () =>
         .describe("The name of the Lucide icon for the third category."),
     }),
     execute: async (input) => {
-      console.log(input);
-      return replacePlaceholders({ ...input, template_name: "venn-diagram" });
+      return { ...input, template_name: "venn-diagram" };
     },
   });
