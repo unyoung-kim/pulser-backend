@@ -327,18 +327,18 @@ export async function crawlWithPuppeteer(
 
     // Launch a headless browser with Puppeteer
     const browser = await puppeteer.launch({
-      // headless: true,
-      // executablePath:
-      //   "/opt/render/project/puppeteer/chrome/linux-131.0.6778.85/chrome-linux64/chrome",
-      // args: [
-      //   "--no-sandbox",
-      //   "--disable-setuid-sandbox",
-      //   "--disable-dev-shm-usage",
-      //   "--disable-accelerated-2d-canvas",
-      //   "--no-first-run",
-      //   "--no-zygote",
-      //   "--disable-gpu",
-      // ],
+      headless: true,
+      executablePath:
+        "/opt/render/project/puppeteer/chrome/linux-131.0.6778.85/chrome-linux64/chrome",
+      args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-accelerated-2d-canvas",
+        "--no-first-run",
+        "--no-zygote",
+        "--disable-gpu",
+      ],
     });
 
     const page = await browser.newPage();

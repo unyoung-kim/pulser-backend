@@ -2,8 +2,8 @@
 // import { crawlWithPuppeteer } from "./scrape.js";
 
 // const ans = await crawlWithPuppeteer(
-//   "https://blog.millionero.com",
-//   "millionero.com",
+//   "https://www.thespearpoint.com/",
+//   "thespearpoint.com",
 //   Set<string>()
 // );
 
