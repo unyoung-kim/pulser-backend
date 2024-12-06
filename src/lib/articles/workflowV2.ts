@@ -107,6 +107,8 @@ export async function workflowV2({
     })
   );
 
+  console.log("Enriched URLs: ", enrichedURLs);
+
   const enrichedOutline: Result<string, string> =
     enrichedURLs.length === 0
       ? ok(outline.value)
@@ -115,6 +117,8 @@ export async function workflowV2({
   if (enrichedOutline.isErr) {
     return err(enrichedOutline.error);
   }
+
+  await new Promise((resolve) => setTimeout(resolve, 60000));
 
   console.log("Enriched outline: ", enrichedOutline.value);
 

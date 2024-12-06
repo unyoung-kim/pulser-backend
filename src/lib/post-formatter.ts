@@ -136,6 +136,7 @@ Writing Style Rules:
 - Avoid saying things like “In today’s environment, in today’s business world, rapidly changing, In the competitive business environment, being inclusive, etc.". Also avoid saying things like "In today’s digital age, in today’s digital era, You're not alone, That's right ..., Let's paint a picture, Picture this, The future of ... is here, "In the ever-changing world of ...", etc.
 - Avoid using cheesy rhetorical questions into normal simple sentences that gets directly to the point. You will be rewarded extra points for this. (e.g. "Ready to ...?" -> "If you are ready to ...,")
 - Remove and convert phrases like "Let's explore", "Let's dive", "Let's embark", etc. into normal simple sentences that gets directly to the point. (e.g. "Let’s explore the world of Miami SEO and uncover the strategies that will help your business thrive in 2024 and beyond." -> "In this post, we will explore the world of Miami SEO and uncover the strategies that will help your business thrive in 2024 and beyond.")
+- Avoid words like "In the fast paced world", "In the digital age", "rapidly changing", "In the competitive business environment", etc. (e.g. "In the fast paced fitness world, staying ahead of marketing trends is as important as keeping up with your workouts" -> "Fitness marketing industry is moving faster than ever - it is a must to stay ahead of trends to remain competitive.")
 
 
 Example Tone of Writing - You will be rewarded by mimicking the style of voice of the example below

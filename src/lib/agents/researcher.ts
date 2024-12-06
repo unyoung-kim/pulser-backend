@@ -86,7 +86,6 @@ Here are a few rules you must follow for the outline:
   3) If relevant, make sure to compare and contrast products and services.
   4) Make sure to focus on the topic of the article and provide relevant information at the front of the article.
   5) Avoid being too salesy - this means that don't promote the client's products or services more than three times in the outline. 
-  6) IMPORTANT: Make sure to stick to the topic of the article. Content that directly answers the topic should be placed at the earliest section after introduction, and if you want to add relevant subtopics, make sure to add them later in the outline.
 </General>
 
   <Introduction>
@@ -96,11 +95,12 @@ Here are a few rules you must follow for the outline:
   </Introduction>
 
   <Images & Links>
-  1) Strictly analyze the images provided by the researcher. Add the main image before the introduction section and make sure the image is relevant to the topic. The image should be generic and not include any logos or branding.
+  1) Strictly analyze the images provided by the researcher. Add the main image before the introduction section, below the title, and make sure the image is relevant to the topic. The image should be generic and not include any logos or branding.
   2) You will be penalized if you add any additional images throughout the outline. Only acceptable case would be if the image is a graph or a chart that is informational.
   3) Make sure to include [Link: ...] and [Image: ...] for each section.
   4) You must include a main image in the introduction section.
   5) Include as many links / sources as many sources through out the article in the [Link: ...] format.
+  6) Don't add image at the end of the outline.
   </Images & Links>
 </Rules>
 
@@ -119,8 +119,8 @@ RULES:
 3) Make sure to add links (only if valuable or insightful to the content) for subtopics that lack them in the given outline. You will be rewarded extra points for having multiple links per subtopic.
 4) Return a full outline with all the sections, sub-sections and links without any ommissions from the given outline.
 5) Focus research efforts on sections that most directly address the article's central topic. You will be rewarded extra points for this.
-6) Don't add any new images. But preserve them if they are already in the outline.
-
+6)  Preserve images if they are already in the outline. Only add images if they are a graph or a chart.
+7) Don't add image at the end of the outline.
 `;
 
 /**

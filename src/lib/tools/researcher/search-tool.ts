@@ -109,6 +109,9 @@ export const searchTool = () =>
       } catch (error) {
         throw new Error(`Search tool error: ${error}`);
       }
+
+      console.log("SEARCH RESULT: ", searchResult);
+
       return searchResult;
     },
   });
