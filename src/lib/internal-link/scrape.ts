@@ -322,24 +322,24 @@ export async function crawlWithPuppeteer(
     return visited;
   }
 
+  // Launch a headless browser with Puppeteer
+  const browser = await puppeteer.launch({
+    headless: true,
+    executablePath:
+      "/opt/render/project/puppeteer/chrome/linux-131.0.6778.85/chrome-linux64/chrome",
+    args: [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-accelerated-2d-canvas",
+      "--no-first-run",
+      "--no-zygote",
+      "--disable-gpu",
+    ],
+  });
+
   try {
     visited = visited.add(url); // Add to the immutable set
-
-    // Launch a headless browser with Puppeteer
-    const browser = await puppeteer.launch({
-      headless: true,
-      executablePath:
-        "/opt/render/project/puppeteer/chrome/linux-131.0.6778.85/chrome-linux64/chrome",
-      args: [
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--disable-dev-shm-usage",
-        "--disable-accelerated-2d-canvas",
-        "--no-first-run",
-        "--no-zygote",
-        "--disable-gpu",
-      ],
-    });
 
     const page = await browser.newPage();
 
@@ -389,6 +389,8 @@ export async function crawlWithPuppeteer(
   } catch (error) {
     console.error(`Failed to crawl ${url}: ${error}`);
     return visited;
+  } finally {
+    await browser.close();
   }
 }
 
