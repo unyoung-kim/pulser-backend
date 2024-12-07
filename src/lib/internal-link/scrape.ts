@@ -131,8 +131,8 @@ export async function crawlWithPuppeteer(
   if (!browser) {
     browser = await puppeteer.launch({
       headless: true,
-      // executablePath:
-      //   "/opt/render/project/puppeteer/chrome/linux-131.0.6778.85/chrome-linux64/chrome",
+      executablePath:
+        "/opt/render/project/puppeteer/chrome/linux-131.0.6778.85/chrome-linux64/chrome",
       args: [
         "--no-sandbox",
         "--disable-setuid-sandbox",
