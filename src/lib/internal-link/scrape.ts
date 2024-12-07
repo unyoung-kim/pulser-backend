@@ -131,8 +131,8 @@ export async function crawlWithPuppeteer(
   if (!browser) {
     browser = await puppeteer.launch({
       headless: true,
-      executablePath:
-        "/opt/render/project/puppeteer/chrome/linux-131.0.6778.85/chrome-linux64/chrome",
+      // executablePath:
+      //   "/opt/render/project/puppeteer/chrome/linux-131.0.6778.85/chrome-linux64/chrome",
       args: [
         "--no-sandbox",
         "--disable-setuid-sandbox",
@@ -141,6 +141,35 @@ export async function crawlWithPuppeteer(
         "--no-first-run",
         "--no-zygote",
         "--disable-gpu",
+        "--single-process",
+        "--disable-background-networking",
+        "--disable-default-apps",
+        "--disable-extensions",
+        "--disable-sync",
+        "--disable-translate",
+        "--headless",
+        "--disable-gl-drawing-for-tests",
+        "--disable-popup-blocking",
+        "--disable-threaded-animation",
+        "--disable-threaded-scrolling",
+        "--disable-in-process-stack-traces",
+        "--disable-histograms",
+        "--disable-logging",
+        "--disable-web-security",
+        "--disk-cache-size=0",
+        "--disable-background-timer-throttling",
+        "--disable-renderer-backgrounding",
+        "--no-zygote",
+        "--ignore-certificate-errors",
+        "--allow-running-insecure-content",
+        "--enable-features=NetworkService,NetworkServiceInProcess",
+        "--disable-component-extensions-with-background-pages",
+        "--disable-component-update",
+        "--disable-ipc-flooding-protection",
+        "--force-color-profile=srgb",
+        "--disable-translate-new-ux",
+        "--disable-features=TranslateUI",
+        "--disable-infobars",
       ],
     });
   }
@@ -148,36 +177,54 @@ export async function crawlWithPuppeteer(
   let page: puppeteer.Page | null = null;
 
   try {
-    visited.add(url); // Add to the immutable set
+    visited.add(url); // Add to the set
 
     page = await browser.newPage();
 
-    // Navigate to the URL and wait for the page to load
-    await page.goto(url, { waitUntil: "networkidle2" });
-
-    // Get the full rendered HTML after JavaScript has executed
-    const html = await page.content();
-
-    await page.close(); // Close page to save memory
-    page = null;
-
-    // Load the HTML into Cheerio
-    const $ = cheerio.load(html);
+    await page.setRequestInterception(true);
+    page.on("request", (request) => {
+      const resourceType = request.resourceType();
+      if (["image", "stylesheet", "font"].includes(resourceType)) {
+        request.abort();
+      } else {
+        request.continue();
+      }
+    });
 
     const links: string[] = [];
 
-    // Find all <a> tags and extract URLs.
-    $("a").each((_, element) => {
-      const href = $(element).attr("href");
-      if (href) {
-        const fullUrl = resolveUrl(url, href, domain);
+    try {
+      // Navigate to the URL and wait for the page to load
+      await page.goto(url, { waitUntil: "networkidle2", timeout: 60000 });
 
-        if (fullUrl && !visited.has(fullUrl)) {
-          console.log("FOUND: ", fullUrl);
-          links.push(normalizeUrl(fullUrl));
+      // Get the full rendered HTML after JavaScript has executed
+      const html = await page.content();
+
+      await page.close(); // Close page to save memory
+      page = null;
+
+      // Load the HTML into Cheerio
+      const $ = cheerio.load(html);
+
+      // Find all <a> tags and extract URLs.
+      $("a").each((_, element) => {
+        const href = $(element).attr("href");
+        if (href) {
+          const fullUrl = resolveUrl(url, href, domain);
+
+          if (fullUrl && !visited.has(fullUrl)) {
+            console.log("FOUND: ", fullUrl);
+            links.push(normalizeUrl(fullUrl));
+          }
         }
-      }
-    });
+      });
+    } catch (error) {
+      console.warn(
+        `Dynamic load failed for ${url}, Error: ${error}, trying static content...`
+      );
+      links.push(url);
+      visited.clear();
+    }
 
     for (const link of links) {
       console.log("Crawling: ", link);
