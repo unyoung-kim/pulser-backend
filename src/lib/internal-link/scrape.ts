@@ -7,6 +7,7 @@ import {
   resolveUrl,
   shouldBeExcludedUrl,
   sortUrlsByDepth,
+  args,
 } from "./utility-functions.js";
 
 // Add these constants at the top with other constants
@@ -48,62 +49,6 @@ export async function crawlImportantInternalLinks(
   return sortedUrls.slice(0, limit);
 }
 
-// Function to crawl a page + gather all links matching key patterns
-export async function crawl(
-  url: string,
-  domain: string,
-  visited: Set<string> = new Set(),
-  depth: number = 3
-): Promise<Set<string>> {
-  // Add depth check
-  if (depth >= MAX_DEPTH || visited.size >= MAX_URLS) {
-    return visited;
-  }
-
-  // Normalize the URL to `https` and check if it has already been visited
-  url = normalizeUrl(url);
-  if (visited.has(url) || shouldBeExcludedUrl(url)) {
-    return visited;
-  }
-
-  try {
-    visited.add(url); // Add to the set
-
-    // Add rate limiting
-    await new Promise((resolve) => setTimeout(resolve, RATE_LIMIT_MS));
-
-    // Fetch the page content
-    const response = await axios.get(url);
-    const html = response.data;
-
-    // Parse the HTML and extract links
-    const $ = cheerio.load(html);
-    const links: string[] = [];
-
-    $("a").each((_, element) => {
-      const href = $(element).attr("href");
-      if (href) {
-        const fullUrl = resolveUrl(url, href, domain);
-        if (fullUrl && !visited.has(fullUrl)) {
-          links.push(normalizeUrl(fullUrl)); // Normalize URLs before adding to the list
-        }
-      }
-    });
-
-    // Recursively crawl each key link
-    for (const link of links) {
-      await crawl(link, domain, visited, depth + 1);
-      // Break early if we hit the URL limit
-      if (visited.size >= MAX_URLS) break;
-    }
-
-    return visited;
-  } catch (error) {
-    console.error(`Failed to crawl ${url}: ${error}`);
-    return visited; // Return visited set even if there's an error
-  }
-}
-
 /**
  * Cheerio loads only the static HTML of the page, so we need to use Puppeteer to load the dynamic HTML.
  * @param url
@@ -133,44 +78,7 @@ export async function crawlWithPuppeteer(
       headless: true,
       executablePath:
         "/opt/render/project/puppeteer/chrome/linux-131.0.6778.85/chrome-linux64/chrome",
-      args: [
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--disable-dev-shm-usage",
-        "--disable-accelerated-2d-canvas",
-        "--no-first-run",
-        "--no-zygote",
-        "--disable-gpu",
-        "--single-process",
-        "--disable-background-networking",
-        "--disable-default-apps",
-        "--disable-extensions",
-        "--disable-sync",
-        "--disable-translate",
-        "--headless",
-        "--disable-gl-drawing-for-tests",
-        "--disable-popup-blocking",
-        "--disable-threaded-animation",
-        "--disable-threaded-scrolling",
-        "--disable-in-process-stack-traces",
-        "--disable-histograms",
-        "--disable-logging",
-        "--disable-web-security",
-        "--disk-cache-size=0",
-        "--disable-background-timer-throttling",
-        "--disable-renderer-backgrounding",
-        "--no-zygote",
-        "--ignore-certificate-errors",
-        "--allow-running-insecure-content",
-        "--enable-features=NetworkService,NetworkServiceInProcess",
-        "--disable-component-extensions-with-background-pages",
-        "--disable-component-update",
-        "--disable-ipc-flooding-protection",
-        "--force-color-profile=srgb",
-        "--disable-translate-new-ux",
-        "--disable-features=TranslateUI",
-        "--disable-infobars",
-      ],
+      args,
     });
   }
 
@@ -191,7 +99,7 @@ export async function crawlWithPuppeteer(
       }
     });
 
-    const links: string[] = [];
+    let links: string[] = [];
 
     try {
       // Navigate to the URL and wait for the page to load
@@ -226,16 +134,53 @@ export async function crawlWithPuppeteer(
       visited.clear();
     }
 
-    for (const link of links) {
-      console.log("Crawling: ", link);
-      await crawl(link, domain, visited, depth + 1);
-      if (visited.size >= MAX_URLS) break;
-    }
+    // await crawl(links, domain, visited, depth + 1);
+    depth += 1;
 
-    return visited;
+    while (links.length > 0 && depth < MAX_DEPTH && visited.size < MAX_URLS) {
+      const size: number = links.length;
+      const newLinks: string[] = [];
+      for (let i = 0; i < size; i++) {
+        let url: string = links[i];
+        // check if it has already been visited
+        if (visited.has(url) || shouldBeExcludedUrl(url)) {
+          continue;
+        }
+
+        try {
+          visited.add(url); // Add to the set
+
+          // Add rate limiting
+          await new Promise((resolve) => setTimeout(resolve, RATE_LIMIT_MS));
+
+          // Fetch the page content
+          const response = await axios.get(url);
+          const html = response.data;
+
+          // Parse the HTML and extract links
+          const $ = cheerio.load(html);
+
+          $("a").each((_, element) => {
+            const href = $(element).attr("href");
+            if (href) {
+              const fullUrl = resolveUrl(url, href, domain);
+              if (fullUrl && !visited.has(fullUrl)) {
+                newLinks.push(normalizeUrl(fullUrl)); // Normalize URLs before adding to the list
+              }
+            }
+          });
+        } catch (error) {
+          console.error(`Failed to crawl ${url}: ${error}`);
+        }
+        if (visited.size >= MAX_URLS) {
+          break;
+        }
+      }
+      links = newLinks;
+      depth += 1;
+    }
   } catch (error) {
-    console.error(`Failed to crawl ${url}: ${error}`);
-    return visited;
+    console.error(`Failed to crawl: ${error}`);
   } finally {
     if (page) {
       await page.close(); // Ensure the page is closed in the finally block
@@ -246,4 +191,57 @@ export async function crawlWithPuppeteer(
       browser = null; // Reset browser for the next crawl session
     }
   }
+  return visited;
 }
+
+// // Function to crawl a page + gather all links matching key patterns
+// export async function crawl(
+//   urls: string[],
+//   domain: string,
+//   visited: Set<string> = new Set(),
+//   depth: number = 3
+// ): Promise<Set<string>> {
+//   while (urls.length > 0 && depth < MAX_DEPTH && visited.size < MAX_URLS) {
+//     const size: number = urls.length;
+//     const newLinks: string[] = [];
+//     for (let i = 0; i < size; i++) {
+//       let url: string = urls[i];
+//       // check if it has already been visited
+//       if (visited.has(url) || shouldBeExcludedUrl(url)) {
+//         continue;
+//       }
+
+//       try {
+//         visited.add(url); // Add to the set
+
+//         // Add rate limiting
+//         await new Promise((resolve) => setTimeout(resolve, RATE_LIMIT_MS));
+
+//         // Fetch the page content
+//         const response = await axios.get(url);
+//         const html = response.data;
+
+//         // Parse the HTML and extract links
+//         const $ = cheerio.load(html);
+
+//         $("a").each((_, element) => {
+//           const href = $(element).attr("href");
+//           if (href) {
+//             const fullUrl = resolveUrl(url, href, domain);
+//             if (fullUrl && !visited.has(fullUrl)) {
+//               newLinks.push(normalizeUrl(fullUrl)); // Normalize URLs before adding to the list
+//             }
+//           }
+//         });
+//       } catch (error) {
+//         console.error(`Failed to crawl ${url}: ${error}`);
+//       }
+//       if (visited.size >= MAX_URLS) {
+//         break;
+//       }
+//     }
+//     urls = newLinks;
+//     depth += 1;
+//   }
+//   return visited;
+// }
