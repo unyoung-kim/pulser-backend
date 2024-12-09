@@ -132,6 +132,15 @@ export async function crawlWithPuppeteer(
       );
       links.push(url);
       visited.clear();
+    } finally {
+      if (page) {
+        await page.close(); // Ensure the page is closed in the finally block
+        page = null;
+      }
+      if (depth === 0 && browser) {
+        await browser.close();
+        browser = null; // Reset browser for the next crawl session
+      }
     }
 
     // await crawl(links, domain, visited, depth + 1);
@@ -181,15 +190,6 @@ export async function crawlWithPuppeteer(
     }
   } catch (error) {
     console.error(`Failed to crawl: ${error}`);
-  } finally {
-    if (page) {
-      await page.close(); // Ensure the page is closed in the finally block
-      page = null;
-    }
-    if (depth === 0 && browser) {
-      await browser.close();
-      browser = null; // Reset browser for the next crawl session
-    }
   }
   return visited;
 }
