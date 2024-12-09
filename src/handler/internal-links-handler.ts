@@ -24,11 +24,13 @@ export function internalLinksHandler(t: tRPC, endpoint: string){
             try {  
                 const result: Result<EnrichedURL[],string> = await throttledEnrichInternalLinks(input.projectId);
                 if(result.isErr){
+                    console.error(`Error in enrich internal URLs: ${result.error}`);
                     return {
                         success: false,
                         error: result.error
                     }
                 }
+                console.log(`Enriched URLs from internal-links-handler: ${result.value}`);
                 return {
                     success: true,
                     data: result.value
