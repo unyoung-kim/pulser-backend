@@ -19,11 +19,11 @@ const getGPTo1Preview = () => {
   return openai("o1-preview");
 };
 
-const getCaludeSonnet20241022 = () => {
+const getClaudeSonnet20241022 = () => {
   return anthropic("claude-3-5-sonnet-20241022");
 };
 
-const getCaludeSonnet20240620 = () => {
+const getClaudeSonnet20240620 = () => {
   return anthropic("claude-3-5-sonnet-20240620");
 };
 
@@ -42,12 +42,12 @@ export const getThrottledGPTo1Preview = pThrottle({
   interval: 1000,
 })(getGPTo1Preview);
 
-export const getThrottledCaludeSonnet20241022 = pThrottle({
+export const getThrottledClaudeSonnet20241022 = pThrottle({
   limit: maxConcurrentCallToClaudeSonnet3_5,
   interval: 1000,
-})(getCaludeSonnet20241022);
+})(getClaudeSonnet20241022);
 
-export const getThrottledCaludeSonnet20240620 = pThrottle({
+export const getThrottledClaudeSonnet20240620 = pThrottle({
   limit: maxConcurrentCallToClaudeSonnet3_5,
   interval: 1000,
-})(getCaludeSonnet20240620);
+})(getClaudeSonnet20240620);

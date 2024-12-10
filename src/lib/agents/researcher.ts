@@ -1,7 +1,7 @@
 import { generateText } from "ai";
 import { err, ok, Result } from "true-myth/result";
 import {
-  getThrottledCaludeSonnet20240620,
+  getThrottledClaudeSonnet20240620,
   getThrottledGPT4o20241120,
 } from "../get-llm-models.js";
 import { getTools } from "../tools/researcher/get-tools.js";
@@ -45,7 +45,7 @@ export async function researcher(
 
     const currentDate = new Date().toLocaleString();
     const result = await generateText({
-      model: await getThrottledCaludeSonnet20240620(),
+      model: await getThrottledClaudeSonnet20240620(),
       system: `${SYSTEM_PROMPT} Current date and time: ${currentDate}`,
       prompt: query,
       tools: getTools(),
@@ -141,7 +141,7 @@ export async function researcherSequential(
     const currentDate = new Date().toLocaleString();
     // Generate the initial outline
     const firstOutline = await generateText({
-      model: await getThrottledCaludeSonnet20240620(),
+      model: await getThrottledClaudeSonnet20240620(),
       system: `${INITIAL_OUTLINE_PROMPT} Current date and time: ${currentDate}`,
       prompt: `Topic: ${topic}\nClient Details: ${clientDetails}`,
       tools: {
