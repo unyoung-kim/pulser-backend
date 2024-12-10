@@ -2,10 +2,10 @@ import { anthropic } from "@ai-sdk/anthropic";
 import { openai } from "@ai-sdk/openai";
 import pThrottle from "p-throttle";
 
-const maxConcurrentCallToGPT4o: number = 3; // TPM: 30,000
-const maxConcurrentCallToGPT4oMini: number = 20; // TPM: 200,000
+const maxConcurrentCallToGPT4o: number = 2; // TPM: 30,000
+const maxConcurrentCallToGPT4oMini: number = 10; // TPM: 200,000
 const maxConcurrentCallToGPT4oPreview: number = 2; // TPM: 30,000
-const maxConcurrentCallToClaudeSonnet3_5: number = 2; // TPM: 16,000
+const maxConcurrentCallToClaudeSonnet3_5: number = 1; // TPM: 16,000
 
 const getGPT4o20241120 = () => {
   return openai("gpt-4o-2024-11-20");
