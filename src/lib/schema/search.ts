@@ -27,8 +27,9 @@ export const searchSchema = z.object({
 export const multiSearchSchema = z.object({
   queries: z
     .array(z.string())
-    .max(5, "The maximum number of queries allowed is 5.")
-    .describe("Subtopic queries to search for"),
+    .describe(
+      "Exactly 5 subtopic queries to search for. Make sure to include a variety of queries to get a diverse set of results."
+    ),
   max_results: z.coerce
     .number()
     .describe("The maximum number of results to return"),
