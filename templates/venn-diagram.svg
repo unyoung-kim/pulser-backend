@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="900" height="373" viewBox="0 0 636 373" style="fill:none;stroke:none;fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;" version="1.1" xmlns="http://www.w3.org/2000/svg">
-    <style id="fontImports">@import url("https://fonts.googleapis.com/css2?family=Shantell+Sans:wght@300..800&amp;display=block");</style>
+<svg width="850" height="300" viewBox="0 0 600 400" style="fill:none;stroke:none;fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <style>
+        text {
+            font-family: 'Arial', sans-serif;
+        }
+    </style>
     <rect id="" x="0" y="0" width="636" height="373" style="fill: #ffffff;"></rect>
     <g id="items" style="isolation: isolate">
         <g id="blend" style="mix-blend-mode:normal">
@@ -29,8 +33,8 @@
             <g id="g-root-tx_theessen_1lrs8hjlylath-fill" data-item-order="1000000000" data-item-id="tx_theessen_1lrs8hjlylath" data-item-class="Label Stroke Title ColorStrokeBlack" data-item-index="none" data-renderer-id="0" transform="translate(170, 2)">
                 <g id="tx_theessen_1lrs8hjlylath-fill" stroke="none" fill="#484848">
                     <g>
-                        <text style="font: 20px &quot;Shantell Sans&quot;, cursive; white-space: pre;" font-size="20px" font-family="'Shantell Sans', cursive" text-anchor="middle">
-                            <tspan x="255" y="35.5" dominant-baseline="ideographic">{{main_title}}</tspan>
+                        <text font-size="20px" text-anchor="middle">
+                            <tspan x="170" y="35.5" dominant-baseline="ideographic">{{main_title}}</tspan>
                         </text>
                     </g>
                 </g>
@@ -38,8 +42,8 @@
             <g id="g-root-tx_profound_1hd7ojblysdmx-fill" data-item-order="1000000000" data-item-id="tx_profound_1hd7ojblysdmx" data-item-class="Label Stroke Indexed ColorStrokeBlack" data-item-index="2" data-renderer-id="0" transform="translate(236, 74)">
                 <g id="tx_profound_1hd7ojblysdmx-fill" stroke="none" fill="#484848">
                     <g>
-                        <text style="font: 20px &quot;Shantell Sans&quot;, cursive; white-space: pre;" font-size="20px" font-family="'Shantell Sans', cursive" text-anchor="middle">
-                            <tspan x="190" y="35.5" dominant-baseline="ideographic">{{text_2}}</tspan>
+                        <text font-size="20px" text-anchor="middle">
+                            <tspan x="100" y="35.5" dominant-baseline="ideographic">{{text_2}}</tspan>
                         </text>
                     </g>
                 </g>
@@ -47,8 +51,8 @@
             <g id="g-root-tx_storytel_1q6z9ivlyld70-fill" data-item-order="1000000000" data-item-id="tx_storytel_1q6z9ivlyld70" data-item-class="Label Stroke Indexed Indexed_1 ColorStrokeBlack" data-item-index="1" data-renderer-id="0" transform="translate(2, 218)">
                 <g id="tx_storytel_1q6z9ivlyld70-fill" stroke="none" fill="#484848">
                     <g>
-                        <text style="font: 20px &quot;Shantell Sans&quot;, cursive; white-space: pre;" font-size="20px" font-family="'Shantell Sans', cursive" text-anchor="end">
-                            <tspan x="295" y="35.5" dominant-baseline="ideographic">{{text_1}}</tspan>
+                        <text font-size="20px" text-anchor="end">
+                            <tspan x="125" y="35.5" dominant-baseline="ideographic">{{text_1}}</tspan>
                         </text>
                     </g>
                 </g>
@@ -59,7 +63,7 @@
             <g id="g-root-tx_themes_1q6z9ivlyld6z-fill" data-item-order="1000000000" data-item-id="tx_themes_1q6z9ivlyld6z" data-item-class="Label Stroke Indexed ColorStrokeBlack" data-item-index="3" data-renderer-id="0" transform="translate(530, 218)">
                 <g id="tx_themes_1q6z9ivlyld6z-fill" stroke="none" fill="#484848">
                     <g>
-                        <text style="font: 20px &quot;Shantell Sans&quot;, cursive; white-space: pre;" font-size="20px" font-family="'Shantell Sans', cursive" text-anchor="start">
+                        <text font-size="20px" text-anchor="start">
                             <tspan x="12" y="35.5" dominant-baseline="ideographic">{{text_3}}</tspan>
                         </text>
                     </g>

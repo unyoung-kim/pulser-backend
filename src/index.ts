@@ -23,10 +23,10 @@ export const baseURL = process.env.BASE_URL ?? `http://localhost:${PORT}`;
 const app = express();
 
 // Rate limiting
-const maxRequestPerMinuteForInternalAPIs: number = 5;
+const maxRequestPerMinuteForInternalAPIs: number = 10;
 const apiRateLimiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute
-  max: maxRequestPerMinuteForInternalAPIs, // 5 requests per minute
+  max: maxRequestPerMinuteForInternalAPIs, // 10 requests per minute
   message: {
     error: "Too many requests, please try again later.",
   },
