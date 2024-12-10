@@ -1,11 +1,16 @@
 import { generateText } from "ai";
 import { err, ok, Result } from "true-myth/result";
-import { getCaludeSonnet, getGPT4o, getModel } from "../get-model.js";
+import {
+  getThrottledCaludeSonnet20240620,
+  getThrottledGPT4o20241120,
+} from "../get-llm-models.js";
 import { getTools } from "../tools/researcher/get-tools.js";
 import {
   searchSubTopicsTool,
   searchTool,
 } from "../tools/researcher/search-tool.js";
+import { openai } from "@ai-sdk/openai";
+import { anthropic } from "@ai-sdk/anthropic";
 
 // const SYSTEM_PROMPT = `As a professional search expert, you possess the ability to search for any information on the web.
 // For each user query, utilize the search results to their fullest potential to provide additional information and assistance in your response.
@@ -40,7 +45,7 @@ export async function researcher(
 
     const currentDate = new Date().toLocaleString();
     const result = await generateText({
-      model: getModel(),
+      model: await getThrottledCaludeSonnet20240620(),
       system: `${SYSTEM_PROMPT} Current date and time: ${currentDate}`,
       prompt: query,
       tools: getTools(),
@@ -136,7 +141,7 @@ export async function researcherSequential(
     const currentDate = new Date().toLocaleString();
     // Generate the initial outline
     const firstOutline = await generateText({
-      model: getCaludeSonnet(),
+      model: await getThrottledCaludeSonnet20240620(),
       system: `${INITIAL_OUTLINE_PROMPT} Current date and time: ${currentDate}`,
       prompt: `Topic: ${topic}\nClient Details: ${clientDetails}`,
       tools: {
@@ -151,7 +156,7 @@ export async function researcherSequential(
     console.log("FIRST OUTLINE: ", firstOutline.text);
 
     const detailedOutline = await generateText({
-      model: getGPT4o(),
+      model: await getThrottledGPT4o20241120(),
       system: `${FINAL_OUTLINE_PROMPT} Current date and time: ${currentDate}`,
       prompt: `Initial Topic: ${topic}\nClient Details: ${clientDetails}\nOutline: ${firstOutline.text}`,
       tools: {

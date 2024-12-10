@@ -1,7 +1,7 @@
 import { generateText } from "ai";
 import { Result, err, ok } from "true-myth/result";
 import { EnrichedURL } from "../enrich-internal-links.js";
-import { getModel } from "../get-model.js";
+import { getThrottledCaludeSonnet20240620 } from "../get-llm-models.js";
 
 // const SYSTEM_PROMPT = `As a professional search expert, you possess the ability to search for any information on the web.
 // For each user query, utilize the search results to their fullest potential to provide additional information and assistance in your response.
@@ -31,7 +31,7 @@ export async function outlineEnricher(
   try {
     const currentDate = new Date().toLocaleString();
     const result = await generateText({
-      model: getModel(),
+      model: await getThrottledCaludeSonnet20240620(),
       system: `${SYSTEM_PROMPT} Current date and time: ${currentDate}`,
       prompt: `Enriched URLs: ${enrichedURLs}\nOutline: ${outline}`,
       maxTokens: 8000,

@@ -1,6 +1,6 @@
-import { openai } from "@ai-sdk/openai";
 import { generateText } from "ai";
 import { Result, err, ok } from "true-myth/result";
+import { getThrottledGPToMini } from "./get-llm-models.js";
 
 const SYSTEM_PROMPT = `As a professional SEO blog writer, you will be given:
 1. An SEO blog post as text.
@@ -27,7 +27,7 @@ export async function postFormatter(
 ): Promise<Result<string, string>> {
   try {
     const result = await generateText({
-      model: openai("gpt-4o-mini-2024-07-18"),
+      model: await getThrottledGPToMini(),
       temperature: 0,
       maxTokens: 8000,
       system: SYSTEM_PROMPT,
@@ -200,7 +200,7 @@ export async function postFormatterAndHumanizer(
   console.log("Entering formatterAndHumanizer...");
   try {
     const result = await generateText({
-      model: openai("o1-mini-2024-09-12"),
+      model: await getThrottledGPToMini(),
       // temperature: 1,
       // @ts-ignore
       max_completion_tokens: 8500,

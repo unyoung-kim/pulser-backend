@@ -2,7 +2,7 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import { generateText } from "ai";
 import { Result } from "true-myth";
 import { err, ok } from "true-myth/result";
-import { getGPT4o } from "../get-model.js";
+import { getThrottledGPT4o20241120 } from "../get-llm-models.js";
 import { getSupabaseClient } from "../get-supabase-client.js";
 import { incrementUsageCredit } from "../supabase/usage.js";
 import { throttledPostFormatter } from "./workflow.js";
@@ -387,7 +387,7 @@ export async function glossaryWorkflow({
     Glossary Terminology to write about: ${keyword?.keyword}`;
 
     const glossaryArticle = await generateText({
-      model: getGPT4o(),
+      model: await getThrottledGPT4o20241120(),
       system: GLOSSARY_SYSTEM_PROMPT,
       prompt: prompt,
       temperature: 1,
