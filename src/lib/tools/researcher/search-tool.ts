@@ -1,6 +1,5 @@
 import { tool } from "ai";
 import Exa from "exa-js";
-import { sanitizeUrl } from "../../get-model.js";
 import { multiSearchSchema, searchSchema } from "../../schema/search.js";
 import {
   SearchResultImage,
@@ -286,4 +285,8 @@ async function searxngSearch(
     console.error("SearXNG API error:", error);
     throw error;
   }
+}
+
+export function sanitizeUrl(url: string): string {
+  return url.replace(/\s+/g, "%20");
 }
