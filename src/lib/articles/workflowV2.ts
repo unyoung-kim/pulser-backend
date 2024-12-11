@@ -1,8 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js";
-import pThrottle from "p-throttle";
 import { Result, err, ok } from "true-myth/result";
 import { outlineEnricher } from "../agents/outline-enricher.js";
-import { querySuggestor } from "../agents/query-suggestor.js";
 import { researcherSequential } from "../agents/researcher.js";
 import { writer } from "../agents/writer.js";
 import { EnrichedURL } from "../enrich-internal-links.js";
@@ -10,34 +8,6 @@ import { getSupabaseClient } from "../get-supabase-client.js";
 import { postFormatterAndHumanizer } from "../post-formatter.js";
 import { incrementUsageCredit } from "../supabase/usage.js";
 import { extractFirstImageUrl } from "../utility/extractFirstImageUrl.js";
-
-const maxConcurrentCallToClaudeLLM: number = 2;
-const maxConcurrentCallToOpenAILLM: number = 4;
-
-const throttledResearcherSequential = pThrottle({
-  limit: maxConcurrentCallToClaudeLLM, // Number of calls allowed per interval
-  interval: 1000, // Interval in milliseconds
-})(researcherSequential);
-
-const throttledOutlineEnricher = pThrottle({
-  limit: maxConcurrentCallToClaudeLLM,
-  interval: 1000,
-})(outlineEnricher);
-
-const throttledWriter = pThrottle({
-  limit: maxConcurrentCallToClaudeLLM,
-  interval: 1000,
-})(writer);
-
-const throttledQuerySuggestor = pThrottle({
-  limit: maxConcurrentCallToOpenAILLM,
-  interval: 1000,
-})(querySuggestor);
-
-export const throttledPostFormatter = pThrottle({
-  limit: maxConcurrentCallToOpenAILLM,
-  interval: 1000,
-})(postFormatterAndHumanizer);
 
 /**
  * Based on user query, generate a blog post
@@ -84,7 +54,7 @@ export async function workflowV2({
   - Background Information: ${JSON.stringify(projectBackground, null, 2)}
 `.trim();
 
-  const outline: Result<string, string> = await throttledResearcherSequential(
+  const outline: Result<string, string> = await researcherSequential(
     inputTopic,
     clientDetails
   );
@@ -112,19 +82,17 @@ export async function workflowV2({
   const enrichedOutline: Result<string, string> =
     enrichedURLs.length === 0
       ? ok(outline.value)
-      : await throttledOutlineEnricher(enrichedURLs, outline.value);
+      : await outlineEnricher(enrichedURLs, outline.value);
 
   if (enrichedOutline.isErr) {
     return err(enrichedOutline.error);
   }
 
-  await new Promise((resolve) => setTimeout(resolve, 60000));
+  // await new Promise((resolve) => setTimeout(resolve, 60000));
 
   console.log("Enriched outline: ", enrichedOutline.value);
 
-  const article: Result<string, string> = await throttledWriter(
-    enrichedOutline.value
-  );
+  const article: Result<string, string> = await writer(enrichedOutline.value);
 
   if (article.isErr) {
     return err(article.error);
@@ -143,7 +111,7 @@ export async function workflowV2({
 
   // console.log("Related queries: ", relatedQueries.value);
 
-  const finalPost: Result<string, string> = await throttledPostFormatter(
+  const finalPost: Result<string, string> = await postFormatterAndHumanizer(
     `Topic: ${inputTopic}\nArticle: ${article.value}`,
     "HTML"
   );

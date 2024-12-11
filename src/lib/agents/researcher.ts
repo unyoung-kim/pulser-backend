@@ -1,6 +1,9 @@
 import { generateText } from "ai";
 import { err, ok, Result } from "true-myth/result";
-import { getCaludeSonnet, getGPT4o, getModel } from "../get-model.js";
+import {
+  getThrottledClaudeSonnet,
+  getThrottledGPT4o,
+} from "../get-llm-models.js";
 import { getTools } from "../tools/researcher/get-tools.js";
 import {
   searchSubTopicsTool,
@@ -40,7 +43,7 @@ export async function researcher(
 
     const currentDate = new Date().toLocaleString();
     const result = await generateText({
-      model: getModel(),
+      model: await getThrottledClaudeSonnet(),
       system: `${SYSTEM_PROMPT} Current date and time: ${currentDate}`,
       prompt: query,
       tools: getTools(),
@@ -136,7 +139,7 @@ export async function researcherSequential(
     const currentDate = new Date().toLocaleString();
     // Generate the initial outline
     const firstOutline = await generateText({
-      model: getCaludeSonnet(),
+      model: await getThrottledClaudeSonnet(),
       system: `${INITIAL_OUTLINE_PROMPT} Current date and time: ${currentDate}`,
       prompt: `Topic: ${topic}\nClient Details: ${clientDetails}`,
       tools: {
@@ -151,7 +154,7 @@ export async function researcherSequential(
     console.log("FIRST OUTLINE: ", firstOutline.text);
 
     const detailedOutline = await generateText({
-      model: getGPT4o(),
+      model: await getThrottledGPT4o(),
       system: `${FINAL_OUTLINE_PROMPT} Current date and time: ${currentDate}`,
       prompt: `Initial Topic: ${topic}\nClient Details: ${clientDetails}\nOutline: ${firstOutline.text}`,
       tools: {
