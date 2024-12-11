@@ -1,16 +1,14 @@
 import { generateText } from "ai";
 import { err, ok, Result } from "true-myth/result";
 import {
-  getThrottledClaudeSonnet20240620,
-  getThrottledGPT4o20241120,
+  getThrottledClaudeSonnet,
+  getThrottledGPT4o,
 } from "../get-llm-models.js";
 import { getTools } from "../tools/researcher/get-tools.js";
 import {
   searchSubTopicsTool,
   searchTool,
 } from "../tools/researcher/search-tool.js";
-import { openai } from "@ai-sdk/openai";
-import { anthropic } from "@ai-sdk/anthropic";
 
 // const SYSTEM_PROMPT = `As a professional search expert, you possess the ability to search for any information on the web.
 // For each user query, utilize the search results to their fullest potential to provide additional information and assistance in your response.
@@ -45,7 +43,7 @@ export async function researcher(
 
     const currentDate = new Date().toLocaleString();
     const result = await generateText({
-      model: await getThrottledClaudeSonnet20240620(),
+      model: await getThrottledClaudeSonnet(),
       system: `${SYSTEM_PROMPT} Current date and time: ${currentDate}`,
       prompt: query,
       tools: getTools(),
@@ -141,7 +139,7 @@ export async function researcherSequential(
     const currentDate = new Date().toLocaleString();
     // Generate the initial outline
     const firstOutline = await generateText({
-      model: await getThrottledClaudeSonnet20240620(),
+      model: await getThrottledClaudeSonnet(),
       system: `${INITIAL_OUTLINE_PROMPT} Current date and time: ${currentDate}`,
       prompt: `Topic: ${topic}\nClient Details: ${clientDetails}`,
       tools: {
@@ -156,7 +154,7 @@ export async function researcherSequential(
     console.log("FIRST OUTLINE: ", firstOutline.text);
 
     const detailedOutline = await generateText({
-      model: await getThrottledGPT4o20241120(),
+      model: await getThrottledGPT4o(),
       system: `${FINAL_OUTLINE_PROMPT} Current date and time: ${currentDate}`,
       prompt: `Initial Topic: ${topic}\nClient Details: ${clientDetails}\nOutline: ${firstOutline.text}`,
       tools: {

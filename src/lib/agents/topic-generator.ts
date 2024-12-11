@@ -3,7 +3,7 @@ import { generateText } from "ai";
 import { Result, err, ok } from "true-myth/result";
 import { getSupabaseClient } from "../get-supabase-client.js";
 import { serpTool } from "../tools/serp-tool.js";
-import { getThrottledGPT4o20241120 } from "../get-llm-models.js";
+import { getThrottledGPT4o } from "../get-llm-models.js";
 
 const SYSTEM_PROMPT = `As a professional SEO blog writer, you will be given a keyword string and client background. 
 Using the provided inputs and tool, your task is to generate a list of 5 highly relevant topic for a SEO blog post tailored for a client, optimized to engage users near the bottom or middle of the sales funnel.
@@ -52,7 +52,7 @@ export async function topicGenerator(
     const currentDate = new Date().toLocaleString();
 
     const result = await generateText({
-      model: await getThrottledGPT4o20241120(),
+      model: await getThrottledGPT4o(),
       system: `${SYSTEM_PROMPT} Current date and time: ${currentDate}`,
       prompt: `Keyword: ${keyword}\nClient background: ${backgroundData?.background}`,
       tools: { serp: serpTool() },

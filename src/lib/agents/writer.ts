@@ -1,7 +1,7 @@
 import { generateText } from "ai";
 import { Result, err, ok } from "true-myth/result";
 import { MAX_CLAUDE_SONNET_TOKENS } from "../ai/ai-token.js";
-import { getThrottledClaudeSonnet20240620 } from "../get-llm-models.js";
+import { getThrottledClaudeSonnet } from "../get-llm-models.js";
 
 const SYSTEM_PROMPT = `<Task>
 As a professional SEO blog writer, you will be given an detailed outline for an SEO blog post.
@@ -47,7 +47,7 @@ export async function writer(outline: string): Promise<Result<string, string>> {
   try {
     const currentDate = new Date().toLocaleString();
     const result = await generateText({
-      model: await getThrottledClaudeSonnet20240620(),
+      model: await getThrottledClaudeSonnet(),
       system: `${SYSTEM_PROMPT} Current date and time: ${currentDate}`,
       prompt: outline,
       maxTokens: MAX_CLAUDE_SONNET_TOKENS,

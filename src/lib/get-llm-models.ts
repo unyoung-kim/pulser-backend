@@ -4,50 +4,51 @@ import pThrottle from "p-throttle";
 
 const maxConcurrentCallToGPT4o: number = 2; // TPM: 30,000
 const maxConcurrentCallToGPT4oMini: number = 10; // TPM: 200,000
+const maxConcurrentCallToGPTo1Mini: number = 10; // TPM: 200,000
 const maxConcurrentCallToGPT4oPreview: number = 2; // TPM: 30,000
 const maxConcurrentCallToClaudeSonnet3_5: number = 1; // TPM: 16,000
 
-const getGPT4o20241120 = () => {
+const getGPT4o = () => {
   return openai("gpt-4o-2024-11-20");
 };
 
-const getGPToMini = () => {
-  return openai("gpt-4o-mini");
+const getGPT4oMini = () => {
+  return openai("gpt-4o-mini-2024-07-18");
+};
+
+const getGPTo1Mini = () => {
+  return openai("o1-mini-2024-09-12");
 };
 
 const getGPTo1Preview = () => {
   return openai("o1-preview");
 };
 
-const getClaudeSonnet20241022 = () => {
-  return anthropic("claude-3-5-sonnet-20241022");
-};
-
-const getClaudeSonnet20240620 = () => {
+const getClaudeSonnet = () => {
   return anthropic("claude-3-5-sonnet-20240620");
 };
 
-export const getThrottledGPT4o20241120 = pThrottle({
+export const getThrottledGPT4o = pThrottle({
   limit: maxConcurrentCallToGPT4o,
   interval: 1000,
-})(getGPT4o20241120);
+})(getGPT4o);
 
-export const getThrottledGPToMini = pThrottle({
+export const getThrottledGPT4oMini = pThrottle({
   limit: maxConcurrentCallToGPT4oMini,
   interval: 1000,
-})(getGPToMini);
+})(getGPT4oMini);
+
+export const getThrottledGPTo1Mini = pThrottle({
+  limit: maxConcurrentCallToGPTo1Mini,
+  interval: 1000,
+})(getGPTo1Mini);
 
 export const getThrottledGPTo1Preview = pThrottle({
   limit: maxConcurrentCallToGPT4oPreview,
   interval: 1000,
 })(getGPTo1Preview);
 
-export const getThrottledClaudeSonnet20241022 = pThrottle({
+export const getThrottledClaudeSonnet = pThrottle({
   limit: maxConcurrentCallToClaudeSonnet3_5,
   interval: 1000,
-})(getClaudeSonnet20241022);
-
-export const getThrottledClaudeSonnet20240620 = pThrottle({
-  limit: maxConcurrentCallToClaudeSonnet3_5,
-  interval: 1000,
-})(getClaudeSonnet20240620);
+})(getClaudeSonnet);

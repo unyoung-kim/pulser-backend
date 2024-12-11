@@ -132,7 +132,7 @@ export async function workflowV2({
         project_id: projectId,
         title: inputTopic,
         image_url: firstImageUrl,
-        // keyword_id: keywordId,
+        keyword_id: keywordId,
       },
     ])
     .select();

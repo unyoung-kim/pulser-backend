@@ -1,7 +1,7 @@
 import { Result, ok, err } from "true-myth/result";
 import { generateText } from "ai";
 import { docs_v1 } from "googleapis";
-import { getThrottledGPToMini } from "../get-llm-models.js";
+import { getThrottledGPT4oMini } from "../get-llm-models.js";
 
 const SYSTEM_PROMPT = `You are an expert in converting HTML content into Google Docs API-compatible batch update requests.
 
@@ -202,7 +202,7 @@ export async function convertHtmlToGoogleDocsRequests(
 ): Promise<Result<docs_v1.Schema$Request[], string>> {
   try {
     const result = await generateText({
-      model: await getThrottledGPToMini(),
+      model: await getThrottledGPT4oMini(),
       maxTokens: 10000,
       system: SYSTEM_PROMPT,
       prompt: `HTML Content: ${html}`,

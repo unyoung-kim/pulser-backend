@@ -2,10 +2,10 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import { generateText } from "ai";
 import { Result } from "true-myth";
 import { err, ok } from "true-myth/result";
-import { getThrottledGPT4o20241120 } from "../get-llm-models.js";
+import { getThrottledGPT4o } from "../get-llm-models.js";
 import { getSupabaseClient } from "../get-supabase-client.js";
 import { incrementUsageCredit } from "../supabase/usage.js";
-import { throttledPostFormatter } from "./workflow.js";
+import { postFormatter } from "../post-formatter.js";
 
 const GLOSSARY_SYSTEM_PROMPT = `You are an expert in writing glossary articles for brands for SEO purposes. 
 
@@ -387,14 +387,14 @@ export async function glossaryWorkflow({
     Glossary Terminology to write about: ${keyword?.keyword}`;
 
     const glossaryArticle = await generateText({
-      model: await getThrottledGPT4o20241120(),
+      model: await getThrottledGPT4o(),
       system: GLOSSARY_SYSTEM_PROMPT,
       prompt: prompt,
       temperature: 1,
       maxTokens: 8000,
     });
 
-    const finalPost: Result<string, string> = await throttledPostFormatter(
+    const finalPost: Result<string, string> = await postFormatter(
       `Topic: ${inputTopic}\nArticle: ${glossaryArticle.text}`,
       "HTML"
     );
