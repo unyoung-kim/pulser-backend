@@ -72,7 +72,14 @@ export async function researcher(
   }
 }
 
-const INITIAL_OUTLINE_PROMPT = `As a professional seo expert, your task is to come up with a detailed outline for an SEO blog post for a client given a blog post topic and client details.
+const INITIAL_OUTLINE_PROMPT = `As a professional seo expert, your task is to come up with a detailed outline for an SEO blog post for a client given:
+
+<Input>
+  1) a blog post topic
+  2) client details
+  3) keywords(optional)
+  4) input content(optional)
+</Input>
 
 You possess the ability to search for any information on the web.
 
@@ -83,27 +90,29 @@ For the outline, make sure each sections has all the relevant external links and
 <Rules>
 Here are a few rules you must follow for the outline:
 
-<General>
-  1) Provide sufficient number of sections, sub-sections, images and links in the outline for a long blog post. Make sure images that you include provide value to the content or else don't include them.
-  2) Use the client details provided in the input and web search results to promote client and its business/service in the blog post by following the Problem - Agitation - Solution copy writing framework. It's important that you generally follow and embed this flow but not explicitly mention it.
-  3) If relevant, make sure to compare and contrast products and services.
-  4) Make sure to focus on the topic of the article and provide relevant information at the front of the article.
-  5) Avoid being too salesy - this means that don't promote the client's products or services more than three times in the outline. 
-</General>
+  <General>
+    1) Provide sufficient number of sections, sub-sections, images and links in the outline for a long blog post. Make sure images that you include provide value to the content or else don't include them.
+    2) Use the client details provided in the input and web search results to promote client and its business/service in the blog post by following the Problem - Agitation - Solution copy writing framework. It's important that you generally follow and embed this flow but not explicitly mention it.
+    3) If provided, the input content is supposed to be part of the final blog post, so provide relevant sections and sub-sections for it.
+    4) If provided, the keywords are also supposed to be embedded in the final blog post.
+    5) If relevant, make sure to compare and contrast products and services.
+    6) Make sure to focus on the topic of the article and provide relevant information at the front of the article.
+    7) Avoid being too salesy - this means that don't promote the client's products or services more than three times in the outline. 
+  </General>
 
   <Introduction>
-  1) Make sure to provide a strong hook, intro to the blog post. The introduction should provide value instantly and mention about the pain point of the audience.
-  2) If client background includes social proof, case studies, or credibility, make sure to include it in the introduction outline to build trust.
-  3) Conduct research to find some unique insight about the topic like a quote, statistic, or a surprising fact and add it to the outline with the source.
+    1) Make sure to provide a strong hook, intro to the blog post. The introduction should provide value instantly and mention about the pain point of the audience.
+    2) If client background includes social proof, case studies, or credibility, make sure to include it in the introduction outline to build trust.
+    3) Conduct research to find some unique insight about the topic like a quote, statistic, or a surprising fact and add it to the outline with the source.
   </Introduction>
 
   <Images & Links>
-  1) Strictly analyze the images provided by the researcher. Add the main image before the introduction section, below the title, and make sure the image is relevant to the topic. The image should be generic and not include any logos or branding.
-  2) You will be penalized if you add any additional images throughout the outline. Only acceptable case would be if the image is a graph or a chart that is informational.
-  3) Make sure to include [Link: ...] and [Image: ...] for each section.
-  4) You must include a main image in the introduction section.
-  5) Include as many links / sources as many sources through out the article in the [Link: ...] format.
-  6) Don't add image at the end of the outline.
+    1) Strictly analyze the images provided by the researcher. Add the main image before the introduction section, below the title, and make sure the image is relevant to the topic. The image should be generic and not include any logos or branding.
+    2) You will be penalized if you add any additional images throughout the outline. Only acceptable case would be if the image is a graph or a chart that is informational.
+    3) Make sure to include [Link: ...] and [Image: ...] for each section.
+    4) You must include a main image in the introduction section.
+    5) Include as many links / sources as many sources through out the article in the [Link: ...] format.
+    6) Don't add image at the end of the outline.
   </Images & Links>
 </Rules>
 
@@ -122,8 +131,9 @@ RULES:
 3) Make sure to add links (only if valuable or insightful to the content) for subtopics that lack them in the given outline. You will be rewarded extra points for having multiple links per subtopic.
 4) Return a full outline with all the sections, sub-sections and links without any ommissions from the given outline.
 5) Focus research efforts on sections that most directly address the article's central topic. You will be rewarded extra points for this.
-6)  Preserve images if they are already in the outline. Only add images if they are a graph or a chart.
-7) Don't add image at the end of the outline.
+6) Also research and enrich the sections and subsections corresponding to input content, if required. 
+7) Preserve images if they are already in the outline. Only add images if they are a graph or a chart.
+8) Don't add image at the end of the outline.
 `;
 
 /**
@@ -133,7 +143,9 @@ RULES:
  */
 export async function researcherSequential(
   topic: string,
-  clientDetails: string
+  clientDetails: string,
+  secondaryKeywords?: string[],
+  inputContent?: string
 ): Promise<Result<string, string>> {
   try {
     const currentDate = new Date().toLocaleString();
@@ -141,7 +153,7 @@ export async function researcherSequential(
     const firstOutline = await generateText({
       model: await getThrottledClaudeSonnet(),
       system: `${INITIAL_OUTLINE_PROMPT} Current date and time: ${currentDate}`,
-      prompt: `Topic: ${topic}\nClient Details: ${clientDetails}`,
+      prompt: `Topic: ${topic}\nClient Details: ${clientDetails}\nKeywords: ${secondaryKeywords}\nInput content: ${inputContent}`,
       tools: {
         search: searchTool(),
         // retrieve: retrieveTool(),
@@ -156,7 +168,7 @@ export async function researcherSequential(
     const detailedOutline = await generateText({
       model: await getThrottledGPT4o(),
       system: `${FINAL_OUTLINE_PROMPT} Current date and time: ${currentDate}`,
-      prompt: `Initial Topic: ${topic}\nClient Details: ${clientDetails}\nOutline: ${firstOutline.text}`,
+      prompt: `Initial Topic: ${topic}\nClient Details: ${clientDetails}\nOutline: ${firstOutline.text}\nInput content: ${inputContent}`,
       tools: {
         subtopicSearch: searchSubTopicsTool(),
       },
