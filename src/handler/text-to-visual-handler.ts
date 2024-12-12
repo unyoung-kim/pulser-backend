@@ -2,7 +2,7 @@ import { z } from "zod";
 import { tRPC } from "../lib/trpc.js";
 import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
 import { Result } from "true-myth";
-import { convertTextToImage } from "../lib/text-to-image/convert-text-to-image.js";
+import { convertTextToVisual } from "../lib/text-to-visual/convert-text-to-visual.js";
 
 export function textToVisualHandler(t: tRPC, path: string) {
   return t.procedure
@@ -23,7 +23,7 @@ export function textToVisualHandler(t: tRPC, path: string) {
     .output(ApiResponseSchema)
     .mutation(async ({ input }) => {
       try {
-        const result: Result<string, string> = await convertTextToImage(
+        const result: Result<string, string> = await convertTextToVisual(
           input.text
         );
         if (result.isErr) {

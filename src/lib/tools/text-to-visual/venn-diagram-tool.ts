@@ -1,6 +1,5 @@
 import { tool } from "ai";
 import { z } from "zod";
-import { replacePlaceholders } from "../../text-to-image/replace-placeholders.js";
 
 export const vennDiagramTool = () =>
   tool({

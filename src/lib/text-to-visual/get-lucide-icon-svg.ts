@@ -10,24 +10,21 @@ export const getLucideIconSVG = (iconName: string): string => {
     const icon = LucideCore.icons[iconName as keyof typeof LucideCore.icons];
     const children = icon.at(2);
 
-    let result = "";
-
-    if (children && Array.isArray(children)) {
-      children.forEach((child) => {
-        result += arrayToSVG(child); // Process child elements
-      });
+    if (!children || !Array.isArray(children)) {
+      throw new Error(`Error getting Lucide core icon details`);
     }
+
+    const result = children.reduce((acc, child) => acc + arrayToSVG(child), "");
 
     return result; // Convert the icon array to an SVG string
   } else if (camelCase in LucideLab) {
     const icon = LucideLab[camelCase as keyof typeof LucideLab];
-    let result = "";
 
-    if (icon && Array.isArray(icon)) {
-      icon.forEach((element) => {
-        result += arrayToSVG(element); // Process child elements
-      });
+    if (!icon || !Array.isArray(icon)) {
+      throw new Error(`Error getting Lucide lab icon details`);
     }
+
+    const result = icon.reduce((acc, child) => acc + arrayToSVG(child), "");
 
     return result; // Convert the icon array to an SVG string
   } else {

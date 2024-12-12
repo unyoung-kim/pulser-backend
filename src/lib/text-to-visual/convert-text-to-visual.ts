@@ -4,7 +4,7 @@ import { getSVGImage } from "./get-svg-image.js";
 import { convertSVGToJPG } from "./convert-svg-to-jpg.js";
 import { replacePlaceholders } from "./replace-placeholders.js";
 
-export const convertTextToImage = async (
+export const convertTextToVisual = async (
   text: string
 ): Promise<Result<string, string>> => {
   try {
