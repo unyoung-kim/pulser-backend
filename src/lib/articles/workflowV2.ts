@@ -22,14 +22,14 @@ export async function workflowV2({
   inputTopic,
   keywordId,
   secondaryKeywords,
-  inputContent,
+  instruction,
   wordCount,
 }: {
   projectId: string;
   inputTopic: string;
   keywordId?: string;
   secondaryKeywords?: string[];
-  inputContent?: string;
+  instruction?: string;
   wordCount?: number;
 }): Promise<Result<string, string>> {
   const supabaseClient: Result<SupabaseClient, string> = getSupabaseClient();
@@ -64,7 +64,7 @@ export async function workflowV2({
     inputTopic,
     clientDetails,
     secondaryKeywords,
-    inputContent
+    instruction
   );
 
   if (outline.isErr) {

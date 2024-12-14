@@ -78,7 +78,7 @@ const INITIAL_OUTLINE_PROMPT = `As a professional seo expert, your task is to co
   1) a blog post topic
   2) client details
   3) keywords(optional)
-  4) input content(optional)
+  4) user instruction(optional)
 </Input>
 
 You possess the ability to search for any information on the web.
@@ -93,11 +93,11 @@ Here are a few rules you must follow for the outline:
   <General>
     1) Provide sufficient number of sections, sub-sections, images and links in the outline for a long blog post. Make sure images that you include provide value to the content or else don't include them.
     2) Use the client details provided in the input and web search results to promote client and its business/service in the blog post by following the Problem - Agitation - Solution copy writing framework. It's important that you generally follow and embed this flow but not explicitly mention it.
-    3) If provided, the input content is supposed to be part of the final blog post, so provide relevant sections and sub-sections for it.
-    4) If provided, the keywords are also supposed to be embedded in the final blog post.
-    5) If relevant, make sure to compare and contrast products and services.
-    6) Make sure to focus on the topic of the article and provide relevant information at the front of the article.
-    7) Avoid being too salesy - this means that don't promote the client's products or services more than three times in the outline. 
+    3) If relevant, make sure to compare and contrast products and services.
+    4) Make sure to focus on the topic of the article and provide relevant information at the front of the article.
+    5) Avoid being too salesy - this means that don't promote the client's products or services more than three times in the outline.
+    6) Ensure that any specific instructions provided by the user are fully addressed in the article.
+    7) The outline should contain content so it's easy and natural to incorporate the provided keywords when the article is written. 
   </General>
 
   <Introduction>
@@ -131,7 +131,7 @@ RULES:
 3) Make sure to add links (only if valuable or insightful to the content) for subtopics that lack them in the given outline. You will be rewarded extra points for having multiple links per subtopic.
 4) Return a full outline with all the sections, sub-sections and links without any ommissions from the given outline.
 5) Focus research efforts on sections that most directly address the article's central topic. You will be rewarded extra points for this.
-6) Also research and enrich the sections and subsections corresponding to input content, if required. 
+6) Also research and enrich the sections and subsections corresponding to user instruction, if required. 
 7) Preserve images if they are already in the outline. Only add images if they are a graph or a chart.
 8) Don't add image at the end of the outline.
 `;
@@ -145,7 +145,7 @@ export async function researcherSequential(
   topic: string,
   clientDetails: string,
   secondaryKeywords?: string[],
-  inputContent?: string
+  instruction?: string
 ): Promise<Result<string, string>> {
   try {
     const currentDate = new Date().toLocaleString();
@@ -153,7 +153,7 @@ export async function researcherSequential(
     const firstOutline = await generateText({
       model: await getThrottledClaudeSonnet(),
       system: `${INITIAL_OUTLINE_PROMPT} Current date and time: ${currentDate}`,
-      prompt: `Topic: ${topic}\nClient Details: ${clientDetails}\nKeywords: ${secondaryKeywords}\nInput content: ${inputContent}`,
+      prompt: `Topic: ${topic}\nClient Details: ${clientDetails}\nKeywords: ${secondaryKeywords}\nInput content: ${instruction}`,
       tools: {
         search: searchTool(),
         // retrieve: retrieveTool(),
@@ -168,7 +168,7 @@ export async function researcherSequential(
     const detailedOutline = await generateText({
       model: await getThrottledGPT4o(),
       system: `${FINAL_OUTLINE_PROMPT} Current date and time: ${currentDate}`,
-      prompt: `Initial Topic: ${topic}\nClient Details: ${clientDetails}\nOutline: ${firstOutline.text}\nInput content: ${inputContent}`,
+      prompt: `Initial Topic: ${topic}\nClient Details: ${clientDetails}\nOutline: ${firstOutline.text}\nInput content: ${instruction}`,
       tools: {
         subtopicSearch: searchSubTopicsTool(),
       },

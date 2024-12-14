@@ -15,7 +15,7 @@ export const WebRetrievalSchema = z.object({
     .array(z.string())
     .optional()
     .describe("Secondary keywords to be included in the blog post"),
-  inputContent: z
+  instruction: z
     .string()
     .optional()
     .describe("Content to be included in the blog post"),

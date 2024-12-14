@@ -28,7 +28,7 @@ export function webRetrievalHandler(t: tRPC, path: string) {
                 inputTopic: input.inputTopic,
                 keywordId: input.keywordId,
                 secondaryKeywords: input.secondaryKeywords,
-                inputContent: input.inputContent,
+                instruction: input.instruction,
                 wordCount: input.wordCount,
               })
             : await glossaryWorkflow({
@@ -43,7 +43,6 @@ export function webRetrievalHandler(t: tRPC, path: string) {
             data: result.error,
           };
         }
-
         return {
           success: true,
           data: result.value,
