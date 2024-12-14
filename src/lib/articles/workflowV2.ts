@@ -21,10 +21,16 @@ export async function workflowV2({
   projectId,
   inputTopic,
   keywordId,
+  secondaryKeywords,
+  instruction,
+  wordCount,
 }: {
   projectId: string;
   inputTopic: string;
   keywordId?: string;
+  secondaryKeywords?: string[];
+  instruction?: string;
+  wordCount?: number;
 }): Promise<Result<string, string>> {
   const supabaseClient: Result<SupabaseClient, string> = getSupabaseClient();
 
@@ -56,7 +62,9 @@ export async function workflowV2({
 
   const outline: Result<string, string> = await researcherSequential(
     inputTopic,
-    clientDetails
+    clientDetails,
+    secondaryKeywords,
+    instruction
   );
 
   if (outline.isErr) {
@@ -92,7 +100,11 @@ export async function workflowV2({
 
   console.log("Enriched outline: ", enrichedOutline.value);
 
-  const article: Result<string, string> = await writer(enrichedOutline.value);
+  const article: Result<string, string> = await writer(
+    enrichedOutline.value,
+    wordCount,
+    secondaryKeywords
+  );
 
   if (article.isErr) {
     return err(article.error);

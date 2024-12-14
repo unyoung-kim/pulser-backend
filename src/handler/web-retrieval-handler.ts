@@ -1,9 +1,9 @@
 import { Result } from "true-myth/result";
-import { z } from "zod";
 import { glossaryWorkflow } from "../lib/articles/glossary.js";
 import { workflowV2 } from "../lib/articles/workflowV2.js";
 import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
 import { tRPC } from "../lib/trpc.js";
+import { WebRetrievalSchema } from "../lib/schema/web-retrieval-schema.js";
 
 export function webRetrievalHandler(t: tRPC, path: string) {
   return t.procedure
@@ -16,22 +16,7 @@ export function webRetrievalHandler(t: tRPC, path: string) {
         tags: ["Web Retrieval"],
       },
     })
-    .input(
-      z.object({
-        projectId: z
-          .string()
-          .describe(
-            "Id of the project or which blog post needs to be generated"
-          ),
-        inputTopic: z.string().describe("The blog topic"),
-        keywordId: z
-          .string()
-          .describe("Keyword to be used to generate the blog post topic"),
-        type: z
-          .enum(["NORMAL", "GLOSSARY"])
-          .describe("Type of the content to be generated"),
-      })
-    )
+    .input(WebRetrievalSchema)
     .output(ApiResponseSchema)
     .mutation(async ({ input }) => {
       try {
@@ -42,6 +27,9 @@ export function webRetrievalHandler(t: tRPC, path: string) {
                 projectId: input.projectId,
                 inputTopic: input.inputTopic,
                 keywordId: input.keywordId,
+                secondaryKeywords: input.secondaryKeywords,
+                instruction: input.instruction,
+                wordCount: input.wordCount,
               })
             : await glossaryWorkflow({
                 projectId: input.projectId,
@@ -55,7 +43,6 @@ export function webRetrievalHandler(t: tRPC, path: string) {
             data: result.error,
           };
         }
-
         return {
           success: true,
           data: result.value,
