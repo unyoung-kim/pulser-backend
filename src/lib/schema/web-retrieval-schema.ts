@@ -11,6 +11,9 @@ export const WebRetrievalSchema = z.object({
   type: z
     .enum(["NORMAL", "GLOSSARY"])
     .describe("Type of the content to be generated"),
+  length: z
+    .enum(["LONG", "SHORT"])
+    .describe("Length of the content to be generated"),
   secondaryKeywords: z
     .array(z.string())
     .optional()
@@ -19,10 +22,10 @@ export const WebRetrievalSchema = z.object({
     .string()
     .optional()
     .describe("Content to be included in the blog post"),
-  wordCount: z
-    .number()
-    .optional()
-    .describe("Ideal word count of the blog post"),
+  // wordCount: z
+  //   .number()
+  //   .optional()
+  //   .describe("Ideal word count of the blog post"),
 });
 
 export type ApiResponse = z.infer<typeof WebRetrievalSchema>;

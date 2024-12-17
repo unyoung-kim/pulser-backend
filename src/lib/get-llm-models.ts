@@ -8,25 +8,25 @@ const maxConcurrentCallToGPTo1Mini: number = 10; // TPM: 200,000
 const maxConcurrentCallToGPT4oPreview: number = 2; // TPM: 30,000
 const maxConcurrentCallToClaudeSonnet3_5: number = 1; // TPM: 16,000
 
-const getGPT4o = () => {
+export function getGPT4o() {
   return openai("gpt-4o-2024-11-20");
-};
+}
 
-const getGPT4oMini = () => {
+export function getGPT4oMini() {
   return openai("gpt-4o-mini-2024-07-18");
-};
+}
 
-const getGPTo1Mini = () => {
+export function getGPTo1Mini() {
   return openai("o1-mini-2024-09-12");
-};
+}
 
-const getGPTo1Preview = () => {
+export function getGPTo1Preview() {
   return openai("o1-preview");
-};
+}
 
-const getClaudeSonnet = () => {
+export function getClaudeSonnet() {
   return anthropic("claude-3-5-sonnet-20240620");
-};
+}
 
 export const getThrottledGPT4o = pThrottle({
   limit: maxConcurrentCallToGPT4o,

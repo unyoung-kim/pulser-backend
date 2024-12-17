@@ -2,8 +2,8 @@ import { Result } from "true-myth/result";
 import { glossaryWorkflow } from "../lib/articles/glossary.js";
 import { workflowV2 } from "../lib/articles/workflowV2.js";
 import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
-import { tRPC } from "../lib/trpc.js";
 import { WebRetrievalSchema } from "../lib/schema/web-retrieval-schema.js";
+import { tRPC } from "../lib/trpc.js";
 
 export function webRetrievalHandler(t: tRPC, path: string) {
   return t.procedure
@@ -29,7 +29,7 @@ export function webRetrievalHandler(t: tRPC, path: string) {
                 keywordId: input.keywordId,
                 secondaryKeywords: input.secondaryKeywords,
                 instruction: input.instruction,
-                wordCount: input.wordCount,
+                length: input.length,
               })
             : await glossaryWorkflow({
                 projectId: input.projectId,
