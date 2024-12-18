@@ -85,13 +85,13 @@ You possess the ability to search for any information on the web.
 
 Conduct a deep research on the topic. Then, come up with the outline of the blog post based on your research. The outline is for a long blog post.
 
-For the outline, make sure each sections has all the relevant external links and images associated and is written in markdown format. Output the outline inside <outline> tags.
+For the outline, make sure each sections has all the relevant external links associated and is written in markdown format. Output the outline inside <outline> tags.
 
 <Rules>
 Here are a few rules you must follow for the outline:
 
   <General>
-    1) Provide sufficient number of sections, sub-sections, images and links in the outline for a blog post that matches the word count provided. Cover topics that are not only core and but also could be relevant to the topic provided. 
+    1) Provide sufficient number of sections, sub-sections, and links in the outline for a blog post that matches the word count provided. Cover topics that are not only core and but also could be relevant to the topic provided. 
     2) Use the client details provided in the input and web search results to promote client and its business/service in the blog post by following the Problem - Agitation - Solution copy writing framework. It's important that you generally follow and embed this flow but not explicitly mention it.
     3) If relevant, make sure to compare and contrast products and services.
     4) Avoid being too salesy - this means that don't promote the client's products or services more than three times in the outline.
@@ -106,23 +106,17 @@ Here are a few rules you must follow for the outline:
     3) Conduct research to find some unique insight about the topic like a quote, statistic, or a surprising fact and add it to the outline with the source.
   </Introduction>
 
-  <Images & Links>
-    1) Strictly analyze the images provided by the researcher. Add the main image before the introduction section, below the title, and make sure the image is relevant to the topic. The image should be generic and not include any logos or branding.
-    2) You will be penalized if you add any images throughout the outline. Only include images that are either a graph or a chart.
-    3) Make sure to include [Link: ...] and [Image: ...] for each section.
-    4) Include as many links / sources as many sources through out the article in the [Link: ...] format.
-    5) Don't add image at the end of the outline.
-    6) It is extremely important that you don't add a link of a potential competitor in the outline.
-  </Images & Links>
+  <Links>
+    1) Make sure to include [Link: ...] for each section.
+    2) Include as many links / sources as many sources through out the article in the [Link: ...] format.
+    3) It is extremely important that you don't add a link of a potential competitor in the outline.
+  </Links>
 </Rules>
 
 <Example>
 <outline>
 
 # Fitness Marketing Tips in 2024: Elevate Your Gym's Success
-
-[Image: https://www.nfpt.com/wp-content/uploads/2024/01/trendsIMAGE.jpeg]
-*Top 2024 Health & Fitness Trends*
 
 ## I. Introduction
 - Hook: "In the ever-evolving fitness industry, staying ahead of marketing trends is as crucial as staying ahead in your workouts."
@@ -146,8 +140,6 @@ Here are a few rules you must follow for the outline:
 - The rise of wearable tech in fitness
 - How to incorporate wearable data into your marketing strategy
 - Examples of successful wearable tech integrations in fitness marketing
-[Image: https://www.acsm.org/images/default-source/news/2023-fit-trends-infographic.jpg?sfvrsn=438a5561_4]
-*Top 10 Worldwide Fitness Trends*
 
 ### C. Influencer Marketing in the Fitness Space
 - The power of fitness influencers in 2024
@@ -243,7 +235,7 @@ You possess the ability to search for any information on the web.
 
 Conduct a deep research on the topic. Then, come up with the outline of the blog post based on your research. The outline is for a long blog post.
 
-For the outline, make sure each sections has all the relevant external links and images associated and is written in markdown format. Output the outline inside <outline> tags.
+For the outline, make sure each sections has all the relevant external links associated and is written in markdown format. Output the outline inside <outline> tags.
 
 <Rules>
 Here are a few rules you must follow for the outline:
@@ -264,14 +256,11 @@ Here are a few rules you must follow for the outline:
     3) Conduct research to find some unique insight about the topic like a quote, statistic, or a surprising fact and add it to the outline with the source.
   </Introduction>
 
-  <Images & Links>
-    1) Strictly analyze the images provided by the researcher. Add the main image before the introduction section, below the title, and make sure the image is relevant to the topic. The image should be generic and not include any logos or branding.
-    2) You will be penalized if you add any images throughout the outline. Only include images that are either a graph or a chart.
-    3) Make sure to include [Link: ...] and [Image: ...] for each section.
-    4) Include as many links / sources as many sources through out the article in the [Link: ...] format.
-    5) Don't add image at the end of the outline.
-    6) It is extremely important that you don't add a link of a potential competitor in the outline.
-  </Images & Links>
+  <Links>
+    1) Make sure to include [Link: ...] for each section.
+    2) Include as many links / sources as many sources through out the article in the [Link: ...] format.
+    3) It is extremely important that you don't add a link of a potential competitor in the outline.
+  </Links>
 </Rules>
 
 Think step by step before you come up with the outline.
@@ -289,10 +278,8 @@ RULES:
 3) Make sure to add links (only if valuable or insightful to the content) for subtopics that lack them in the given outline. You will be rewarded extra points for having multiple links per subtopic.
 4) Return a full outline with all the sections, sub-sections and links without any ommissions from the given outline.
 5) Focus research efforts on sections that most directly address the article's central topic. You will be rewarded extra points for this.
-6) Also research and enrich the sections and subsections corresponding to user instruction, if required. 
-7) Preserve images if they are already in the outline. Only add images if they are a graph or a chart.
-8) Don't add image at the end of the outline.
-9) It is extremely important that you don't add a link of a potential competitor in the outline.
+6) Also research and enrich the sections and subsections corresponding to user instruction, if required.  
+7) It is extremely important that you don't add a link of a potential competitor in the outline.
 `;
 
 /**

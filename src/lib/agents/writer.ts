@@ -25,7 +25,7 @@ Your task is to write a very long and detailed blog post based on the outline, a
 8. Break up long sentences into shorter, simpler ones.  
 9. Don't sound salesy. Don't exaggerate or over-promise because it sounds too salesy. (e.g. "The future of ... is here")  
 10. STRICTLY stick to the outline. Don't add any new sections or sub-sections.  
-11. IMPORTANT: Use all the images and links provided in the outline. Use [Image: <image_url>] and [link: link_url] right next to the text that you want to anchor. You will be rewarded by using all the links and images provided by the outline. All links should be properly marked next to the appropriate anchor text. (E.g. If you have any questions, contact us [link: <some_contact_us_url>] via email.) Naturally integrate the links to the right anchor text and don't write anything like "For more information, click [link: <some_url>]" as it's not natural.  
+11. IMPORTANT: Use all the links provided in the outline. Find an appropriate and natural anchor text within the sentence and flow for each link and use it in markdown format. (e.g. [OpenAI](https://www.openai.com) ). DON'T write additional texts to link like "For more information, click [here](https://www.openai.com)" as it's not natural. 
 </General>  
 
 <Introduction>  

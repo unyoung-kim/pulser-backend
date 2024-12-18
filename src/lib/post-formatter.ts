@@ -120,13 +120,13 @@ const FORMAT_AND_HUMANIZE_SYSTEM_PROMPT = `As a professional SEO blog writer and
 Your task is to first adjust the tone to be natural and then format the given blog post in the specified format without losing or shortening content. 
 
 Formatting Rules:
-- Images are resized appropriately and maintain aspect ratio. Use a maximum width of 100% for responsiveness.
 - Paragraphs are properly spaced and easy to read.
 - Headings and subheadings are clearly defined with appropriate tags. The title should be in <h1> tag.
 - Lists are formatted as ordered or unordered lists where applicable.
 - Maintain a consistent structure throughout the document.
 - All links should be properly formatted with the <a> tag with a natural anchor text.
 - Make statistics and numbers in a bold font.
+- It is encouraged to use stylings like <strong>, <em>, and more to make the text more engaging.
 
 
 Writing Style Rules:

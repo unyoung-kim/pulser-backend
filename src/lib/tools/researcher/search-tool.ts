@@ -126,7 +126,7 @@ async function tavilySearch(
   if (!apiKey) {
     throw new Error("TAVILY_API_KEY is not set in the environment variables");
   }
-  const includeImageDescriptions = true;
+  const includeImageDescriptions = false;
   const response = await fetch("https://api.tavily.com/search", {
     method: "POST",
     headers: {
@@ -137,7 +137,7 @@ async function tavilySearch(
       query,
       max_results: maxResults,
       search_depth: searchDepth,
-      include_images: true,
+      include_images: false,
       include_image_descriptions: includeImageDescriptions,
       include_answers: true,
       include_domains: includeDomains,
@@ -185,7 +185,7 @@ async function tavilySearchWithRawContent(
   if (!apiKey) {
     throw new Error("TAVILY_API_KEY is not set in the environment variables");
   }
-  const includeImageDescriptions = true;
+  const includeImageDescriptions = false;
   const response = await fetch("https://api.tavily.com/search", {
     method: "POST",
     headers: {
@@ -196,7 +196,7 @@ async function tavilySearchWithRawContent(
       query,
       max_results: maxResults,
       search_depth: searchDepth,
-      include_images: true,
+      include_images: false,
       include_image_descriptions: includeImageDescriptions,
       include_answers: true,
       include_domains: includeDomains,
