@@ -1,20 +1,13 @@
-import { generateText } from "ai";
-import { Result, err, ok } from "true-myth/result";
-import {
-  getThrottledClaudeSonnet,
-  getThrottledGPT4o,
-} from "../get-llm-models.js";
-import { writerTool } from "../tools/writer/writer-tools.js";
+import { generateText, tool } from "ai";
+import { z } from "zod";
+import { getClaudeSonnet } from "../../get-llm-models.js";
 
-const SYSTEM_PROMPT = `<Task>  
-As a professional SEO blog writer, you will be given a detailed outline and some related keywords for an SEO blog post.  
-
-Your task is to write a very long and detailed blog post based on the outline, adhering to the specified word count.  
-</Task>  
+const SYSTEM_PROMPT = `
+Given the following sections, write a section of the blog post.
 
 <Rules>  
 <General>  
-1. The word count of the blog post MUST be over 4000 words. Follow this very strictly.  
+1. The word count of the blog post MUST be approximately the number specified in the input. Follow this very strictly.  
 2. Follow the Problem - Agitation - Solution copywriting framework. It's important that you generally follow and embed this flow but not explicitly mention it. 
 3. If provided, embed the input keywords naturally in the blog post. 
 3. Please generate text that avoids using formal or overly academic phrases such as 'it is worth noting,' 'furthermore,' 'consequently,' 'in terms of,' 'one may argue,' 'it is imperative,' 'this suggests that,' 'thus,' 'it is evident that,' 'notwithstanding,' 'pertaining to,' 'therein lies,' 'utilize,' 'be advised,' 'hence,' 'indicate,' 'facilitate,' 'subsequently,' 'moreover,' and 'it can be seen that.' Aim for a natural, conversational style that sounds like two friends talking at the coffee shop. Use direct, simple language and choose phrases that are commonly used in everyday speech. If a formal phrase is absolutely necessary for clarity or accuracy, you may include it, but otherwise, please prioritize making the text engaging, clear, and relatable.  
@@ -24,8 +17,7 @@ Your task is to write a very long and detailed blog post based on the outline, a
 7. NEVER come up with new testimonials, case studies, or statistics that are not directly mentioned in the outline.  
 8. Break up long sentences into shorter, simpler ones.  
 9. Don't sound salesy. Don't exaggerate or over-promise because it sounds too salesy. (e.g. "The future of ... is here")  
-10. STRICTLY stick to the outline. Don't add any new sections or sub-sections.  
-11. IMPORTANT: Use all the links provided in the outline. Find an appropriate and natural anchor text within the sentence and flow for each link and use it in markdown format. (e.g. [OpenAI](https://www.openai.com) ). DON'T write additional texts to link like "For more information, click [here](https://www.openai.com)" as it's not natural. 
+10. IMPORTANT: Use all the images and links provided in the outline. Use [Image: <image_url>] and [link: link_url] right next to the text that you want to anchor. You will be rewarded by using all the links and images provided by the outline. All links should be properly marked next to the appropriate anchor text. (E.g. If you have any questions, contact us [link: <some_contact_us_url>] via email.) Naturally integrate the links to the right anchor text and don't write anything like "For more information, click [link: <some_url>]" as it's not natural.  
 </General>  
 
 <Introduction>  
@@ -44,64 +36,36 @@ Just output the formatted result without any new lines or other special characte
 </Rules> 
 `;
 
-export async function writer(
-  outline: string,
-  // wordCount: number = 3000,
-  length: "LONG" | "SHORT",
-  secondaryKeywords?: string[]
-): Promise<Result<string, string>> {
-  try {
-    const model = await getThrottledClaudeSonnet();
-    const currentDate = new Date().toLocaleString();
-    const result = await generateText({
-      // model: await getThrottledClaudeSonnet(),
-      model: model,
-      system: `Current date and time: ${currentDate}
-      
-      ${SYSTEM_PROMPT}`,
-      prompt: `Outline: ${outline}`,
-      maxTokens: 8000,
-      temperature: 0.9,
-    });
+export const writerTool = () =>
+  tool({
+    description:
+      "Write a blog post from the outline provided. Split the outline into multiple sections without losing any information.",
+    parameters: z.object({
+      sections: z
+        .array(z.string())
+        .describe(
+          "A list of sections to write about (The outline split into sections)"
+        ),
+    }),
+    execute: async ({ sections }: { sections: string[] }) => {
+      console.log("Sections: ", sections);
+      const currentDate = new Date().toLocaleString();
 
-    return ok(result.text);
-  } catch (error) {
-    console.error("Error in writer:", error);
-    return err("An error has occurred. Please try again.");
-  }
-}
+      const results: string[] = await Promise.all(
+        sections.map(async (section) => {
+          const result = await generateText({
+            // model: await getThrottledClaudeSonnet(),
+            model: getClaudeSonnet(),
+            system: `${SYSTEM_PROMPT} Current date and time: ${currentDate}`,
+            prompt: `Outline: ${section}`,
+            maxTokens: 2000,
+            temperature: 0.7,
+          });
 
-const SYSTEM_PROMPT2 = `  
-As a professional SEO blog writer, you will be given a detailed outline and some related keywords for an SEO blog post.  
+          return result.text;
+        })
+      );
 
-Your task is to use the writer tool to first split the outline into sections and then write each section. Then you should join the sections together to form the final blog post while applying the rules below. You must call the writer tool. 
-
-`;
-
-export async function writerV2(
-  outline: string,
-  wordCount: number = 3000,
-  secondaryKeywords?: string[]
-): Promise<Result<string, string>> {
-  try {
-    const currentDate = new Date().toLocaleString();
-    const result = await generateText({
-      model: await getThrottledGPT4o(),
-      system: `${SYSTEM_PROMPT2} Current date and time: ${currentDate}`,
-      prompt: `Outline: ${outline}\nWord Count: ${wordCount}\nKeywords: ${secondaryKeywords}`,
-      tools: {
-        writer: writerTool(),
-      },
-      maxTokens: 8000,
-      temperature: 0.7,
-      maxSteps: 3,
-    });
-
-    console.log("Result: ", result);
-
-    return ok(result.text);
-  } catch (error) {
-    console.error("Error in writer:", error);
-    return err("An error has occurred. Please try again.");
-  }
-}
+      return results;
+    },
+  });

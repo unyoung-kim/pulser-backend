@@ -22,6 +22,7 @@ Your task is to enrich the outline so that it includes at least around 4 to 5 in
 3. Do not change the title of the outline.
 4. Preserve as much of the original outline as possible while adding the internal links.
 5. Don't include internal links like "privacy policy", "disclaimer", "terms of service", but one's like "contact us" are good.
+6. You must return the full outline with the internal links embedded. Don't add any additional comments like [Sections V through XII remain unchanged] or anything like that. Just return the full outline.
 </Rules>`;
 
 export async function outlineEnricher(
@@ -36,6 +37,8 @@ export async function outlineEnricher(
       prompt: `Enriched URLs: ${enrichedURLs}\nOutline: ${outline}`,
       maxTokens: 8000,
     });
+
+    console.log("OUTLINE ENRICHER RESULT: ", result);
 
     return ok(result.text);
   } catch (error) {

@@ -72,39 +72,195 @@ export async function researcher(
   }
 }
 
-const INITIAL_OUTLINE_PROMPT = `As a professional seo expert, your task is to come up with a detailed outline for an SEO blog post for a client given a blog post topic and client details.
+const LONG_POST_INITIAL_OUTLINE_PROMPT = `As a professional seo expert, your task is to come up with a detailed outline for an SEO blog post for a client given:
+
+<Input>
+  1) a blog post topic
+  2) client details
+  3) keywords(optional)
+  4) user instruction(optional)
+</Input>
 
 You possess the ability to search for any information on the web.
 
-Conduct a deep research on the topic. Then, come up with the initial outline of the blog post based on your research.
+Conduct a deep research on the topic. Then, come up with the outline of the blog post based on your research. The outline is for a long blog post.
 
-For the outline, make sure each sections has all the relevant external links and images associated and is written in markdown format. Output the outline inside <outline> tags.
+For the outline, make sure each sections has all the relevant external links associated and is written in markdown format. Output the outline inside <outline> tags.
 
 <Rules>
 Here are a few rules you must follow for the outline:
 
-<General>
-  1) Provide sufficient number of sections, sub-sections, images and links in the outline for a long blog post. Make sure images that you include provide value to the content or else don't include them.
-  2) Use the client details provided in the input and web search results to promote client and its business/service in the blog post by following the Problem - Agitation - Solution copy writing framework. It's important that you generally follow and embed this flow but not explicitly mention it.
-  3) If relevant, make sure to compare and contrast products and services.
-  4) Make sure to focus on the topic of the article and provide relevant information at the front of the article.
-  5) Avoid being too salesy - this means that don't promote the client's products or services more than three times in the outline. 
-</General>
+  <General>
+    1) Provide sufficient number of sections, sub-sections, and links in the outline for a blog post that matches the word count provided. Cover topics that are not only core and but also could be relevant to the topic provided. 
+    2) Use the client details provided in the input and web search results to promote client and its business/service in the blog post by following the Problem - Agitation - Solution copy writing framework. It's important that you generally follow and embed this flow but not explicitly mention it.
+    3) If relevant, make sure to compare and contrast products and services.
+    4) Avoid being too salesy - this means that don't promote the client's products or services more than three times in the outline.
+    5) Ensure that any specific instructions provided by the user are fully addressed in the outline.
+    6) The outline should contain content so it's easy and natural to incorporate the provided keywords when the article is written. 
+    7) Don't make up any case studies or social proof that wasn't provided by the researcher.
+  </General>
 
   <Introduction>
-  1) Make sure to provide a strong hook, intro to the blog post. The introduction should provide value instantly and mention about the pain point of the audience.
-  2) If client background includes social proof, case studies, or credibility, make sure to include it in the introduction outline to build trust.
-  3) Conduct research to find some unique insight about the topic like a quote, statistic, or a surprising fact and add it to the outline with the source.
+    1) Make sure to provide a strong hook, intro to the blog post. The introduction should provide value instantly and mention about the pain point of the audience.
+    2) If client background includes social proof, case studies, or credibility, make sure to include it in the introduction outline to build trust.
+    3) Conduct research to find some unique insight about the topic like a quote, statistic, or a surprising fact and add it to the outline with the source.
   </Introduction>
 
-  <Images & Links>
-  1) Strictly analyze the images provided by the researcher. Add the main image before the introduction section, below the title, and make sure the image is relevant to the topic. The image should be generic and not include any logos or branding.
-  2) You will be penalized if you add any additional images throughout the outline. Only acceptable case would be if the image is a graph or a chart that is informational.
-  3) Make sure to include [Link: ...] and [Image: ...] for each section.
-  4) You must include a main image in the introduction section.
-  5) Include as many links / sources as many sources through out the article in the [Link: ...] format.
-  6) Don't add image at the end of the outline.
-  </Images & Links>
+  <Links>
+    1) Make sure to include [Link: ...] for each section.
+    2) Include as many links / sources as many sources through out the article in the [Link: ...] format.
+    3) It is extremely important that you don't add a link of a potential competitor in the outline.
+  </Links>
+</Rules>
+
+<Example>
+<outline>
+
+# Fitness Marketing Tips in 2024: Elevate Your Gym's Success
+
+## I. Introduction
+- Hook: "In the ever-evolving fitness industry, staying ahead of marketing trends is as crucial as staying ahead in your workouts."
+- Brief overview of the challenges facing fitness businesses in 2024
+- Unique insight: According to a recent study, 81% of gym-goers prefer a mix of digital and in-person fitness experiences [Link: https://www.wellnesscreatives.com/fitness-marketing-trends/]
+- Introduction to SpearPoint Marketing LLC and how they help fitness businesses thrive in the digital age
+
+## II. The Fitness Industry Landscape in 2024
+- Current state of the fitness market
+- Key challenges facing gym owners and fitness professionals
+- Opportunities for growth and innovation
+[Link: https://gyminsiders.com/2023/12/strategic-gym-marketing-for-2024-leveraging-data-and-trends/]
+
+## III. Leveraging Digital Marketing Trends
+### A. Fitness Marketing Funnels
+- Explanation of marketing funnels in the fitness context
+- Steps to create an effective fitness marketing funnel
+[Link: https://www.wellnesscreatives.com/fitness-marketing-trends/]
+
+### B. Embracing Wearable Technology
+- The rise of wearable tech in fitness
+- How to incorporate wearable data into your marketing strategy
+- Examples of successful wearable tech integrations in fitness marketing
+
+### C. Influencer Marketing in the Fitness Space
+- The power of fitness influencers in 2024
+- How to choose the right influencers for your brand
+- Tips for creating authentic influencer partnerships
+[Link: https://legitfit.com/blog/top-2024-marketing-consumption-trends-for-fitness-professionals]
+
+## IV. Personalization and AI-Driven Marketing
+### A. AI-Powered Fitness Apps and Platforms
+- The role of AI in personalizing fitness experiences
+- How to use AI for targeted marketing campaigns
+- Case study: A fitness app that increased user engagement by 50% with AI-driven recommendations
+
+### B. Conversational Marketing for Gyms
+- Implementing chatbots and AI-driven interactions
+- Best practices for conversational marketing in the fitness industry
+- How SpearPoint Marketing can help implement these technologies effectively
+
+## V. Content Marketing Strategies for Fitness Brands
+### A. Video Content and Live Streaming
+- The importance of video in fitness marketing
+- Tips for creating engaging fitness video content
+- Leveraging platforms like YouTube, Instagram, and TikTok for fitness marketing
+
+### B. Podcasting for Fitness Professionals
+- Why podcasts are gaining popularity in the fitness niche
+- How to start and market a fitness podcast
+- Success stories of fitness brands using podcasts for marketing
+
+## VI. Community Building and Engagement
+### A. Social Media Strategies for Gyms
+- Effective social media tactics for 2024
+- Creating engaging content that resonates with fitness enthusiasts
+- How SpearPoint Marketing helps fitness businesses build a strong social media presence
+[Link: https://wod.guru/blog/fitness-marketing/]
+
+### B. Hybrid Fitness Experiences
+- Blending online and offline fitness offerings
+- Marketing strategies for hybrid fitness models
+- Case study: A gym that successfully transitioned to a hybrid model with SpearPoint's help
+
+## VII. Sustainability and Wellness-Focused Marketing
+### A. Incorporating the "New Green Reality"
+- How sustainability is shaping fitness marketing
+- Strategies to showcase your gym's eco-friendly initiatives
+- Examples of successful green marketing campaigns in the fitness industry
+[Link: https://legitfit.com/blog/top-2024-marketing-consumption-trends-for-fitness-professionals]
+
+### B. Holistic Wellness Approach
+- Expanding marketing beyond physical fitness to overall wellness
+- Creating content that addresses mental health and nutrition
+- Partnerships with wellness brands to enhance your marketing reach
+
+## VIII. Data-Driven Marketing Strategies
+### A. Leveraging Gym Management Software
+- The importance of data in fitness marketing
+- Key metrics to track for effective marketing
+- How SpearPoint Marketing can help analyze and utilize gym data for targeted campaigns
+
+### B. Retargeting and Remarketing in the Fitness Industry
+- Strategies for re-engaging past members and leads
+- Implementing effective retargeting campaigns
+- Case study: How a gym increased member retention by 25% through strategic remarketing
+
+## IX. Local SEO and Google My Business Optimization
+- The importance of local SEO for gyms and fitness studios
+- Tips for optimizing Google My Business listings
+- How SpearPoint Marketing's SEO expertise can boost local visibility for fitness businesses
+
+## X. Conclusion
+- Recap of key fitness marketing trends for 2024
+- The importance of staying adaptable in the ever-changing fitness landscape
+- How partnering with SpearPoint Marketing can help fitness businesses thrive in 2024 and beyond
+
+[Link: https://www.thespearpoint.com/]
+
+</outline>
+</Example>
+
+Think step by step before you come up with the outline.
+`;
+
+const SHORT_POST_INITIAL_OUTLINE_PROMPT = `As a professional seo expert, your task is to come up with a detailed outline for an SEO blog post for a client given:
+
+<Input>
+  1) a blog post topic
+  2) client details
+  3) keywords(optional)
+  4) user instruction(optional)
+</Input>
+
+You possess the ability to search for any information on the web.
+
+Conduct a deep research on the topic. Then, come up with the outline of the blog post based on your research. The outline is for a long blog post.
+
+For the outline, make sure each sections has all the relevant external links associated and is written in markdown format. Output the outline inside <outline> tags.
+
+<Rules>
+Here are a few rules you must follow for the outline:
+
+  <General>
+    1) Provide sufficient number of sections, sub-sections, images and links in the outline for a blog post that matches the word count provided. Make sure to only cover topics that are relevant to the topic provided.
+    2) Use the client details provided in the input and web search results to promote client and its business/service in the blog post by following the Problem - Agitation - Solution copy writing framework. It's important that you generally follow and embed this flow but not explicitly mention it.
+    3) If relevant, make sure to compare and contrast products and services.
+    4) Avoid being too salesy - this means that don't promote the client's products or services more than three times in the outline.
+    5) Ensure that any specific instructions provided by the user are fully addressed in the article.
+    6) The outline should contain content so it's easy and natural to incorporate the provided keywords when the article is written. 
+    7) Don't make up any case studies or social proof that wasn't provided by the researcher.
+  </General>
+
+  <Introduction>
+    1) Make sure to provide a strong hook, intro to the blog post. The introduction should provide value instantly and mention about the pain point of the audience.
+    2) If client background includes social proof, case studies, or credibility, make sure to include it in the introduction outline to build trust.
+    3) Conduct research to find some unique insight about the topic like a quote, statistic, or a surprising fact and add it to the outline with the source.
+  </Introduction>
+
+  <Links>
+    1) Make sure to include [Link: ...] for each section.
+    2) Include as many links / sources as many sources through out the article in the [Link: ...] format.
+    3) It is extremely important that you don't add a link of a potential competitor in the outline.
+  </Links>
 </Rules>
 
 Think step by step before you come up with the outline.
@@ -122,8 +278,8 @@ RULES:
 3) Make sure to add links (only if valuable or insightful to the content) for subtopics that lack them in the given outline. You will be rewarded extra points for having multiple links per subtopic.
 4) Return a full outline with all the sections, sub-sections and links without any ommissions from the given outline.
 5) Focus research efforts on sections that most directly address the article's central topic. You will be rewarded extra points for this.
-6)  Preserve images if they are already in the outline. Only add images if they are a graph or a chart.
-7) Don't add image at the end of the outline.
+6) Also research and enrich the sections and subsections corresponding to user instruction, if required.  
+7) It is extremely important that you don't add a link of a potential competitor in the outline.
 `;
 
 /**
@@ -133,15 +289,22 @@ RULES:
  */
 export async function researcherSequential(
   topic: string,
-  clientDetails: string
+  clientDetails: string,
+  length: "LONG" | "SHORT",
+  secondaryKeywords?: string[],
+  instruction?: string
 ): Promise<Result<string, string>> {
   try {
     const currentDate = new Date().toLocaleString();
     // Generate the initial outline
     const firstOutline = await generateText({
       model: await getThrottledClaudeSonnet(),
-      system: `${INITIAL_OUTLINE_PROMPT} Current date and time: ${currentDate}`,
-      prompt: `Topic: ${topic}\nClient Details: ${clientDetails}`,
+      system: `${
+        length === "LONG"
+          ? LONG_POST_INITIAL_OUTLINE_PROMPT
+          : SHORT_POST_INITIAL_OUTLINE_PROMPT
+      } Current date and time: ${currentDate}`,
+      prompt: `Topic: ${topic}\nClient Details: ${clientDetails}\nKeywords: ${secondaryKeywords}\nInput content: ${instruction}`,
       tools: {
         search: searchTool(),
         // retrieve: retrieveTool(),
@@ -151,12 +314,12 @@ export async function researcherSequential(
       maxTokens: 8000,
     });
 
-    console.log("FIRST OUTLINE: ", firstOutline.text);
+    console.log("FIRST OUTLINE: ", firstOutline);
 
     const detailedOutline = await generateText({
       model: await getThrottledGPT4o(),
       system: `${FINAL_OUTLINE_PROMPT} Current date and time: ${currentDate}`,
-      prompt: `Initial Topic: ${topic}\nClient Details: ${clientDetails}\nOutline: ${firstOutline.text}`,
+      prompt: `Initial Topic: ${topic}\nClient Details: ${clientDetails}\nOutline: ${firstOutline.text}\nInput content: ${instruction}`,
       tools: {
         subtopicSearch: searchSubTopicsTool(),
       },
@@ -165,7 +328,7 @@ export async function researcherSequential(
       maxTokens: 8000,
     });
 
-    console.log("DETAILED OUTLINE: ", detailedOutline.text);
+    console.log("DETAILED OUTLINE: ", detailedOutline);
 
     return ok(detailedOutline.text);
   } catch (error) {
