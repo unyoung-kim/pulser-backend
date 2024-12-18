@@ -4,7 +4,7 @@ import { z } from "zod";
 export const vennDiagramTool = () =>
   tool({
     description: `
-        This tool generates an SVG image based on a "Venn Diagram" template.
+        This tool collects parameters based on a "Venn Diagram" template and outputs them with the template name. 
 
         Purpose:
         - Visualizes relationships and overlaps between three main categories or ideas in an aesthetically pleasing format.

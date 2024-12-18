@@ -1,8 +1,8 @@
 import { Result } from "true-myth";
 import { err, ok } from "true-myth/result";
-import { getSVGImage } from "./get-svg-image.js";
 import { convertSVGToJPG } from "./convert-svg-to-jpg.js";
 import { replacePlaceholders } from "./replace-placeholders.js";
+import { getArguements } from "./get-arguements.js";
 
 export const convertTextToVisual = async (
   text: string
@@ -11,7 +11,7 @@ export const convertTextToVisual = async (
     const argumentsObject: Result<
       Record<string, string>,
       string
-    > = await getSVGImage(text);
+    > = await getArguements(text);
 
     if (argumentsObject.isErr) {
       return err(argumentsObject.error);

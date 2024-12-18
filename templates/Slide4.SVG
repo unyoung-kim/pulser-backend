@@ -1,0 +1,46 @@
+<svg width="1280" height="720" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" overflow="hidden">
+    <g>
+        <rect x="0" y="0" width="1280" height="720" fill="#FFFFFF"/>
+        <rect x="29" y="95" width="28" height="4" fill="#10CF9B"/>
+        <rect x="0" y="95" width="29" height="4" fill="#009DD9"/>
+        <text fill="#0F6FC6" font-family="Open Sans,Open Sans_MSFontService,sans-serif" font-weight="700" font-size="48" transform="translate(85.6 111)">{{header}}</text>
+        <text fill="#17406D" font-family="Open Sans,Open Sans_MSFontService,sans-serif" font-weight="400" font-size="15" transform="translate(88 58)">{{section_title}}</text>
+        <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(88 146)">{{sub_header}}</text>
+        <path d="M102 402.5C102 321.038 168.038 255 249.5 255 330.962 255 397 321.038 397 402.5 397 483.962 330.962 550 249.5 550 168.038 550 102 483.962 102 402.5Z" fill="#0F6FC6" fill-rule="evenodd" fill-opacity="0.701961"/>
+        <path d="M216 545.5C216 526.998 230.998 512 249.5 512 268.002 512 283 526.998 283 545.5 283 564.002 268.002 579 249.5 579 230.998 579 216 564.002 216 545.5Z" fill="#0B5395" fill-rule="evenodd"/>
+        <path d="M365 334.5C365 253.038 430.814 187 512 187 593.186 187 659 253.038 659 334.5 659 415.962 593.186 482 512 482 430.814 482 365 415.962 365 334.5Z" fill="#009DD9" fill-rule="evenodd" fill-opacity="0.701961"/>
+        <path d="M478 477C478 458.775 492.998 444 511.5 444 530.002 444 545 458.775 545 477 545 495.225 530.002 510 511.5 510 492.998 510 478 495.225 478 477Z" fill="#0076A3" fill-rule="evenodd"/>
+        <path d="M627 402.5C627 321.038 693.038 255 774.5 255 855.962 255 922 321.038 922 402.5 922 483.962 855.962 550 774.5 550 693.038 550 627 483.962 627 402.5Z" fill="#0BD0D9" fill-rule="evenodd" fill-opacity="0.701961"/>
+        <path d="M741 545.5C741 526.998 755.775 512 774 512 792.225 512 807 526.998 807 545.5 807 564.002 792.225 579 774 579 755.775 579 741 564.002 741 545.5Z" fill="#089CA3" fill-rule="evenodd"/>
+        <path d="M889 334.5C889 253.038 955.038 187 1036.5 187 1117.96 187 1184 253.038 1184 334.5 1184 415.962 1117.96 482 1036.5 482 955.038 482 889 415.962 889 334.5Z" fill="#10CF9B" fill-rule="evenodd" fill-opacity="0.701961"/>
+        <path d="M1003 477C1003 458.775 1018 444 1036.5 444 1055 444 1070 458.775 1070 477 1070 495.225 1055 510 1036.5 510 1018 510 1003 495.225 1003 477Z" fill="#0C9B74" fill-rule="evenodd"/>
+        <g id="img1" transform="translate(225 520) scale(2)" stroke="white" stroke-width="1" fill="none">
+            {{icon_1}}    
+        </g>
+        <g id="img1" transform="translate(487 453) scale(2)" stroke="white" stroke-width="1" fill="none">
+            {{icon_2}}
+        </g>
+        <g id="img1" transform="translate(750 520) scale(2)" stroke="white" stroke-width="1" fill="none">
+            {{icon_3}}
+        </g>
+        <g id="img1" transform="translate(1012 453) scale(2)" stroke="white" stroke-width="1" fill="none">
+            {{icon_4}}
+        </g>
+        <text fill="#FFFFFF" font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(250 393)" text-anchor="middle">{{title_1_desc_line_1}}</text>
+        <text fill="#FFFFFF" font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(250 421)" text-anchor="middle">{{title_1_desc_line_2}}</text>
+        <text fill="#FFFFFF" font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(250 450)" text-anchor="middle">{{title_1_desc_line_3}}</text>
+        <text fill="#FFFFFF" font-family="Open Sans,Open Sans_MSFontService,sans-serif" font-weight="700" font-size="19" transform="translate(250 354)" text-anchor="middle">{{text_1}}</text>
+        <text fill="#FFFFFF" font-family="Open Sans,Open Sans_MSFontService,sans-serif" font-weight="700" font-size="19" transform="translate(510 281)" text-anchor="middle">{{text_2}}</text>
+        <text fill="#FFFFFF" font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(510 321)" text-anchor="middle">{{title_2_desc_line_1}}</text>
+        <text fill="#FFFFFF" font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(510 349)" text-anchor="middle">{{title_2_desc_line_2}}</text>
+        <text fill="#FFFFFF" font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(510 378)" text-anchor="middle">{{title_2_desc_line_3}}</text>
+        <text fill="#FFFFFF" font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(775 393)" text-anchor="middle">{{title_3_desc_line_1}}</text>
+        <text fill="#FFFFFF" font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(775 421)" text-anchor="middle">{{title_3_desc_line_2}}</text>
+        <text fill="#FFFFFF" font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(775 450)" text-anchor="middle">{{title_3_desc_line_3}}</text>
+        <text fill="#FFFFFF" font-family="Open Sans,Open Sans_MSFontService,sans-serif" font-weight="700" font-size="19" transform="translate(775 354)" text-anchor="middle">{{text_3}}</text>
+        <text fill="#FFFFFF" font-family="Open Sans,Open Sans_MSFontService,sans-serif" font-weight="700" font-size="19" transform="translate(1035 281)" text-anchor="middle">{{text_4}}</text>
+        <text fill="#FFFFFF" font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(1035 321)" text-anchor="middle">{{title_4_desc_line_1}}</text>
+        <text fill="#FFFFFF" font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(1035 349)" text-anchor="middle">{{title_4_desc_line_2}}</text>
+        <text fill="#FFFFFF" font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(1035 378)" text-anchor="middle">{{title_4_desc_line_3}}</text>
+    </g>
+</svg>

@@ -22,7 +22,7 @@ Your responsibilities:
    - Each tool is designed for a specific type of SVG layout or visualization.  
 
 3. Argument Values:  
-   - Text Arguments: Provide concise, meaningful, and contextually relevant text (not exceeding two words).  
+   - Text Arguments: Provide concise, meaningful, and contextually relevant text.  
    - Icon Arguments:  
      - Provide valid Lucide icon names in PascalCase format.  
      - If no exact match exists, choose a closely related icon that aligns with the context.  
@@ -32,7 +32,7 @@ Your responsibilities:
    - Strictly output the return value provided by calling the chosen tool. Do not add any words or special characters to it.
 `;
 
-export const getSVGImage = async (
+export const getArguements = async (
   text: string
 ): Promise<Result<Record<string, string>, string>> => {
   try {

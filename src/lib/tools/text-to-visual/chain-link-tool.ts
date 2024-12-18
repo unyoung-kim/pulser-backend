@@ -4,20 +4,20 @@ import { z } from "zod";
 export const chainLinkTool = () =>
   tool({
     description: `
-        This tool generates an SVG image based on a "chain link" template. 
+        This tool collects parameters based on a "Chain Link" template and outputs them with the template name. 
 
         Purpose:
-        - Visualizes interconnected ideas or themes in a structured and visually appealing way.
+        - Captures details about interconnected ideas or themes in a structured format.
 
         Structure:
-        - A main title at the top of the image.
+        - A main title summarizing the interconnected ideas.
         - Five interconnected links, each containing:
-        - A text label above or below the link.
-        - An icon inside the link.
+          - A text label for the link.
+          - An icon associated with the link (using Lucide icons).
 
         Parameters:
-        - The text labels represent related ideas or themes and are concise and meaningful.
-        - The icons are visual representations of the associated ideas and must strictly be Lucide icons. Icon names should be in PascalCase (e.g., "Activity", "Briefcase").
+        - Text labels represent related ideas or themes and must be concise and meaningful.
+        - Lucide icons are used as visual representations. Use PascalCase for icon names (e.g., "Activity").
     `,
     parameters: z.object({
       main_title: z
