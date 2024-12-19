@@ -113,6 +113,9 @@ export const keyPatterns = [
 export const excludPatterns = [
   "#", // Exclude URLs with fragment identifiers
   "terms-and-conditions",
+  "termsandconditions",
+  "privacy-policy",
+  "privacypolicy",
   "privacy",
   "terms",
   "login",
