@@ -201,7 +201,7 @@ async function tavilySearchWithRawContent(
       include_answers: true,
       include_domains: includeDomains,
       exclude_domains: excludeDomains,
-      raw_content: true,
+      include_raw_content: true,
     }),
   });
 
@@ -212,6 +212,21 @@ async function tavilySearchWithRawContent(
   }
 
   const data = await response.json();
+
+  const trimmedRawData = data.results.map(
+    (result: {
+      title: string;
+      url: string;
+      content: string;
+      score: number;
+      raw_content: string;
+    }) => {
+      return {
+        ...result,
+        raw_content: result.raw_content.substring(0, 16000),
+      };
+    }
+  );
   const processedImages = includeImageDescriptions
     ? data.images
         .map(({ url, description }: { url: string; description: string }) => ({
@@ -230,6 +245,7 @@ async function tavilySearchWithRawContent(
 
   return {
     ...data,
+    results: trimmedRawData,
     images: processedImages,
   };
 }
