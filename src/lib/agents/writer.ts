@@ -23,8 +23,8 @@ Your task is to write a very long and detailed blog post based on the outline, a
 6. Don't change the title at all.  
 7. NEVER come up with new testimonials, case studies, or statistics that are not directly mentioned in the outline.  
 8. Break up long sentences into shorter, simpler ones.  
-9. Don't sound salesy. Don't exaggerate or over-promise because it sounds too salesy. (e.g. "The future of ... is here")  
-10. STRICTLY stick to the outline. Don't add any new sections or sub-sections.  
+9. DON'T sound salesy. Don't exaggerate or over-promise because it sounds too salesy. (e.g. "The future of ... is here"). Also, NEVER promote the product or service more than 4 times in the entire blog post.
+10. Use a few numbered lists and bullet points to make the text more engaging.  
 11. IMPORTANT: Use all the links provided in the outline. Find an appropriate and natural anchor text within the sentence and flow for each link and use it in markdown format. (e.g. [OpenAI](https://www.openai.com) ). DON'T write additional texts to link like "For more information, click [here](https://www.openai.com)" as it's not natural. 
 </General>  
 
