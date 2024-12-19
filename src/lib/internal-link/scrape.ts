@@ -2,12 +2,12 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 import * as puppeteer from "puppeteer";
 import {
+  args,
   normalizeInputUrl,
   normalizeUrl,
   resolveUrl,
   shouldBeExcludedUrl,
   sortUrlsByDepth,
-  args,
 } from "./utility-functions.js";
 
 // Add these constants at the top with other constants
@@ -143,6 +143,8 @@ export async function crawlWithPuppeteer(
       }
     }
 
+    console.log("Links: ", links);
+
     // await crawl(links, domain, visited, depth + 1);
     depth += 1;
 
@@ -190,6 +192,16 @@ export async function crawlWithPuppeteer(
     }
   } catch (error) {
     console.error(`Failed to crawl: ${error}`);
+  } finally {
+    if (page) {
+      await page.close();
+      page = null;
+    }
+    // Close browser after processing all URLs at current depth
+    if (depth === MAX_DEPTH - 1 && browser) {
+      await browser.close();
+      browser = null;
+    }
   }
   return visited;
 }

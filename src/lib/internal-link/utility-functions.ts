@@ -130,4 +130,10 @@ export const args: string[] = [
   "--disable-translate-new-ux",
   "--disable-features=TranslateUI",
   "--disable-infobars",
+  // Add these new memory-specific flags
+  '--js-flags="--max-old-space-size=2048"', // Limit Chrome's memory usage
+  "--memory-pressure-off",
+  "--disable-dev-shm-usage",
+  "--disable-background-timer-throttling",
+  "--disable-renderer-backgrounding",
 ];
