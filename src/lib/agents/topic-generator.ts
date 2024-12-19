@@ -1,9 +1,9 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { generateText } from "ai";
 import { Result, err, ok } from "true-myth/result";
+import { getThrottledGPT4o } from "../get-llm-models.js";
 import { getSupabaseClient } from "../get-supabase-client.js";
 import { serpTool } from "../tools/serp-tool.js";
-import { getThrottledGPT4o } from "../get-llm-models.js";
 
 const SYSTEM_PROMPT = `As a professional SEO blog writer, you will be given a keyword string and client background. 
 Using the provided inputs and tool, your task is to generate a list of 5 highly relevant topic for a SEO blog post tailored for a client, optimized to engage users near the bottom or middle of the sales funnel.
@@ -17,6 +17,7 @@ Follow these tips to generate the topic:
 4. Keep It Short & Clear: under 50 characters. Avoid jargon.
 5. Make it engaging and compelling CTAs to increase clicks.
 6. Understand Your Audience: Know your target reader's pain points, interest, and language, then create titles that address their needs or solve their problems.
+7. Include numbers if possible. (e.g. Top Healthcare Billing Denial Reasons and Fixes -> Top 5 Healthcare Billing Denial Reasons and Fixes)
 
 Strictly output only the suggested titles in ["topic1","topic2",..] format.
 `;
