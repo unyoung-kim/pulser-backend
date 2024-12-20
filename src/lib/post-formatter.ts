@@ -5,16 +5,14 @@ import {
   getThrottledGPTo1Mini,
 } from "./get-llm-models.js";
 
-const SYSTEM_PROMPT = `As a professional SEO blog writer, you will be given:
-1. An SEO blog post as text.
-2. A 'format' (HTML, Markdown, None, etc).
+const SYSTEM_PROMPT = `As a professional SEO blog writer, you will be given an SEO blog post as text in markdown format.
 
-Your task is to format the given blog post in the specified format without losing or changing any content. 
+Your task is to format the given blog post in html format without losing or changing any content. 
 
 Please ensure:
 - Images are resized appropriately and maintain aspect ratio. Use a maximum width of 100% for responsiveness.
 - Paragraphs are properly spaced and easy to read.
-- Headings and subheadings are clearly defined with appropriate tags. The title should be in <h1> tag.
+- Headings and subheadings are clearly defined with appropriate tags. The title should be in <h1> tag and use <h2> and <h3> tags for subheadings.
 - Lists are formatted as ordered or unordered lists where applicable.
 - Maintain a consistent structure throughout the document.
 - Links are properly formatted with the <a> tag.
@@ -24,6 +22,12 @@ Just output the formatted result without any new lines or other special characte
 // Removed the below line corresponding to table of content from prompt
 // - Include a table of contents (using the <ul> tag) with corresponding headers (using <h3> tags) placed in the top section, just below the main image. Ensure that the table of contents does not repeat numbering if sections or subsections are already numbered. Instead, use appropriate nested lists for subsections and apply correct numbering where necessary. Avoid using bullet points (•) in sections that have numbered items.
 
+/**
+ * We currently only use this for glossary articles.
+ * @param post
+ * @param format
+ * @returns
+ */
 export async function postFormatter(
   post: string,
   format: string
@@ -36,6 +40,8 @@ export async function postFormatter(
       system: SYSTEM_PROMPT,
       prompt: `Post: ${post}\nFormat: ${format}`,
     });
+
+    console.log("Post Formatter Result: ", result);
 
     return ok(result.text);
   } catch (error) {
