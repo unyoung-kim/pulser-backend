@@ -2,6 +2,20 @@ import { excludPatterns, keyPatterns } from "./uri-patterns.js";
 
 // Function to check if a URL should be excluded based on exclusion patterns
 export const shouldBeExcludedUrl = (url: string): boolean => {
+  // Check if the last segment starts with a hash
+  const lastSegment = url.split("/").pop() || "";
+  if (lastSegment.includes("#")) {
+    return true;
+  }
+
+  // Check if the last segment contains both ? and =
+  // E.g. https://thespearpoint.com/blog?category=startups
+  // This is bascially same as /blog
+  if (lastSegment.includes("?") && lastSegment.includes("=")) {
+    return true;
+  }
+
+  // Check other exclusion patterns
   return excludPatterns.some((pattern) => url.endsWith(pattern));
 };
 
@@ -11,13 +25,14 @@ export const normalizeUrl = (url: string): string => {
     ? url.replace("http://", "https://")
     : url;
 
+  // Remove www.
+  const noWwwUrl = secureUrl.replace(/^https:\/\/www\./i, "https://");
+
   // Remove trailing slash unless it's the root URL
-  const trimmedUrl = secureUrl.endsWith("/")
-    ? secureUrl.slice(0, -1)
-    : secureUrl;
+  const trimmedUrl = noWwwUrl.endsWith("/") ? noWwwUrl.slice(0, -1) : noWwwUrl;
 
   // Convert to lowercase
-  return trimmedUrl;
+  return trimmedUrl.toLowerCase();
 };
 
 // Helper function to resolve relative URLs to absolute URLs
@@ -130,4 +145,10 @@ export const args: string[] = [
   "--disable-translate-new-ux",
   "--disable-features=TranslateUI",
   "--disable-infobars",
+  // Add these new memory-specific flags
+  '--js-flags="--max-old-space-size=2048"', // Limit Chrome's memory usage
+  "--memory-pressure-off",
+  "--disable-dev-shm-usage",
+  "--disable-background-timer-throttling",
+  "--disable-renderer-backgrounding",
 ];

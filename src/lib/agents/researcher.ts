@@ -101,7 +101,7 @@ Here are a few rules you must follow for the outline:
   </General>
 
   <Introduction>
-    1) Make sure to provide a strong hook, intro to the blog post. The introduction should provide value instantly and mention about the pain point of the audience.
+    1) The introduction should provide value instantly and mention about the pain point of the audience.
     2) If client background includes social proof, case studies, or credibility, make sure to include it in the introduction outline to build trust.
     3) Conduct research to find some unique insight about the topic like a quote, statistic, or a surprising fact and add it to the outline with the source.
   </Introduction>
@@ -119,7 +119,7 @@ Here are a few rules you must follow for the outline:
 # Fitness Marketing Tips in 2024: Elevate Your Gym's Success
 
 ## I. Introduction
-- Hook: "In the ever-evolving fitness industry, staying ahead of marketing trends is as crucial as staying ahead in your workouts."
+- Hook (this should sound simple and natural): "Keeping up with fitness marketing trends is as important as staying ahead in your workouts."
 - Brief overview of the challenges facing fitness businesses in 2024
 - Unique insight: According to a recent study, 81% of gym-goers prefer a mix of digital and in-person fitness experiences [Link: https://www.wellnesscreatives.com/fitness-marketing-trends/]
 - Introduction to SpearPoint Marketing LLC and how they help fitness businesses thrive in the digital age
@@ -241,7 +241,7 @@ For the outline, make sure each sections has all the relevant external links ass
 Here are a few rules you must follow for the outline:
 
   <General>
-    1) Provide sufficient number of sections, sub-sections, images and links in the outline for a blog post that matches the word count provided. Make sure to only cover topics that are relevant to the topic provided.
+    1) Provide sufficient number of sections, sub-sections, and links in the outline for a blog post that matches the word count provided. Make sure to stick to the title and ONLY cover topics that are relevant to the topic provided.
     2) Use the client details provided in the input and web search results to promote client and its business/service in the blog post by following the Problem - Agitation - Solution copy writing framework. It's important that you generally follow and embed this flow but not explicitly mention it.
     3) If relevant, make sure to compare and contrast products and services.
     4) Avoid being too salesy - this means that don't promote the client's products or services more than three times in the outline.
@@ -251,7 +251,7 @@ Here are a few rules you must follow for the outline:
   </General>
 
   <Introduction>
-    1) Make sure to provide a strong hook, intro to the blog post. The introduction should provide value instantly and mention about the pain point of the audience.
+    1) The introduction should provide value instantly and mention about the pain point of the audience.
     2) If client background includes social proof, case studies, or credibility, make sure to include it in the introduction outline to build trust.
     3) Conduct research to find some unique insight about the topic like a quote, statistic, or a surprising fact and add it to the outline with the source.
   </Introduction>

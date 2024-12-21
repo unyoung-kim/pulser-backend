@@ -3,7 +3,8 @@ import Exa from "exa-js";
 import pThrottle from "p-throttle";
 import { err, ok, Result } from "true-myth/result";
 import { getSupabaseClient } from "./get-supabase-client.js";
-import { crawlImportantInternalLinks } from "./internal-link/scrape.js";
+// import { crawlImportantInternalLinks } from "./internal-link/scrape.js";
+import { crawlImportantInternalLinks } from "./internal-link/scrape-cheerio.js";
 import { extractDomain } from "./internal-link/util.js";
 
 // Define the interface for enriched URL

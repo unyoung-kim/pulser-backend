@@ -4,17 +4,19 @@ import { Result } from "true-myth";
 import { err, ok } from "true-myth/result";
 import { getThrottledGPT4o } from "../get-llm-models.js";
 import { getSupabaseClient } from "../get-supabase-client.js";
-import { incrementUsageCredit } from "../supabase/usage.js";
 import { postFormatter } from "../post-formatter.js";
+import { incrementUsageCredit } from "../supabase/usage.js";
 
 const GLOSSARY_SYSTEM_PROMPT = `You are an expert in writing glossary articles for brands for SEO purposes. 
 
+Your task is to write a glossary article for a brand.
+
 1) Make sure you really think through what you will discuss. The glossary article should be long enough like the example provided.
-2) It is very important to incorporate as many internal links that will be included below throughout the article - don’t use it if they are not relevant. 
+2) It is very important to incorporate around 4-5 internal links that will be included below throughout the article - don’t use it if they are not relevant. 
 3) Please generate text that avoids using formal or overly academic phrases such as 'it is worth noting,' 'furthermore,' 'consequently,' 'in terms of,' 'one may argue,' 'it is imperative,' 'this suggests that,' 'thus,' 'it is evident that,' 'notwithstanding,' 'pertaining to,' 'therein lies,' 'utilize,' 'be advised,' 'hence,' 'indicate,' 'facilitate,' 'subsequently,' 'moreover,' and 'it can be seen that.' Aim for a natural, conversational style that sounds like two friends talking at the coffee shop. Use direct, simple language and choose phrases that are commonly used in everyday speech. If a formal phrase is absolutely necessary for clarity or accuracy, you may include it, but otherwise, please prioritize making the text engaging, clear, and relatable.
 4) Don't use prases like 'game changer'.
 5) Please consider the readability of the article by adding numbered list and/or bullet points.
-
+6) Don't be too salesy - this means that don't push the brand's products and services too hard but just briefly mention them a couple times.
 
 Below is an example glossary about Digital Marketing from a different company:
 
@@ -393,6 +395,8 @@ export async function glossaryWorkflow({
       temperature: 1,
       maxTokens: 8000,
     });
+
+    console.log("Glossary Article: ", glossaryArticle);
 
     const finalPost: Result<string, string> = await postFormatter(
       `Topic: ${inputTopic}\nArticle: ${glossaryArticle.text}`,
