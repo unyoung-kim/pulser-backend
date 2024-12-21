@@ -14,16 +14,16 @@
         <path d="M741 545.5C741 526.998 755.775 512 774 512 792.225 512 807 526.998 807 545.5 807 564.002 792.225 579 774 579 755.775 579 741 564.002 741 545.5Z" fill="#089CA3" fill-rule="evenodd"/>
         <path d="M889 334.5C889 253.038 955.038 187 1036.5 187 1117.96 187 1184 253.038 1184 334.5 1184 415.962 1117.96 482 1036.5 482 955.038 482 889 415.962 889 334.5Z" fill="#10CF9B" fill-rule="evenodd" fill-opacity="0.701961"/>
         <path d="M1003 477C1003 458.775 1018 444 1036.5 444 1055 444 1070 458.775 1070 477 1070 495.225 1055 510 1036.5 510 1018 510 1003 495.225 1003 477Z" fill="#0C9B74" fill-rule="evenodd"/>
-        <g id="img1" transform="translate(225 520) scale(2)" stroke="white" stroke-width="1" fill="none">
+        <g transform="translate(225 520) scale(2)" stroke="white" stroke-width="1" fill="none">
             {{icon_1}}    
         </g>
-        <g id="img1" transform="translate(487 453) scale(2)" stroke="white" stroke-width="1" fill="none">
+        <g transform="translate(487 453) scale(2)" stroke="white" stroke-width="1" fill="none">
             {{icon_2}}
         </g>
-        <g id="img1" transform="translate(750 520) scale(2)" stroke="white" stroke-width="1" fill="none">
+        <g transform="translate(750 520) scale(2)" stroke="white" stroke-width="1" fill="none">
             {{icon_3}}
         </g>
-        <g id="img1" transform="translate(1012 453) scale(2)" stroke="white" stroke-width="1" fill="none">
+        <g transform="translate(1012 453) scale(2)" stroke="white" stroke-width="1" fill="none">
             {{icon_4}}
         </g>
         <text fill="#FFFFFF" font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(250 393)" text-anchor="middle">{{title_1_desc_line_1}}</text>

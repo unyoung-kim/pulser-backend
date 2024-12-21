@@ -58,9 +58,9 @@
             </g>
         </g>
         <path d="M486 405C486 319.948 554.948 251 640 251 725.052 251 794 319.948 794 405 794 490.052 725.052 559 640 559 554.948 559 486 490.052 486 405Z" fill="#0BD0D9" fill-rule="evenodd"/>
-        <text fill="#FFFFFF" font-family="Open Sans,Open Sans_MSFontService,sans-serif" font-weight="700" font-size="19" transform="translate(630 354)" text-anchor="middle">{{title_2}}</text>
-        <text fill="#FFFFFF" font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(630 394)" text-anchor="middle">{{title_2_desc_line_1}}</text>
-        <text fill="#FFFFFF" font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(630 417)" text-anchor="middle">{{title_2_desc_line_2}}</text>
+        <text fill="#FFFFFF" font-family="Open Sans,Open Sans_MSFontService,sans-serif" font-weight="700" font-size="19" transform="translate(635 354)" text-anchor="middle">{{title_2}}</text>
+        <text fill="#FFFFFF" font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(635 394)" text-anchor="middle">{{title_2_desc_line_1}}</text>
+        <text fill="#FFFFFF" font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(635 417)" text-anchor="middle">{{title_2_desc_line_2}}</text>
         <g filter="url(#fx2)" transform="matrix(3 0 0 2.99291 826 194)">
             <g clip-path="url(#clip5)">
                 <path d="M19 70.5C19 42.0822 42.0573 19.045 70.5 19.045 98.9426 19.045 122 42.0822 122 70.5 122 98.9178 98.9426 121.955 70.5 121.955 42.0573 121.955 19 98.9178 19 70.5Z" fill="#10CF9B" fill-rule="evenodd"/>

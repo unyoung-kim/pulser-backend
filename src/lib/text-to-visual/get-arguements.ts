@@ -1,9 +1,10 @@
 import { Result } from "true-myth";
 import { generateText } from "ai";
 import { err, ok } from "true-myth/result";
-import { chainLinkTool } from "../tools/text-to-visual/chain-link-tool.js";
-import { vennDiagramTool } from "../tools/text-to-visual/venn-diagram-tool.js";
 import { getThrottledGPT4o } from "../get-llm-models.js";
+import { problemSolutionTool } from "../tools/text-to-visual/problem-solution-tool.js";
+import { threeCircleComparisonTool } from "../tools/text-to-visual/three-circle-comparison-tool.js";
+import { threeStepCircleFlowTool } from "../tools/text-to-visual/three-step-circle-flow-tool.js";
 
 const SYSTEM_PROMPT = `
 You are provided with:  
@@ -43,8 +44,9 @@ export const getArguements = async (
       system: `${SYSTEM_PROMPT} Current date and time: ${currentDate}`,
       prompt: text,
       tools: {
-        chain: chainLinkTool(),
-        venn: vennDiagramTool(),
+        problemSolutionTool: problemSolutionTool(),
+        threeCircleComparisonTool: threeCircleComparisonTool(),
+        threeStepCircleFlowTool: threeStepCircleFlowTool(),
       },
     });
 
