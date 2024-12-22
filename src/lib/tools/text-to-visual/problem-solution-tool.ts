@@ -105,6 +105,21 @@ export const problemSolutionTool = () =>
         .describe("The third line of description for the third solution."),
     }),
     execute: async (input) => {
-      return { ...input, template_name: "problem-solution" };
+      return {
+        problem_1_desc_line_2: "",
+        problem_1_desc_line_3: "",
+        problem_2_desc_line_2: "",
+        problem_2_desc_line_3: "",
+        problem_3_desc_line_2: "",
+        problem_3_desc_line_3: "",
+        solution_1_desc_line_2: "",
+        solution_1_desc_line_3: "",
+        solution_2_desc_line_2: "",
+        solution_2_desc_line_3: "",
+        solution_3_desc_line_2: "",
+        solution_3_desc_line_3: "",
+        ...input,
+        template_name: "problem-solution",
+      };
     },
   });

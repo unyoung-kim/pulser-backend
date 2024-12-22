@@ -19,14 +19,22 @@ export const replacePlaceholders = (
 
   // Replace placeholders with the values from argumentObject
   for (const [key, value] of Object.entries(argumentObject)) {
-    const regex = new RegExp(`{{${key}}}`, "g"); // Match all placeholders like {{text_1}}, {{icon_1}}
+    // const regex = new RegExp(`{{${key}}}`, "g"); // Match all placeholders like {{text_1}}, {{icon_1}}
 
     if (key.startsWith("icon_")) {
       // Replace placeholder with the SVG string for the Lucide icon
-      updatedTemplate = updatedTemplate.replace(regex, getLucideIconSVG(value));
-    } else {
+      const svg = getLucideIconSVG(value);
+      if (svg.length > 0) {
+        updatedTemplate = updatedTemplate.replace(`{{${key}}}`, svg);
+      } else {
+        updatedTemplate = updatedTemplate.replace(
+          `{{fallback_${key}}}`,
+          argumentObject[`fallback_${key}`]
+        );
+      }
+    } else if (!key.startsWith("fallback_")) {
       // Replace placeholder with simple text value
-      updatedTemplate = updatedTemplate.replace(regex, value);
+      updatedTemplate = updatedTemplate.replace(`{{${key}}}`, value);
     }
   }
 

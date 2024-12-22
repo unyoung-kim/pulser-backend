@@ -3,6 +3,7 @@
         <clipPath id="clip0">
             <rect x="0" y="0" width="504825" height="504825"/>
         </clipPath>
+        {{fallback_icon_1}}
         <g id="img1" transform="scale(2.5)" stroke="white" stroke-width="0.7" fill="none">
             {{icon_1}}
         </g>
@@ -12,6 +13,7 @@
         <clipPath id="clip3">
             <rect x="9.31323e-10" y="0" width="504825" height="504825"/>
         </clipPath>
+        {{fallback_icon_2}}
         <g id="img2" transform="scale(2.5)" stroke="white" stroke-width="0.7" fill="none">
             {{icon_2}}
         </g>
@@ -21,6 +23,7 @@
         <clipPath id="clip6">
             <rect x="0" y="0" width="504825" height="504825"/>
         </clipPath>
+        {{fallback_icon_3}}
         <g id="img3" transform="scale(2.5)" stroke="white" stroke-width="0.7" fill="none">
             {{icon_3}}
         </g>

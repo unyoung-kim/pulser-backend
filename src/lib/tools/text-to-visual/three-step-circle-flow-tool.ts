@@ -59,6 +59,12 @@ export const threeStepCircleFlowTool = () =>
         .describe("The second description line for the third step."),
     }),
     execute: async (input) => {
-      return { ...input, template_name: "three-step-circle-flow" };
+      return {
+        title_1_desc_line_2: "",
+        title_2_desc_line_2: "",
+        title_3_desc_line_2: "",
+        ...input,
+        template_name: "three-step-circle-flow",
+      };
     },
   });

@@ -32,7 +32,7 @@
         <text fill="#17406D" font-family="Open Sans,Open Sans_MSFontService,sans-serif" font-weight="400" font-size="16" transform="translate(974.609 518)" text-anchor="start">{{solution_3}}</text>
         <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="15" transform="translate(974.609 558)" text-anchor="start">{{solution_3_desc_line_1}}</text>
         <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="15" transform="translate(974.609 579)" text-anchor="start">{{solution_3_desc_line_2}}</text>
-        <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="15" transform="translate(974.609 600)" text-anchor="start">{{solution_3_desc_line_2}}</text>
+        <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="15" transform="translate(974.609 600)" text-anchor="start">{{solution_3_desc_line_3}}</text>
         <text fill="#17406D" font-family="Open Sans,Open Sans_MSFontService,sans-serif" font-weight="400" font-size="16" transform="translate(305 254)" text-anchor="end">{{problem_1}}</text>
         <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="15" transform="translate(305 295)" text-anchor="end">{{problem_1_desc_line_1}}</text>
         <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="15" transform="translate(305 316)" text-anchor="end">{{problem_1_desc_line_2}}</text>

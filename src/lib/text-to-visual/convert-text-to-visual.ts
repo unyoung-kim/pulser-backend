@@ -17,8 +17,6 @@ export const convertTextToVisual = async (
       return err(argumentsObject.error);
     }
 
-    console.log("Generated template arguments: " + argumentsObject.value);
-
     const svgImage: string = replacePlaceholders(argumentsObject.value);
 
     const result: string = await convertSVGToJPG(svgImage);

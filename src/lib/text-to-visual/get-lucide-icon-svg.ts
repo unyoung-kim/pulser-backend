@@ -11,7 +11,7 @@ export const getLucideIconSVG = (iconName: string): string => {
     const children = icon.at(2);
 
     if (!children || !Array.isArray(children)) {
-      throw new Error(`Error getting Lucide core icon details`);
+      return "";
     }
 
     const result = children.reduce((acc, child) => acc + arrayToSVG(child), "");
@@ -21,14 +21,14 @@ export const getLucideIconSVG = (iconName: string): string => {
     const icon = LucideLab[camelCase as keyof typeof LucideLab];
 
     if (!icon || !Array.isArray(icon)) {
-      throw new Error(`Error getting Lucide lab icon details`);
+      return "";
     }
 
     const result = icon.reduce((acc, child) => acc + arrayToSVG(child), "");
 
     return result; // Convert the icon array to an SVG string
   } else {
-    throw new Error(`Icon "${iconName}" not found in Lucide`);
+    return "";
   }
 };
 

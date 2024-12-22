@@ -5,6 +5,11 @@ import { getThrottledGPT4o } from "../get-llm-models.js";
 import { problemSolutionTool } from "../tools/text-to-visual/problem-solution-tool.js";
 import { threeCircleComparisonTool } from "../tools/text-to-visual/three-circle-comparison-tool.js";
 import { threeStepCircleFlowTool } from "../tools/text-to-visual/three-step-circle-flow-tool.js";
+import { cyclicProcessVisualizationTool } from "../tools/text-to-visual/cyclic-process-visualization-tool.js";
+import { fourCircleComparisonTool } from "../tools/text-to-visual/four-circle-comparison-tool.js";
+import { hubAndSpokeCloudTool } from "../tools/text-to-visual/hub-and-spoke-cloud-tool.js";
+import { segmentedIdeaLightbulbTool } from "../tools/text-to-visual/segmented-idea-lightbulb-tool.js";
+import { segmentedVisualizationTool } from "../tools/text-to-visual/segmented-visualization-tool.js";
 
 const SYSTEM_PROMPT = `
 You are provided with:  
@@ -23,7 +28,7 @@ Your responsibilities:
    - Each tool is designed for a specific type of SVG layout or visualization.  
 
 3. Argument Values:  
-   - Text Arguments: Provide concise, meaningful, and contextually relevant text.  
+   - Text Arguments: Provide concise, meaningful, and contextually relevant text. Each description line should be max 30 characters.
    - Icon Arguments:  
      - Provide valid Lucide icon names in PascalCase format.  
      - If no exact match exists, choose a closely related icon that aligns with the context.  
@@ -44,7 +49,12 @@ export const getArguements = async (
       system: `${SYSTEM_PROMPT} Current date and time: ${currentDate}`,
       prompt: text,
       tools: {
+        cyclicProcessVisualizationTool: cyclicProcessVisualizationTool(),
+        fourCircleComparisonTool: fourCircleComparisonTool(),
+        hubAndSpokeCloudTool: hubAndSpokeCloudTool(),
         problemSolutionTool: problemSolutionTool(),
+        segmentedIdeaLightbulbTool: segmentedIdeaLightbulbTool(),
+        segmentedVisualizationTool: segmentedVisualizationTool(),
         threeCircleComparisonTool: threeCircleComparisonTool(),
         threeStepCircleFlowTool: threeStepCircleFlowTool(),
       },
