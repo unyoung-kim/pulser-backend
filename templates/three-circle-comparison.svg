@@ -1,0 +1,71 @@
+<svg width="1280" height="720" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" overflow="hidden">
+    <defs>
+        <clipPath id="clip0">
+            <rect x="0" y="0" width="504825" height="504825"/>
+        </clipPath>
+        {{fallback_icon_1}}
+        <g id="img1" transform="scale(2.5)" stroke="white" stroke-width="0.7" fill="none">
+            {{icon_1}}
+        </g>
+        <clipPath id="clip2">
+            <rect x="0" y="-0.25" width="504825" height="504825"/>
+        </clipPath>
+        <clipPath id="clip3">
+            <rect x="9.31323e-10" y="0" width="504825" height="504825"/>
+        </clipPath>
+        {{fallback_icon_2}}
+        <g id="img2" transform="scale(2.5)" stroke="white" stroke-width="0.7" fill="none">
+            {{icon_2}}
+        </g>
+        <clipPath id="clip5">
+            <rect x="0" y="-0.25" width="504825" height="504825"/>
+        </clipPath>
+        <clipPath id="clip6">
+            <rect x="0" y="0" width="504825" height="504825"/>
+        </clipPath>
+        {{fallback_icon_3}}
+        <g id="img3" transform="scale(2.5)" stroke="white" stroke-width="0.7" fill="none">
+            {{icon_3}}
+        </g>
+        <clipPath id="clip8">
+            <rect x="0" y="-0.25" width="504825" height="504825"/>
+        </clipPath>
+    </defs>
+    <g>
+        <rect x="0" y="0" width="1280" height="720" fill="#FFFFFF"/>
+        <rect x="29" y="95" width="28" height="4" fill="#10CF9B"/>
+        <rect x="0" y="95" width="29" height="4" fill="#009DD9"/>
+        <path d="M773 395C773 306.082 845.082 234 934 234 1022.92 234 1095 306.082 1095 395 1095 483.918 1022.92 556 934 556 845.082 556 773 483.918 773 395Z" fill="#10CF9B" fill-rule="evenodd" fill-opacity="0.8"/>
+        <path d="M479 395C479 306.082 551.082 234 640 234 728.918 234 801 306.082 801 395 801 483.918 728.918 556 640 556 551.082 556 479 483.918 479 395Z" fill="#0BD0D9" fill-rule="evenodd" fill-opacity="0.8"/>
+        <path d="M185 395C185 306.082 257.082 234 346 234 434.918 234 507 306.082 507 395 507 483.918 434.918 556 346 556 257.082 556 185 483.918 185 395Z" fill="#009DD9" fill-rule="evenodd" fill-opacity="0.8"/>
+        <text fill="#0F6FC6" font-family="Open Sans,Open Sans_MSFontService,sans-serif" font-weight="700" font-size="48" transform="translate(85.6 111)">{{header}}</text>
+        <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(88 146)">{{sub_header}}</text>
+        <text fill="#FFFFFF" font-family="Open Sans,Open Sans_MSFontService,sans-serif" font-weight="700" font-size="19" transform="translate(345 392)" text-anchor="middle">{{title_1}}</text>
+        <text fill="#FFFFFF" font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(345 426)" text-anchor="middle">{{title_1_desc_line_1}}</text>
+        <text fill="#FFFFFF" font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(345 449)" text-anchor="middle">{{title_1_desc_line_2}}</text>
+        <text fill="#FFFFFF" font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(345 472)" text-anchor="middle">{{title_1_desc_line_3}}</text>
+        <text fill="#FFFFFF" font-family="Open Sans,Open Sans_MSFontService,sans-serif" font-weight="700" font-size="19" transform="translate(640 392)" text-anchor="middle">{{title_2}}</text>
+        <text fill="#FFFFFF" font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(640 426)" text-anchor="middle">{{title_2_desc_line_1}}</text>
+        <text fill="#FFFFFF" font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(640 449)" text-anchor="middle">{{title_2_desc_line_2}}</text>
+        <text fill="#FFFFFF" font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(640 472)" text-anchor="middle">{{title_2_desc_line_3}}</text>
+        <text fill="#FFFFFF" font-family="Open Sans,Open Sans_MSFontService,sans-serif" font-weight="700" font-size="19" transform="translate(935 392)" text-anchor="middle">{{title_3}}</text>
+        <text fill="#FFFFFF" font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(935 426)" text-anchor="middle">{{title_3_desc_line_1}}</text>
+        <text fill="#FFFFFF" font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(935 449)" text-anchor="middle">{{title_3_desc_line_2}}</text>
+        <text fill="#FFFFFF" font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(935 472)" text-anchor="middle">{{title_3_desc_line_3}}</text>
+        <g clip-path="url(#clip0)" transform="matrix(0.000104987 0 0 0.000104987 321 295)">
+            <g clip-path="url(#clip2)">
+                <use width="100%" height="100%" xlink:href="#img1" transform="matrix(7887.89 0 0 7887.89 0 -0.25)"></use>
+            </g>
+        </g>
+        <g clip-path="url(#clip3)" transform="matrix(0.000104987 0 0 0.000104987 613 295)">
+            <g clip-path="url(#clip5)">
+                <use width="100%" height="100%" xlink:href="#img2" transform="matrix(7887.89 0 0 7887.89 0 -0.25)"></use>
+            </g>
+        </g>
+        <g clip-path="url(#clip6)" transform="matrix(0.000104987 0 0 0.000104987 908 295)">
+            <g clip-path="url(#clip8)">
+                <use width="100%" height="100%" xlink:href="#img3" transform="matrix(7887.89 0 0 7887.89 0 -0.25)"></use>
+            </g>
+        </g>
+    </g>
+</svg>
