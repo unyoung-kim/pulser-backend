@@ -4,12 +4,12 @@ import { err, ok } from "true-myth/result";
 import { getThrottledGPT4o } from "../get-llm-models.js";
 import { problemSolutionTool } from "../tools/text-to-visual/problem-solution-tool.js";
 import { threeCircleComparisonTool } from "../tools/text-to-visual/three-circle-comparison-tool.js";
-import { threeStepCircleFlowTool } from "../tools/text-to-visual/three-step-circle-flow-tool.js";
+import { threeSequentialStepFlowTool } from "../tools/text-to-visual/three-sequential-step-flow-tool.js";
 import { cyclicProcessVisualizationTool } from "../tools/text-to-visual/cyclic-process-visualization-tool.js";
 import { fourCircleComparisonTool } from "../tools/text-to-visual/four-circle-comparison-tool.js";
 import { hubAndSpokeCloudTool } from "../tools/text-to-visual/hub-and-spoke-cloud-tool.js";
 import { segmentedIdeaLightbulbTool } from "../tools/text-to-visual/segmented-idea-lightbulb-tool.js";
-import { segmentedVisualizationTool } from "../tools/text-to-visual/segmented-visualization-tool.js";
+import { demographicDistributionVisualizationTool } from "../tools/text-to-visual/demographic-distribution-visualization-tool.js";
 
 const SYSTEM_PROMPT = `
 You are provided with:  
@@ -54,9 +54,10 @@ export const getArguements = async (
         hubAndSpokeCloudTool: hubAndSpokeCloudTool(),
         problemSolutionTool: problemSolutionTool(),
         segmentedIdeaLightbulbTool: segmentedIdeaLightbulbTool(),
-        segmentedVisualizationTool: segmentedVisualizationTool(),
+        demographicDistributionVisualizationTool:
+          demographicDistributionVisualizationTool(),
         threeCircleComparisonTool: threeCircleComparisonTool(),
-        threeStepCircleFlowTool: threeStepCircleFlowTool(),
+        threeSequentialStepFlowTool: threeSequentialStepFlowTool(),
       },
     });
 

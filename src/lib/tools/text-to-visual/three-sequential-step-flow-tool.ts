@@ -1,10 +1,10 @@
 import { tool } from "ai";
 import { z } from "zod";
 
-export const threeStepCircleFlowTool = () =>
+export const threeSequentialStepFlowTool = () =>
   tool({
     description: `
-        This tool captures parameters based on the "Three-Step Circle Flow" template and outputs them with the template name.
+        This tool captures parameters based on the "Three Sequential Step Flow" template and outputs them with the template name.
 
         Purpose:
         - Visualizes a process or flow in three sequential steps represented as circular sections.
@@ -64,7 +64,7 @@ export const threeStepCircleFlowTool = () =>
         title_2_desc_line_2: "",
         title_3_desc_line_2: "",
         ...input,
-        template_name: "three-step-circle-flow",
+        template_name: "three-sequential-step-flow",
       };
     },
   });
