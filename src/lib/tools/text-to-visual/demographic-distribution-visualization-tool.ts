@@ -6,22 +6,20 @@ export const demographicDistributionVisualizationTool = () =>
     description: `
         This tool collects parameters based on a "Demographic Distribution Visualization" template and outputs them with the template name.
 
-      Purpose:
-      - Visualizes demographic data or comparative statistics using icons, titles, and progress bars.
+        Purpose:
+        - Visualizes demographic data or comparative statistics using icons, titles, and progress bars.
 
-      Structure:
-      - A main header and sub-header at the top to summarize the concept.
-      - Two large sections at the top visualizing statistics with person icons and corresponding titles.
-        - The first section contains more person icons than the second, indicating a larger proportion or count.
-      - Three progress bars below, each with:
-        - A title summarizing the data.
-        - A descriptive label for the progress bar.
-        - The first progress bar is the longest, followed by the second, and the third is the shortest, representing relative values.
+        Structure:
+        - A main header and sub-header summarize the concept.
+        - Two sections at the top visualize statistics with person icons and titles:
+          - The first section has more person icons than the second, representing a larger proportion or count.
+        - Three progress bars below, each with:
+          - A title summarizing the data.
+          - A label and description text.
+          - Progress bars vary in length: the first is the longest, followed by the second, and the third is the shortest, reflecting relative values.
 
-      Parameters:
-      - Main header and sub-header summarize the concept.
-      - Each section includes a title, description, and the number of person icons.
-      - Each progress bar includes a label, a title text and a description text.
+        Parameters:
+        - Includes a header, sub-header, titles and descriptions for each statistic and progress bar, and a label for each progress bar.
     `,
     parameters: z.object({
       header: z
