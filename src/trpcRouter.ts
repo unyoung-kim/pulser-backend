@@ -48,7 +48,7 @@ export const trpcRouter = t.router({
     t,
     "create-stripe-session"
   ),
-  webhook: stripeWebhook(t, "webhook"),
+  "stripe-webhook": stripeWebhook(t, "stripe-webhook"),
   "verify-checkout-session": stripeSessionVerificationHandler(
     t,
     "verify-checkout-session"

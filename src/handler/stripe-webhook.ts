@@ -9,7 +9,7 @@ export function stripeWebhook(t: tRPC, path: string) {
     .meta({
       openapi: {
         method: "POST",
-        path: "/webhook",
+        path: "/stripe-webhook",
         summary: "Stripe webhook endpoint",
         description: "Handles Stripe webhook events",
         tags: ["Stripe"],
