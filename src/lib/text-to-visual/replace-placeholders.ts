@@ -6,7 +6,7 @@ export const replacePlaceholders = (
   argumentObject: Record<string, string>
 ): string => {
   const templatePath = path.resolve(
-    `./templates/${argumentObject["template_name"]}.svg`
+    `./templates/${argumentObject["template_name"]}.SVG`
   );
 
   // Read the template synchronously (for simplicity in a small-scale use case)
