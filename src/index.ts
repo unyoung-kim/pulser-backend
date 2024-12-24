@@ -23,10 +23,10 @@ export const baseURL = process.env.BASE_URL ?? `http://localhost:${PORT}`;
 const app = express();
 
 // Rate limiting
-const maxRequestPerMinuteForInternalAPIs: number = 5;
+const maxRequestPerMinuteForInternalAPIs: number = 10;
 const apiRateLimiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute
-  max: maxRequestPerMinuteForInternalAPIs, // 5 requests per minute
+  max: maxRequestPerMinuteForInternalAPIs, // 10 requests per minute
   message: {
     error: "Too many requests, please try again later.",
   },
@@ -43,14 +43,14 @@ const webhookRateLimiter = rateLimit({
 
 // Middleware for Stripe webhook: Raw body required for signature validation
 app.post(
-  "/webhook",
+  "/stripe-webhook",
   webhookRateLimiter, // Apply specific rate limiter for /webhook
   bodyParser.raw({ type: "application/json" }) // Raw body for Stripe
 );
 
 // Apply general rate limiter to all other routes
 app.use((req: any, res: any, next: any) => {
-  if (req.path !== "/webhook") {
+  if (req.path !== "/stripe-webhook") {
     return apiRateLimiter(req, res, next);
   }
   next();
