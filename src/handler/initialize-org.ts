@@ -69,15 +69,16 @@ export function initializeOrgHandler(t: tRPC, path: string) {
           return;
         }
 
-        // Create a new usage row
+        // Create a new usage row give them 10 free credits
         const { data: usage, error: usageError } = await supabase
           .from("Usage")
           .insert({
             org_id: orgId,
             start_date: new Date().toISOString().split("T")[0],
             credits_used: 0,
-            credits_charged: 0,
+            credits_charged: 10,
             additional_credits_charged: 0,
+            plan: "FREE_CREDIT",
           })
           .select()
           .single();

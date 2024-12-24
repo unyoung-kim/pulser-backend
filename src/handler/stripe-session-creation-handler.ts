@@ -1,8 +1,8 @@
+import { Result } from "true-myth";
 import { z } from "zod";
-import { tRPC } from "../lib/trpc.js";
 import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
 import { createStripeSession } from "../lib/stripe/create-stripe-session.js";
-import { Result } from "true-myth";
+import { tRPC } from "../lib/trpc.js";
 
 export function stripeSessionCreationHandler(t: tRPC, path: string) {
   return t.procedure
@@ -22,9 +22,11 @@ export function stripeSessionCreationHandler(t: tRPC, path: string) {
           .describe(
             "Organisation for which the Stripe checkout session needs to be created"
           ),
-        priceId: z.string().describe("Price id of the plan"),
-        credits: z.number().describe("Number of credits for this plan"),
-        mode: z.enum(["subscription", "payment"]),
+        plan: z.enum(["SOLO", "BUSINESS", "AGENCY"]),
+        term: z.enum(["MONTHLY", "YEARLY"]),
+        // priceId: z.string().describe("Price id of the plan"),
+        // credits: z.number().describe("Number of credits for this plan"),
+        mode: z.enum(["subscription", "payment"]).default("subscription"),
       })
     )
     .output(ApiResponseSchema)
@@ -32,8 +34,8 @@ export function stripeSessionCreationHandler(t: tRPC, path: string) {
       try {
         const result: Result<string, string> = await createStripeSession(
           input.orgId,
-          input.priceId,
-          input.credits,
+          input.plan,
+          input.term,
           input.mode
         );
         if (result.isErr) {
