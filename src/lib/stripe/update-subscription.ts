@@ -1,8 +1,8 @@
+import { SupabaseClient } from "@supabase/supabase-js";
+import Stripe from "stripe";
 import Result, { err, ok } from "true-myth/result";
 import { getSupabaseClient } from "../get-supabase-client.js";
-import { SupabaseClient } from "@supabase/supabase-js";
 import { getStripeClient } from "./get-stripe-client.js";
-import Stripe from "stripe";
 
 export const updateSubscription = async (
   orgId: string,
