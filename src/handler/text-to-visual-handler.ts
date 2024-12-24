@@ -23,7 +23,7 @@ export function textToVisualHandler(t: tRPC, path: string) {
     .output(ApiResponseSchema)
     .mutation(async ({ input }) => {
       try {
-        const result: Result<string, string> = await convertTextToVisual(
+        const result: Result<string[], string> = await convertTextToVisual(
           input.text
         );
         if (result.isErr) {
