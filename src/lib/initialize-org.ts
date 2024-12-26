@@ -35,6 +35,7 @@ export const initializeOrg = async (orgId: string) => {
       credits_used: 0,
       credits_charged: 10, // 10 credits for free trial
       additional_credits_charged: 0,
+      plan: "FREE_CREDIT",
     })
     .select()
     .single();

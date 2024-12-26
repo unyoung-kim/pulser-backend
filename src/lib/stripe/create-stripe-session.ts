@@ -1,19 +1,30 @@
-import Result, { err, ok } from "true-myth/result";
-import { getStripeClient } from "./get-stripe-client.js";
-import { getOrCreateCustomer } from "./get-or-create-customer.js";
-import Stripe from "stripe";
-import { getSupabaseClient } from "../get-supabase-client.js";
 import { SupabaseClient } from "@supabase/supabase-js";
+import Stripe from "stripe";
+import Result, { err, ok } from "true-myth/result";
+import { getSupabaseClient } from "../get-supabase-client.js";
+import { getOrCreateCustomer } from "./get-or-create-customer.js";
+import { getStripeClient } from "./get-stripe-client.js";
+import { STRIPE_PRODUCT_LIST, StripeProduct } from "./product-list.js";
 
 export const createStripeSession = async (
   orgId: string,
-  priceId: string,
-  credits: number,
+  // priceId: string,
+  // credits: number,
+  plan: "SOLO" | "BUSINESS" | "AGENCY",
+  term: "MONTHLY" | "YEARLY",
   mode: "payment" | "subscription"
 ): Promise<Result<string, string>> => {
   const supabaseClient: Result<SupabaseClient, string> = getSupabaseClient();
   if (supabaseClient.isErr) {
     return err(supabaseClient.error);
+  }
+
+  const stripeProduct: StripeProduct | undefined = STRIPE_PRODUCT_LIST.find(
+    (product: StripeProduct) => product.plan === plan && product.term === term
+  );
+
+  if (!stripeProduct) {
+    return err("Invalid plan or term");
   }
 
   const stripeClientResult = getStripeClient();
@@ -37,7 +48,7 @@ export const createStripeSession = async (
       mode,
       line_items: [
         {
-          price: priceId,
+          price: stripeProduct.stripePriceId,
           quantity: 1,
         },
       ],
@@ -45,9 +56,9 @@ export const createStripeSession = async (
       cancel_url: `${process.env.FRONTEND_CANCEL_URL}`,
       customer: customerId,
       metadata: {
-        credits: credits.toString(),
+        credits: stripeProduct.credits.toString(),
         orgId,
-        priceId,
+        priceId: stripeProduct.stripePriceId,
       },
     };
 

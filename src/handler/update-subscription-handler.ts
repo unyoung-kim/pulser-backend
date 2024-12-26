@@ -1,9 +1,12 @@
-import { z } from "zod";
-import { t, tRPC } from "../lib/trpc.js";
-import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
 import { Result } from "true-myth";
-import { err } from "true-myth/result";
+import { z } from "zod";
+import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
+import {
+  STRIPE_PRODUCT_LIST,
+  StripeProduct,
+} from "../lib/stripe/product-list.js";
 import { updateSubscription } from "../lib/stripe/update-subscription.js";
+import { tRPC } from "../lib/trpc.js";
 
 export function updateSubscriptionHandler(t: tRPC, path: string) {
   return t.procedure
@@ -19,17 +22,33 @@ export function updateSubscriptionHandler(t: tRPC, path: string) {
     .input(
       z.object({
         orgId: z.string(),
-        priceId: z.string(),
-        credits: z.string(),
+        plan: z.enum(["BASIC", "PRO", "AGENCY"]),
+        term: z.enum(["MONTHLY", "YEARLY"]),
+        // priceId: z.string(),
+        // credits: z.string(),
       })
     )
     .output(ApiResponseSchema)
     .mutation(async ({ input }) => {
       try {
+        // Find the stripe product for the given plan and term
+        const stripeProduct: StripeProduct | undefined =
+          STRIPE_PRODUCT_LIST.find(
+            (product: StripeProduct) =>
+              product.plan === input.plan && product.term === input.term
+          );
+
+        if (!stripeProduct) {
+          return {
+            success: false,
+            error: "Couldn't find the plan or term",
+          };
+        }
+
         const result: Result<string, string> = await updateSubscription(
           input.orgId,
-          input.priceId,
-          input.credits
+          stripeProduct.stripePriceId,
+          stripeProduct.credits.toString()
         );
         if (result.isErr) {
           return {
