@@ -80,6 +80,30 @@ export const handleInvoicePaid = async (
           return err("creditsCharged metadata is missing");
         }
 
+        const {
+          data: usageData,
+          count,
+          error: usageError,
+        } = await supabase
+          .from("Usage")
+          .select("id", { count: "exact" })
+          .eq("org_id", orgId);
+
+        if (usageError || !usageData || !count) {
+          return err("Error fetching current usage id");
+        }
+
+        if (count === 1) {
+          const { error: usageEndDateUpdateError } = await supabase
+            .from("Usage")
+            .update({ end_date: new Date().toISOString().split("T")[0] })
+            .eq("id", usageData.at(0)?.id);
+
+          if (usageEndDateUpdateError) {
+            return err("Error updating existing subscription usage date");
+          }
+        }
+
         // Insert into the Usage table for subscription creation
         const { data: newUsageInsertData, error: newUsageInsertError } =
           await supabase
