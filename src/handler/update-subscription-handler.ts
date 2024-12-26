@@ -45,7 +45,8 @@ export function updateSubscriptionHandler(t: tRPC, path: string) {
 
         const result: Result<string, string> = await updateSubscription(
           input.orgId,
-          stripeProduct.stripeProductId
+          stripeProduct.stripeProductId,
+          stripeProduct.stripePriceId
         );
         if (result.isErr) {
           return {

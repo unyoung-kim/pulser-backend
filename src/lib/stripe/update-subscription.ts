@@ -7,7 +7,8 @@ import { StripeProduct } from "./product-list.js";
 
 export const updateSubscription = async (
   orgId: string,
-  productId: string
+  productId: string,
+  priceId: string
 ): Promise<Result<string, string>> => {
   const supabaseClient: Result<SupabaseClient, string> = getSupabaseClient();
   if (supabaseClient.isErr) {
@@ -47,19 +48,11 @@ export const updateSubscription = async (
     },
   });
 
-  const stripeProduct = STRIPE_PRODUCT_LIST.find(
-    (product: StripeProduct) => product.stripeProductId === productId
-  );
-
-  if (!stripeProduct) {
-    return err("Product not found for productId: " + productId);
-  }
-
   await stripe.subscriptions.update(stripeSubscriptionId, {
     items: [
       {
         id: subscriptionItemId,
-        price: stripeProduct.stripePriceId,
+        price: priceId,
       },
     ],
     proration_behavior: "none",
