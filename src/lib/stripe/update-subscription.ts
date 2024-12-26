@@ -1,13 +1,13 @@
 import { SupabaseClient } from "@supabase/supabase-js";
-import Stripe from "stripe";
 import Result, { err, ok } from "true-myth/result";
 import { getSupabaseClient } from "../get-supabase-client.js";
 import { getStripeClient } from "./get-stripe-client.js";
+import { STRIPE_PRODUCT_LIST } from "./product-list.js";
+import { StripeProduct } from "./product-list.js";
 
 export const updateSubscription = async (
   orgId: string,
-  priceId: string,
-  credits: string
+  productId: string
 ): Promise<Result<string, string>> => {
   const supabaseClient: Result<SupabaseClient, string> = getSupabaseClient();
   if (supabaseClient.isErr) {
@@ -15,20 +15,18 @@ export const updateSubscription = async (
   }
   const supabase = supabaseClient.value;
 
-  const {
-    data: stripeCustomerIdFetchResponse,
-    error: stripeCustomerIdFetchError,
-  } = await supabase
-    .from("Organization")
-    .select("stripe_customer_id")
-    .eq("org_id", orgId)
-    .single();
+  const { data: stripeSubscriptionIdData, error: stripeSubscriptionIdError } =
+    await supabase
+      .from("Usage")
+      .select("stripe_subscription_id")
+      .eq("org_id", orgId)
+      .single();
 
-  const stripeCustomerId = stripeCustomerIdFetchResponse?.stripe_customer_id;
-
-  if (stripeCustomerIdFetchError || !stripeCustomerId) {
-    return err("Unable to fetch stripe customer id for the org id");
+  if (stripeSubscriptionIdError || !stripeSubscriptionIdData) {
+    return err("Error fetching current stripe subscription id");
   }
+
+  const stripeSubscriptionId = stripeSubscriptionIdData.stripe_subscription_id;
 
   const stripeClientResult = getStripeClient();
   if (stripeClientResult.isErr) {
@@ -36,37 +34,32 @@ export const updateSubscription = async (
   }
   const stripe = stripeClientResult.value;
 
-  const subscriptions: Stripe.Subscription[] = (
-    await stripe.subscriptions.list({
-      customer: stripeCustomerId,
-      status: "active",
-    })
-  ).data;
+  const subscription = await stripe.subscriptions.retrieve(
+    stripeSubscriptionId
+  );
 
-  const activeSubscription = subscriptions.at(0);
+  const subscriptionItemId = subscription.items.data[0].id;
 
-  const subscriptionId = activeSubscription?.id;
-  const subscriptionItemId = activeSubscription?.items.data[0].id;
-
-  if (subscriptions.length != 1 || !subscriptionId || !subscriptionItemId) {
-    return err("Error fetching active subscription details");
-  }
-
-  await stripe.subscriptions.update(subscriptionId, {
+  await stripe.subscriptions.update(stripeSubscriptionId, {
     metadata: {
-      //   subscriptionItemId,
-      //   oldSubscriptionPriceId: subscriptionPriceId,
-      //   oldBillingCycleAnchor,
-      newCredits: credits,
+      productId: productId,
       forUpdate: "true",
     },
   });
 
-  await stripe.subscriptions.update(subscriptionId, {
+  const stripeProduct = STRIPE_PRODUCT_LIST.find(
+    (product: StripeProduct) => product.stripeProductId === productId
+  );
+
+  if (!stripeProduct) {
+    return err("Product not found for productId: " + productId);
+  }
+
+  await stripe.subscriptions.update(stripeSubscriptionId, {
     items: [
       {
         id: subscriptionItemId,
-        price: priceId,
+        price: stripeProduct.stripePriceId,
       },
     ],
     proration_behavior: "none",

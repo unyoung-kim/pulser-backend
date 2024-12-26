@@ -441,7 +441,7 @@ export async function glossaryWorkflow({
       ]);
 
     const incrementUsageCreditResult: Result<string, string> =
-      await incrementUsageCredit(supabase, project?.org_id ?? "");
+      await incrementUsageCredit(supabase, project?.org_id ?? "", 1);
 
     if (incrementUsageCreditResult.isErr) {
       return err(incrementUsageCreditResult.error);

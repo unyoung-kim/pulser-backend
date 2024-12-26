@@ -1,6 +1,7 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import Stripe from "stripe";
 import Result, { err, ok } from "true-myth/result";
+import { STRIPE_PRODUCT_LIST, StripeProduct } from "./product-list.js";
 
 export const handleInvoicePaid = async (
   invoice: Stripe.Invoice,
@@ -71,29 +72,34 @@ export const handleInvoicePaid = async (
           return err("Error getting metadata from session");
         }
 
-        const creditsCharged = parseInt(
-          String(session.metadata.credits ?? "0"),
-          10
-        );
+        const productId = session.metadata.productId;
 
-        if (creditsCharged <= 0) {
-          return err("creditsCharged metadata is missing");
+        if (productId == null) {
+          return err("productId metadata is missing");
         }
 
-        const {
-          data: usageData,
-          count,
-          error: usageError,
-        } = await supabase
-          .from("Usage")
-          .select("id", { count: "exact" })
-          .eq("org_id", orgId);
+        const stripeProduct = STRIPE_PRODUCT_LIST.find(
+          (product: StripeProduct) => product.stripeProductId === productId
+        );
 
-        if (usageError || !usageData || !count) {
+        if (!stripeProduct) {
+          return err("Product not found for productId: " + productId);
+        }
+
+        // Search for the usage record for Free Credits with end date null
+        const { data: usageData, error: usageError } = await supabase
+          .from("Usage")
+          .select("id")
+          .eq("org_id", orgId)
+          .eq("plan", "FREE_CREDIT")
+          .eq("end_date", null);
+
+        if (usageError || !usageData) {
           return err("Error fetching current usage id");
         }
 
-        if (count === 1) {
+        // If there is a free credits usage record, update its end date to today
+        if (usageData.length === 1) {
           const { error: usageEndDateUpdateError } = await supabase
             .from("Usage")
             .update({ end_date: new Date().toISOString().split("T")[0] })
@@ -112,8 +118,10 @@ export const handleInvoicePaid = async (
               stripe_subscription_id: subscriptionId,
               start_date: startDate.toISOString(),
               end_date: endDate.toISOString(),
-              credits_charged: creditsCharged,
+              credits_charged: stripeProduct.credits,
               org_id: orgId,
+              plan: stripeProduct.plan,
+              term: stripeProduct.term,
             })
             .select("id")
             .single();
@@ -138,14 +146,16 @@ export const handleInvoicePaid = async (
           return err("Error fetching current usage id");
         }
 
-        const { data: creditsChargedData, error: creditsChargedError } =
-          await supabase
-            .from("Usage")
-            .select("credits_charged")
-            .eq("id", current_usage_id)
-            .single();
+        const {
+          data: currentSubscriptionData,
+          error: currentSubscriptionError,
+        } = await supabase
+          .from("Usage")
+          .select("credits_charged,plan,term")
+          .eq("id", current_usage_id)
+          .single();
 
-        if (creditsChargedError || !creditsChargedData) {
+        if (currentSubscriptionError || !currentSubscriptionData) {
           return err("Error fetching current credits charged");
         }
 
@@ -156,8 +166,10 @@ export const handleInvoicePaid = async (
               stripe_subscription_id: subscriptionId,
               start_date: startDate.toISOString(),
               end_date: endDate.toISOString(),
-              credits_charged: parseInt(creditsChargedData.credits_charged, 10),
+              credits_charged: currentSubscriptionData.credits_charged,
               org_id: orgId,
+              plan: currentSubscriptionData.plan,
+              term: currentSubscriptionData.term,
             })
             .select("id")
             .single();
@@ -198,7 +210,15 @@ export const handleInvoicePaid = async (
         parseInt(usageData.additional_credits_charged, 10) -
         parseInt(usageData.credits_used, 10);
 
-      const newCredits = parseInt(subscription.metadata.newCredits, 10);
+      const productId = subscription.metadata.productId;
+
+      const stripeProduct = STRIPE_PRODUCT_LIST.find(
+        (product: StripeProduct) => product.stripeProductId === productId
+      );
+
+      if (!stripeProduct) {
+        return err("Product not found for productId: " + productId);
+      }
 
       const { error: existingUsageEndDateUpdateError } = await supabase
         .from("Usage")
@@ -215,9 +235,11 @@ export const handleInvoicePaid = async (
             stripe_subscription_id: subscriptionId,
             start_date: startDate.toISOString(),
             end_date: endDate.toISOString(),
-            credits_charged: newCredits,
+            credits_charged: stripeProduct.credits,
             additional_credits_charged: creditsLeft,
             org_id: orgId,
+            plan: stripeProduct.plan,
+            term: stripeProduct.term,
           })
           .select("id")
           .single();
@@ -239,7 +261,7 @@ export const handleInvoicePaid = async (
 
       // Reset the metadata as the update is done
       await stripe.subscriptions.update(subscriptionId, {
-        metadata: {},
+        metadata: "",
       });
 
       return ok(
@@ -258,13 +280,15 @@ export const handleInvoicePaid = async (
       return err("Error getting metadata from session");
     }
 
-    const creditsCharged = parseInt(
-      String(session.metadata.credits ?? "0"),
-      10
+    const stripeProduct = STRIPE_PRODUCT_LIST.find(
+      (product: StripeProduct) =>
+        product.stripeProductId === session.metadata?.productId
     );
 
-    if (creditsCharged <= 0) {
-      return err("creditsCharged metadata is missing/invalid");
+    if (!stripeProduct) {
+      return err(
+        "Product not found for productId: " + session.metadata?.productId
+      );
     }
 
     const { data: currentUsageIdData, error: currentUsageIdError } =
@@ -278,33 +302,19 @@ export const handleInvoicePaid = async (
       return err("Error fetching current usage id");
     }
 
-    const {
-      data: additionalCreditsChargedData,
-      error: additionalCreditsChargedError,
-    } = await supabase
-      .from("Usage")
-      .select("additional_credits_charged")
-      .eq("id", currentUsageIdData.current_usage_id)
-      .single();
+    // Update the Usage record
+    const { error } = await supabase.rpc(
+      "increment_additional_credits_charged",
+      {
+        usage_id: currentUsageIdData.current_usage_id,
+        increment_value: stripeProduct.credits,
+      }
+    );
 
-    if (additionalCreditsChargedError || !additionalCreditsChargedData) {
-      return err("Error fetching current additional credits");
+    if (error) {
+      return err(`Error updating additional credits: ${error.message}`);
     }
 
-    const currentAdditionalCredits =
-      additionalCreditsChargedData.additional_credits_charged;
-
-    // Update the `additionalCreditsCharged` field
-    const { error: updateError } = await supabase
-      .from("Usage")
-      .update({
-        additional_credits_charged:
-          parseInt(currentAdditionalCredits, 10) + creditsCharged,
-      })
-      .eq("id", currentUsageIdData?.current_usage_id);
-
-    return updateError
-      ? err(updateError.message)
-      : ok("One-time payment processed successfully.");
+    return error ? err(error) : ok("One-time payment processed successfully.");
   }
 };

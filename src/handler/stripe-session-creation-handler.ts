@@ -24,8 +24,6 @@ export function stripeSessionCreationHandler(t: tRPC, path: string) {
           ),
         plan: z.enum(["SOLO", "BUSINESS", "AGENCY"]),
         term: z.enum(["MONTHLY", "YEARLY"]),
-        // priceId: z.string().describe("Price id of the plan"),
-        // credits: z.number().describe("Number of credits for this plan"),
         mode: z.enum(["subscription", "payment"]).default("subscription"),
       })
     )

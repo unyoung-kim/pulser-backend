@@ -8,8 +8,6 @@ import { STRIPE_PRODUCT_LIST, StripeProduct } from "./product-list.js";
 
 export const createStripeSession = async (
   orgId: string,
-  // priceId: string,
-  // credits: number,
   plan: "SOLO" | "BUSINESS" | "AGENCY",
   term: "MONTHLY" | "YEARLY",
   mode: "payment" | "subscription"
@@ -58,7 +56,7 @@ export const createStripeSession = async (
       metadata: {
         credits: stripeProduct.credits.toString(),
         orgId,
-        priceId: stripeProduct.stripePriceId,
+        productId: stripeProduct.stripeProductId,
       },
     };
 

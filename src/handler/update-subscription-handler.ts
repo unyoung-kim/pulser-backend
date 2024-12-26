@@ -24,8 +24,6 @@ export function updateSubscriptionHandler(t: tRPC, path: string) {
         orgId: z.string(),
         plan: z.enum(["BASIC", "PRO", "AGENCY"]),
         term: z.enum(["MONTHLY", "YEARLY"]),
-        // priceId: z.string(),
-        // credits: z.string(),
       })
     )
     .output(ApiResponseSchema)
@@ -47,8 +45,7 @@ export function updateSubscriptionHandler(t: tRPC, path: string) {
 
         const result: Result<string, string> = await updateSubscription(
           input.orgId,
-          stripeProduct.stripePriceId,
-          stripeProduct.credits.toString()
+          stripeProduct.stripeProductId
         );
         if (result.isErr) {
           return {

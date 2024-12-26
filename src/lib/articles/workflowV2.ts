@@ -174,7 +174,7 @@ export async function workflowV2({
   }
 
   const incrementUsageCreditResult: Result<string, string> =
-    await incrementUsageCredit(supabase, project.at(0)?.org_id ?? "");
+    await incrementUsageCredit(supabase, project.at(0)?.org_id ?? "", 3);
 
   if (incrementUsageCreditResult.isErr) {
     return err(incrementUsageCreditResult.error);

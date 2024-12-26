@@ -10,7 +10,8 @@ import { err, ok } from "true-myth/result";
  */
 export async function incrementUsageCredit(
   supabase: SupabaseClient,
-  orgId: string
+  orgId: string,
+  value: number
 ): Promise<Result<string, string>> {
   // Get active_usage_id from Organization
   const { data: org, error: orgError } = await supabase
@@ -24,11 +25,10 @@ export async function incrementUsageCredit(
   }
 
   // Update the Usage record
-  const { error } = await supabase
-    .from("Usage")
-    .update({ credits_used: supabase.rpc("increment") })
-    .eq("id", org.current_usage_id)
-    .select();
+  const { error } = await supabase.rpc("increment_credits_used", {
+    usage_id: org.current_usage_id,
+    increment_value: value,
+  });
 
   if (error) {
     return err(`Error updating usage: ${error.message}`);
