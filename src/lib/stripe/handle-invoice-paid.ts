@@ -90,9 +90,9 @@ export const handleInvoicePaid = async (
         const { data: usageData, error: usageError } = await supabase
           .from("Usage")
           .select("id")
-          .eq("org_id", orgId)
+          .eq("id", current_usage_id)
           .eq("plan", "FREE_CREDIT")
-          .eq("end_date", null);
+          .is("end_date", null);
 
         if (usageError || !usageData) {
           return err("Error fetching current usage id");
@@ -103,7 +103,7 @@ export const handleInvoicePaid = async (
           const { error: usageEndDateUpdateError } = await supabase
             .from("Usage")
             .update({ end_date: new Date().toISOString().split("T")[0] })
-            .eq("id", usageData.at(0)?.id);
+            .eq("id", current_usage_id);
 
           if (usageEndDateUpdateError) {
             return err("Error updating existing subscription usage date");

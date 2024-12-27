@@ -2,8 +2,6 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import Result, { err, ok } from "true-myth/result";
 import { getSupabaseClient } from "../get-supabase-client.js";
 import { getStripeClient } from "./get-stripe-client.js";
-import { STRIPE_PRODUCT_LIST } from "./product-list.js";
-import { StripeProduct } from "./product-list.js";
 
 export const updateSubscription = async (
   orgId: string,
@@ -16,11 +14,23 @@ export const updateSubscription = async (
   }
   const supabase = supabaseClient.value;
 
+  const { data: orgData, error: orgError } = await supabase
+    .from("Organization")
+    .select("current_usage_id")
+    .eq("org_id", orgId)
+    .single();
+
+  if (orgError || !orgData) {
+    return err("Error fetching current usage id");
+  }
+
+  const current_usage_id = orgData.current_usage_id;
+
   const { data: stripeSubscriptionIdData, error: stripeSubscriptionIdError } =
     await supabase
       .from("Usage")
       .select("stripe_subscription_id")
-      .eq("org_id", orgId)
+      .eq("id", current_usage_id)
       .single();
 
   if (stripeSubscriptionIdError || !stripeSubscriptionIdData) {

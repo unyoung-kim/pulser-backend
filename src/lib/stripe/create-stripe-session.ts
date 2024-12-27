@@ -8,7 +8,7 @@ import { STRIPE_PRODUCT_LIST, StripeProduct } from "./product-list.js";
 
 export const createStripeSession = async (
   orgId: string,
-  plan: "SOLO" | "BUSINESS" | "AGENCY",
+  plan: "BASIC" | "PRO" | "AGENCY",
   term: "MONTHLY" | "YEARLY",
   mode: "payment" | "subscription"
 ): Promise<Result<string, string>> => {

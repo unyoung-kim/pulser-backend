@@ -22,7 +22,7 @@ export function stripeSessionCreationHandler(t: tRPC, path: string) {
           .describe(
             "Organisation for which the Stripe checkout session needs to be created"
           ),
-        plan: z.enum(["SOLO", "BUSINESS", "AGENCY"]),
+        plan: z.enum(["BASIC", "PRO", "AGENCY"]),
         term: z.enum(["MONTHLY", "YEARLY"]),
         mode: z.enum(["subscription", "payment"]).default("subscription"),
       })
