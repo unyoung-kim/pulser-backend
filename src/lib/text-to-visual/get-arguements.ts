@@ -19,12 +19,12 @@ You are provided with:
 Your responsibilities:  
 1. Purpose: Your task is not to generate SVGs yourself but to:  
    - Analyze the input string.  
-   - Select the most appropriate tool/template based on its description and intended use.  
+   - Select 5 most appropriate tools/templates based on their description and intended use.  
    - Provide meaningful placeholder values for all required arguments (text and icons).  
-   - Call the selected tool with these arguments and directly return its output.  
+   - Call the selected tools with these arguments and directly return their outputs.  
 
 2. Tool Selection:  
-   - Refer to the description of each tool to decide the best match for the input context.  
+   - Refer to the description of each tool to decide the best 5 matches for the input context.  
    - Each tool is designed for a specific type of SVG layout or visualization.  
 
 3. Argument Values:  
@@ -35,12 +35,12 @@ Your responsibilities:
      - Ensure icons strictly conform to the Lucide icon library.  
 
 4. Output Rules:  
-   - Strictly output the return value provided by calling the chosen tool. Do not add any words or special characters to it.
+   - Strictly output the return values provided by calling the chosen tools in an array format [tool1Result, tool2Result, tool3Result, tool4Result, tool5Result]. Do not add any words or special characters to it.
 `;
 
 export const getArguements = async (
   text: string
-): Promise<Result<Record<string, string>, string>> => {
+): Promise<Result<Record<string, string>[], string>> => {
   try {
     const currentDate = new Date().toLocaleString();
 
@@ -61,13 +61,15 @@ export const getArguements = async (
       },
     });
 
-    const toolResult = result.toolResults.at(0)?.result;
+    const toolResults = result.toolResults.map(
+      (toolResult) => toolResult.result
+    );
 
-    if (!toolResult) {
+    if (!toolResults) {
       return err("Couldn't get tool result from the LLM output");
     }
 
-    return ok(toolResult);
+    return ok(toolResults);
   } catch (error) {
     console.error("Error in template arguments generation:", error);
     return err(
