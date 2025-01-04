@@ -10,8 +10,8 @@ import {
 } from "./utility-functions.js";
 
 // Add these constants at the top with other constants
-const MAX_DEPTH = 3; // Maximum depth to crawl
-const MAX_URLS = 150; // Maximum number of URLs to process
+const MAX_DEPTH = 2; // Maximum depth to crawl
+const MAX_URLS = 75; // Maximum number of URLs to process
 const RATE_LIMIT_MS = 0; // Delay between requests in milliseconds
 
 /**
@@ -24,6 +24,7 @@ export async function crawlImportantInternalLinks(
   domain: string,
   limit: number
 ): Promise<string[]> {
+  const startTime = performance.now();
   console.log("Crawling only with Cheerio...");
 
   const url: string = normalizeInputUrl(domain);
@@ -42,6 +43,12 @@ export async function crawlImportantInternalLinks(
 
   const sortedUrls = sortUrlsByDepth(visitedArray);
   console.log("Sorted URLs");
+
+  const endTime = performance.now();
+  console.log(
+    `Crawling completed in ${((endTime - startTime) / 1000).toFixed(2)} seconds`
+  );
+
   // If the number of URLs exceeds the limit, return only the first X URLs
   return sortedUrls.slice(0, limit);
 }
@@ -59,15 +66,16 @@ export async function crawlWithCheerio(
   visited: ImSet<string> = ImSet<string>(),
   depth: number = 0
 ): Promise<ImSet<string>> {
-  // Normalize URL first
-  const normalizedUrl = normalizeUrl(url);
+  // Normalize URL first and remove any trailing slashes or fragments
+  const normalizedUrl = normalizeUrl(url).replace(/\/$/, "");
 
-  // Check all conditions before proceeding
+  // Early return conditions - moved up for faster filtering
   if (
     depth >= MAX_DEPTH ||
     visited.size >= MAX_URLS ||
     visited.has(normalizedUrl) ||
-    shouldBeExcludedUrl(normalizedUrl)
+    shouldBeExcludedUrl(normalizedUrl) ||
+    !normalizedUrl.includes(domain) // Add domain check early
   ) {
     return visited;
   }
@@ -77,32 +85,42 @@ export async function crawlWithCheerio(
   console.log("Visiting new link: ", normalizedUrl);
 
   try {
-    await new Promise((resolve) => setTimeout(resolve, RATE_LIMIT_MS));
+    // Add delay between requests to prevent rate limiting
+    if (RATE_LIMIT_MS > 0) {
+      await new Promise((resolve) => setTimeout(resolve, RATE_LIMIT_MS));
+    }
+
     const response = await axios.get(normalizedUrl);
     const $ = cheerio.load(response.data);
 
-    let links = ImSet<string>();
+    // Process links in batches
+    const links = new Set<string>();
     $("a").each((_, element) => {
       const href = $(element).attr("href");
       if (href) {
         const fullUrl = resolveUrl(normalizedUrl, href, domain);
-        if (!fullUrl) return;
-        const normalizedHref = normalizeUrl(fullUrl);
+        if (!fullUrl || !fullUrl.includes(domain)) return; // Skip non-domain URLs early
+        const normalizedHref = normalizeUrl(fullUrl).replace(/\/$/, "");
         if (
           !visited.has(normalizedHref) &&
           !links.has(normalizedHref) &&
           !shouldBeExcludedUrl(normalizedHref)
         ) {
-          links = links.add(normalizedHref);
+          links.add(normalizedHref);
         }
       }
     });
 
-    // Recursively crawl all found links
-    for (const link of links) {
-      visited = await crawlWithCheerio(link, domain, visited, depth + 1);
-      if (visited.size >= MAX_URLS) break;
-    }
+    // Process links in parallel with Promise.all
+    const crawlPromises = Array.from(links).map((link) =>
+      crawlWithCheerio(link, domain, visited, depth + 1)
+    );
+
+    const results = await Promise.all(crawlPromises);
+    // Merge all results into visited set
+    results.forEach((result) => {
+      visited = visited.merge(result);
+    });
   } catch (error) {
     console.error(`Failed to crawl ${normalizedUrl}: ${error}`);
   }
