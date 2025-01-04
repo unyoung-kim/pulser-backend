@@ -10,6 +10,18 @@ import { fourCircleComparisonTool } from "../tools/text-to-visual/four-circle-co
 import { hubAndSpokeCloudTool } from "../tools/text-to-visual/hub-and-spoke-cloud-tool.js";
 import { segmentedIdeaLightbulbTool } from "../tools/text-to-visual/segmented-idea-lightbulb-tool.js";
 import { demographicDistributionVisualizationTool } from "../tools/text-to-visual/demographic-distribution-visualization-tool.js";
+import { arrowLinkedFourStepTool } from "../tools/text-to-visual/arrow-linked-four-step-visualization-tool.js";
+import { centralFocusConnectedNodesTool } from "../tools/text-to-visual/central-focus-connected-nodes-tool.js";
+import { centralHubFeaturesVisualizationTool } from "../tools/text-to-visual/central-hub-features-visualization-tool.js";
+import { circularIdeaVisualizationTool } from "../tools/text-to-visual/circular-idea-visualization-tool.js";
+import { coreMechanismFeaturesTool } from "../tools/text-to-visual/core-mechanism-features-visualization-tool.js";
+import { fiveStepCurvedFlowVisualizationTool } from "../tools/text-to-visual/five-step-curved-flow-visualization-tool.js";
+import { flowchartWorkflowVisualizationTool } from "../tools/text-to-visual/flowchart-workflow-visualization-tool.js";
+import { horizontalTimelineVisualizationTool } from "../tools/text-to-visual/horizontal-timeline-visualization-tool.js";
+import { linearMilestoneVisualizationTool } from "../tools/text-to-visual/linear-milestone-visualization-tool.js";
+import { radialDataVisualizationTool } from "../tools/text-to-visual/radial-data-visualization-tool.js";
+import { radialHubSpokeVisualizationTool } from "../tools/text-to-visual/radial-hub-spoke-visualization-tool.js";
+import { segmentedCircularVisualizationTool } from "../tools/text-to-visual/segmented-circular-visualization-tool.js";
 
 const SYSTEM_PROMPT = `
 You are provided with:  
@@ -36,6 +48,7 @@ Your responsibilities:
 
 4. Output Rules:  
    - Strictly output the return values provided by calling the chosen tools in an array format [tool1Result, tool2Result, tool3Result, tool4Result, tool5Result]. Do not add any words or special characters to it.
+   - Use &amp; instead of & in the output.
 `;
 
 export const getArguements = async (
@@ -58,6 +71,23 @@ export const getArguements = async (
           demographicDistributionVisualizationTool(),
         threeCircleComparisonTool: threeCircleComparisonTool(),
         threeSequentialStepFlowTool: threeSequentialStepFlowTool(),
+        arrowLinkedFourStepTool: arrowLinkedFourStepTool(),
+        // centralFocusConnectedNodesTool: centralFocusConnectedNodesTool(),
+        centralHubFeaturesVisualizationTool:
+          centralHubFeaturesVisualizationTool(),
+        circularIdeaVisualizationTool: circularIdeaVisualizationTool(),
+        coreMechanismFeaturesTool: coreMechanismFeaturesTool(),
+        fiveStepCurvedFlowVisualizationTool:
+          fiveStepCurvedFlowVisualizationTool(),
+        flowchartWorkflowVisualizationTool:
+          flowchartWorkflowVisualizationTool(),
+        horizontalTimelineVisualizationTool:
+          horizontalTimelineVisualizationTool(),
+        linearMilestoneVisualizationTool: linearMilestoneVisualizationTool(),
+        radialDataVisualizationTool: radialDataVisualizationTool(),
+        radialHubSpokeVisualizationTool: radialHubSpokeVisualizationTool(),
+        segmentedCircularVisualizationTool:
+          segmentedCircularVisualizationTool(),
       },
     });
 
