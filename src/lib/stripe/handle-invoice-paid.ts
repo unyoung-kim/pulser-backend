@@ -79,6 +79,7 @@ export const handleInvoicePaid = async (
         if (creditsCharged <= 0) {
           return err("creditsCharged metadata is missing");
         }
+        // TODO: We should set the term and plan field here. Check supabase for new fields. use product-list.ts STRIPE_PRODUCT_LIST to get the term and plan if required.
 
         // Insert into the Usage table for subscription creation
         const { data: newUsageInsertData, error: newUsageInsertError } =

@@ -1,3 +1,5 @@
+import { autoFillBackgroundHandler } from "./handler/auto-fill-background-handler.js";
+import { deleteSubscriptionHandler } from "./handler/delete-subscription-handler.js";
 import { googleAuthHandler } from "./handler/google-auth-handler.js";
 import { googleDocCreationHandler } from "./handler/google-doc-creation-handler.js";
 import { googleDocSharingHandler } from "./handler/google-doc-sharing-handler.js";
@@ -5,22 +7,21 @@ import { googleTokenGenerationHandler } from "./handler/google-token-generation-
 import { imageSearchHandler } from "./handler/image-search-handler.js";
 import { initializeOrgHandler } from "./handler/initialize-org.js";
 import { internalLinksHandler } from "./handler/internal-links-handler.js";
+import { stripeSessionCreationHandler } from "./handler/stripe-session-creation-handler.js";
+import { stripeSessionVerificationHandler } from "./handler/stripe-session-verification-handler.js";
+import { stripeWebhook } from "./handler/stripe-webhook.js";
+import { subscriptionStatusRetrievalHandler } from "./handler/subscription-status-retrieval-handler.js";
 import { testEndpointHandler } from "./handler/test-handler.js";
+import { textToVisualHandler } from "./handler/text-to-visual-handler.js";
 import { topicGenerationHandler } from "./handler/topic-generation-handler.js";
+import { updateSubscriptionHandler } from "./handler/update-subscription-handler.js";
 import { uploadDocxHandler } from "./handler/upload-docx-handler.js";
 import { videoSearchHandler } from "./handler/video-search-handler.js";
-import { stripeSessionCreationHandler } from "./handler/stripe-session-creation-handler.js";
-import { stripeWebhook } from "./handler/stripe-webhook.js";
-import { stripeSessionVerificationHandler } from "./handler/stripe-session-verification-handler.js";
-import { subscriptionStatusRetrievalHandler } from "./handler/subscription-status-retrieval-handler.js";
 import { webRetrievalHandler } from "./handler/web-retrieval-handler.js";
 import { wordpressAuthHandler } from "./handler/wordpress-auth-handler.js";
 import { createPostHandler } from "./handler/wordpress-post-creation.js";
 import { wordpressTokenGenerationHandler } from "./handler/wordpress-token-generation-handler.js";
 import { t } from "./lib/trpc.js";
-import { deleteSubscriptionHandler } from "./handler/delete-subscription-handler.js";
-import { updateSubscriptionHandler } from "./handler/update-subscription-handler.js";
-import { textToVisualHandler } from "./handler/text-to-visual-handler.js";
 
 /**
  * tRPC routers from here
@@ -70,4 +71,5 @@ export const trpcRouter = t.router({
   "create-google-doc": googleDocCreationHandler(t, "create-google-doc"),
   "share-google-doc": googleDocSharingHandler(t, "share-google-doc"),
   "upload-docx": uploadDocxHandler(t, "upload-docx"),
+  "autofill-background": autoFillBackgroundHandler(t, "autofill-background"),
 });
