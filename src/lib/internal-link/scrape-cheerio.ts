@@ -13,6 +13,7 @@ import {
 const MAX_DEPTH = 2; // Maximum depth to crawl
 const MAX_URLS = 75; // Maximum number of URLs to process
 const RATE_LIMIT_MS = 0; // Delay between requests in milliseconds
+const CHUNK_SIZE = 10;
 
 /**
  * Use me!
@@ -93,34 +94,44 @@ export async function crawlWithCheerio(
     const response = await axios.get(normalizedUrl);
     const $ = cheerio.load(response.data);
 
-    // Process links in batches
-    const links = new Set<string>();
-    $("a").each((_, element) => {
-      const href = $(element).attr("href");
-      if (href) {
+    // Collect and filter links first
+    const validLinks = $("a")
+      .map((_, element) => $(element).attr("href"))
+      .get()
+      .reduce((acc: string[], href) => {
+        if (!href) return acc;
         const fullUrl = resolveUrl(normalizedUrl, href, domain);
-        if (!fullUrl || !fullUrl.includes(domain)) return; // Skip non-domain URLs early
+        if (!fullUrl || !fullUrl.includes(domain)) return acc;
+
         const normalizedHref = normalizeUrl(fullUrl).replace(/\/$/, "");
         if (
           !visited.has(normalizedHref) &&
-          !links.has(normalizedHref) &&
           !shouldBeExcludedUrl(normalizedHref)
         ) {
-          links.add(normalizedHref);
+          acc.push(normalizedHref);
         }
-      }
-    });
+        return acc;
+      }, []);
 
-    // Process links in parallel with Promise.all
-    const crawlPromises = Array.from(links).map((link) =>
-      crawlWithCheerio(link, domain, visited, depth + 1)
-    );
+    // Process links in chunks
+    for (let i = 0; i < validLinks.length; i += CHUNK_SIZE) {
+      const chunk = validLinks.slice(i, i + CHUNK_SIZE);
+      const chunkResults = await Promise.all(
+        chunk.map((link) => crawlWithCheerio(link, domain, visited, depth + 1))
+      );
 
-    const results = await Promise.all(crawlPromises);
-    // Merge all results into visited set
-    results.forEach((result) => {
-      visited = visited.merge(result);
-    });
+      // Merge results from this chunk
+      chunkResults.forEach((result) => {
+        visited = visited.merge(result);
+      });
+
+      // Optional: Log progress
+      console.log(
+        `Processed chunk ${Math.floor(i / CHUNK_SIZE) + 1} of ${Math.ceil(
+          validLinks.length / CHUNK_SIZE
+        )}`
+      );
+    }
   } catch (error) {
     console.error(`Failed to crawl ${normalizedUrl}: ${error}`);
   }
