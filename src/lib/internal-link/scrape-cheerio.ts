@@ -12,7 +12,7 @@ import {
 // Add these constants at the top with other constants
 const MAX_DEPTH = 3; // Maximum depth to crawl
 const MAX_URLS = 150; // Maximum number of URLs to process
-const RATE_LIMIT_MS = 200; // Delay between requests in milliseconds
+const RATE_LIMIT_MS = 0; // Delay between requests in milliseconds
 
 /**
  * Use me!
