@@ -130,7 +130,7 @@ Your task is to first adjust the tone to be natural and then format the given bl
 - Headings and subheadings are clearly defined with appropriate tags. The title should be in <h1> tag.
 - Lists are formatted as ordered or unordered lists where applicable.
 - Maintain a consistent structure throughout the document.
-- All links should be properly formatted with the <a> tag with a natural anchor text.
+- All links should be properly formatted with the <a> tag with a natural anchor text with the anchor text being less than 3-4 words.
 - Make statistics and numbers in a bold font.
 - It is encouraged to use stylings like <strong>, <em>, and more to make the text more engaging.
 - You will be rewarded if you can use tables for some of the text/content that could be better presented by a table (in html). Make sure that you preserve the texts and simply add the table in the right place to improve readability and user engagement. (e.g. 

@@ -97,7 +97,7 @@ Here are a few rules you must follow for the outline:
     4) Avoid being too salesy - this means that don't promote the client's products or services more than three times in the outline.
     5) Ensure that any specific instructions provided by the user are fully addressed in the outline.
     6) The outline should contain content so it's easy and natural to incorporate the provided keywords when the article is written. 
-    7) Don't make up any case studies or social proof that wasn't provided by the researcher.
+    7) DO NOT add any case studies unless provided in the user instructions.
   </General>
 
   <Introduction>
@@ -119,7 +119,6 @@ Here are a few rules you must follow for the outline:
 # Fitness Marketing Tips in 2024: Elevate Your Gym's Success
 
 ## I. Introduction
-- Hook (this should sound simple and natural): "Keeping up with fitness marketing trends is as important as staying ahead in your workouts."
 - Brief overview of the challenges facing fitness businesses in 2024
 - Unique insight: According to a recent study, 81% of gym-goers prefer a mix of digital and in-person fitness experiences [Link: https://www.wellnesscreatives.com/fitness-marketing-trends/]
 - Introduction to SpearPoint Marketing LLC and how they help fitness businesses thrive in the digital age
@@ -247,7 +246,7 @@ Here are a few rules you must follow for the outline:
     4) Avoid being too salesy - this means that don't promote the client's products or services more than three times in the outline.
     5) Ensure that any specific instructions provided by the user are fully addressed in the article.
     6) The outline should contain content so it's easy and natural to incorporate the provided keywords when the article is written. 
-    7) Don't make up any case studies or social proof that wasn't provided by the researcher.
+    7) DO NOT add any case studies unless provided in the user instructions.
   </General>
 
   <Introduction>
