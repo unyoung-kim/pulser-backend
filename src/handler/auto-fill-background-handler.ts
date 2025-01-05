@@ -34,10 +34,7 @@ export function autoFillBackgroundHandler(t: tRPC, path: string) {
             error: result.error,
           };
         }
-        console.log(
-          "Successfully autofilled company information for project: ",
-          input.projectId
-        );
+
         return {
           success: true,
           data: result.value,

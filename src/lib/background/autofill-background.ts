@@ -119,6 +119,11 @@ export async function autoFillBackground(
       return err(`Error updating project background: ${error.message}`);
     }
 
+    console.log(
+      "Successfully autofilled background data for project: ",
+      project?.name ?? projectId
+    );
+
     return ok("Successfully autofilled background data");
   } catch (error) {
     console.log("Error during background autofilling: ", error);
