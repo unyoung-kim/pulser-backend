@@ -31,18 +31,26 @@ export async function incrementUsageCredit(
   const creditAmount =
     postType === "NORMAL" ? NORMAL_CONTENT_CREDIT : GLOSSARY_CONTENT_CREDIT;
 
-  // Update the Usage record with specific increment amount
+  // First, get the current usage data
+  const { data: currentUsage, error: usageError } = await supabase
+    .from("Usage")
+    .select("*")
+    .eq("id", org.current_usage_id)
+    .single();
+
+  if (usageError) {
+    return err(`Error fetching usage data: ${usageError.message}`);
+  }
+
+  console.log("Current Usage: ", currentUsage);
+
   const { data: usage, error } = await supabase
     .from("Usage")
     .update({
-      credits_used: supabase.rpc("increment", {
-        increment_amount: creditAmount,
-      }),
+      credits_used: currentUsage.credits_used + creditAmount,
     })
     .eq("id", org.current_usage_id)
     .select();
-
-  console.log("Usage: ", usage);
 
   if (error) {
     return err(`Error updating usage: ${error.message}`);
