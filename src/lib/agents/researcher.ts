@@ -313,7 +313,7 @@ export async function researcherSequential(
       maxTokens: 8000,
     });
 
-    console.log("FIRST OUTLINE: ", firstOutline);
+    console.log("FIRST OUTLINE: ", firstOutline.text);
 
     const detailedOutline = await generateText({
       model: await getThrottledGPT4o(),
@@ -327,7 +327,7 @@ export async function researcherSequential(
       maxTokens: 8000,
     });
 
-    console.log("DETAILED OUTLINE: ", detailedOutline);
+    console.log("DETAILED OUTLINE: ", detailedOutline.text);
 
     return ok(detailedOutline.text);
   } catch (error) {

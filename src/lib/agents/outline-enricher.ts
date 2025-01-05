@@ -38,7 +38,7 @@ export async function outlineEnricher(
       maxTokens: 8000,
     });
 
-    console.log("OUTLINE ENRICHER RESULT: ", result);
+    console.log("OUTLINE ENRICHER RESULT: ", result.text);
 
     return ok(result.text);
   } catch (error) {
