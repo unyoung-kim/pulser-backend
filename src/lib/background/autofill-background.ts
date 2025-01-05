@@ -78,14 +78,15 @@ export async function autoFillBackground(
   }
 
   try {
-    // const backgroundData = JSON.parse(project.background);
-    // const projectWebsite: string = backgroundData.basic.companyUrl;
+    // Get existing background data first
+    const existingBackground = project.background ?? {};
 
     // Now enrich using exa
     // @ts-ignore
     const exa = new Exa(process.env.EXA_API_KEY ?? "");
     const singleContent = await exa.getContents(companyUrl);
 
+    // Generate new data
     const { object } = await generateObject({
       model: await getThrottledGPT4o(),
       schema: BackgroundSchema2,
@@ -97,12 +98,14 @@ export async function autoFillBackground(
       )}`,
     });
 
-    // Preserve the original companyUrl
+    // Merge existing and new data, preserving existing fields
     const updatedBackground = {
-      ...object,
+      ...existingBackground, // Keep all existing fields
+      ...object, // Add new generated fields
       basic: {
-        ...object.basic,
-        companyUrl: companyUrl,
+        ...existingBackground.basic, // Keep existing basic fields
+        ...object.basic, // Add new basic fields
+        companyUrl: companyUrl, // Override with provided URL
       },
     };
 
