@@ -2,26 +2,26 @@ import { Result } from "true-myth";
 import { generateText } from "ai";
 import { err, ok } from "true-myth/result";
 import { getThrottledGPT4o } from "../get-llm-models.js";
-import { problemSolutionTool } from "../tools/text-to-visual/problem-solution-tool.js";
-import { threeCircleComparisonTool } from "../tools/text-to-visual/three-circle-comparison-tool.js";
-import { threeSequentialStepFlowTool } from "../tools/text-to-visual/three-sequential-step-flow-tool.js";
-import { cyclicProcessVisualizationTool } from "../tools/text-to-visual/cyclic-process-visualization-tool.js";
-import { fourCircleComparisonTool } from "../tools/text-to-visual/four-circle-comparison-tool.js";
-import { hubAndSpokeCloudTool } from "../tools/text-to-visual/hub-and-spoke-cloud-tool.js";
-import { segmentedIdeaLightbulbTool } from "../tools/text-to-visual/segmented-idea-lightbulb-tool.js";
-import { demographicDistributionVisualizationTool } from "../tools/text-to-visual/demographic-distribution-visualization-tool.js";
-import { arrowLinkedFourStepTool } from "../tools/text-to-visual/arrow-linked-four-step-visualization-tool.js";
+import { problemVsSolutionComparisonVisualizationTool } from "../tools/text-to-visual/problem-vs-solution-comparison-visualization-tool.js";
+import { threeCircleHorizontalVisualizationTool } from "../tools/text-to-visual/three-circle-horizontal-visualization-tool.js";
+import { threeCircleSequentialFlowVisualizationTool } from "../tools/text-to-visual/three-circle-sequential-flow-visualization-tool.js";
+import { cyclicFourStepProcessVisualizationTool } from "../tools/text-to-visual/cyclic-four-step-process-visualization.js";
+import { fourStageOverlappingCircularVisualizationTool } from "../tools/text-to-visual/four-stage-overlapping-circular-visualization-tool.js";
+import { fiveNodeCloudCentricVisualizationTool } from "../tools/text-to-visual/five-node-cloud-centric-visualization-tool.js";
+import { fourLayeredLightbulbVisualizationTool } from "../tools/text-to-visual/four-layered-lightbulb-visualization-tool.js";
+import { populationAndDistributionVisualizationTool } from "../tools/text-to-visual/population-and-distribution-visualization.js";
+import { arrowLinkedFourStepVisualizationTool } from "../tools/text-to-visual/arrow-linked-four-step-visualization-tool.js";
 import { centralFocusConnectedNodesTool } from "../tools/text-to-visual/central-focus-connected-nodes-tool.js";
 import { centralHubFeaturesVisualizationTool } from "../tools/text-to-visual/central-hub-features-visualization-tool.js";
-import { circularIdeaVisualizationTool } from "../tools/text-to-visual/circular-idea-visualization-tool.js";
-import { coreMechanismFeaturesTool } from "../tools/text-to-visual/core-mechanism-features-visualization-tool.js";
-import { fiveStepCurvedFlowVisualizationTool } from "../tools/text-to-visual/five-step-curved-flow-visualization-tool.js";
-import { flowchartWorkflowVisualizationTool } from "../tools/text-to-visual/flowchart-workflow-visualization-tool.js";
-import { horizontalTimelineVisualizationTool } from "../tools/text-to-visual/horizontal-timeline-visualization-tool.js";
-import { linearMilestoneVisualizationTool } from "../tools/text-to-visual/linear-milestone-visualization-tool.js";
-import { radialDataVisualizationTool } from "../tools/text-to-visual/radial-data-visualization-tool.js";
-import { radialHubSpokeVisualizationTool } from "../tools/text-to-visual/radial-hub-spoke-visualization-tool.js";
-import { segmentedCircularVisualizationTool } from "../tools/text-to-visual/segmented-circular-visualization-tool.js";
+import { circularFourStepProcessVisualizationTool } from "../tools/text-to-visual/circular-four-step-process-visualization-tool.js";
+import { gearCentricFourProcessesVisualizationTool } from "../tools/text-to-visual/gear-centric-four-processes-visualization-tool.js";
+import { fiveStepBubbleFlowVisualizationTool } from "../tools/text-to-visual/five-step-bubble-flow-visualization-tool.js";
+import { fourStepCircularNodeFlowVisualizationTool } from "../tools/text-to-visual/four-step-circular-node-flow-visualization-tool.js";
+import { sixStageAlternatingDescriptionVisualizationTool } from "../tools/text-to-visual/six-stage-alternating-description-visualization-tool.js";
+import { fourPointsZigzagPathVisualizationTool } from "../tools/text-to-visual/four-points-zigzag-path-visualization-tool.js";
+import { circularMetricsVisualizationTool } from "../tools/text-to-visual/circular-metrics-visualization-tool.js";
+import { centralNodeWithFiveConnectedPointsVisualizationTool } from "../tools/text-to-visual/central-node-with-five-connected-points-visualization-tool.js";
+import { threeSegmentCircularVisualizationTool } from "../tools/text-to-visual/three-segment-circular-visualization-tool.js";
 
 const SYSTEM_PROMPT = `
 You are provided with:  
@@ -48,7 +48,7 @@ Your responsibilities:
 
 4. Output Rules:  
    - Strictly output the return values provided by calling the chosen tools in an array format [tool1Result, tool2Result, tool3Result, tool4Result, tool5Result]. Do not add any words or special characters to it.
-   - Use &amp; instead of & in the output.
+   - Use '&amp;' instead of '&'.
 `;
 
 export const getArguements = async (
@@ -62,32 +62,44 @@ export const getArguements = async (
       system: `${SYSTEM_PROMPT} Current date and time: ${currentDate}`,
       prompt: text,
       tools: {
-        cyclicProcessVisualizationTool: cyclicProcessVisualizationTool(),
-        fourCircleComparisonTool: fourCircleComparisonTool(),
-        hubAndSpokeCloudTool: hubAndSpokeCloudTool(),
-        problemSolutionTool: problemSolutionTool(),
-        segmentedIdeaLightbulbTool: segmentedIdeaLightbulbTool(),
-        demographicDistributionVisualizationTool:
-          demographicDistributionVisualizationTool(),
-        threeCircleComparisonTool: threeCircleComparisonTool(),
-        threeSequentialStepFlowTool: threeSequentialStepFlowTool(),
-        arrowLinkedFourStepTool: arrowLinkedFourStepTool(),
+        arrowLinkedFourStepVisualizationTool:
+          arrowLinkedFourStepVisualizationTool(),
         // centralFocusConnectedNodesTool: centralFocusConnectedNodesTool(),
         centralHubFeaturesVisualizationTool:
           centralHubFeaturesVisualizationTool(),
-        circularIdeaVisualizationTool: circularIdeaVisualizationTool(),
-        coreMechanismFeaturesTool: coreMechanismFeaturesTool(),
-        fiveStepCurvedFlowVisualizationTool:
-          fiveStepCurvedFlowVisualizationTool(),
-        flowchartWorkflowVisualizationTool:
-          flowchartWorkflowVisualizationTool(),
-        horizontalTimelineVisualizationTool:
-          horizontalTimelineVisualizationTool(),
-        linearMilestoneVisualizationTool: linearMilestoneVisualizationTool(),
-        radialDataVisualizationTool: radialDataVisualizationTool(),
-        radialHubSpokeVisualizationTool: radialHubSpokeVisualizationTool(),
-        segmentedCircularVisualizationTool:
-          segmentedCircularVisualizationTool(),
+        centralNodeWithFiveConnectedPointsVisualizationTool:
+          centralNodeWithFiveConnectedPointsVisualizationTool(),
+        circularFourStepProcessVisualizationTool:
+          circularFourStepProcessVisualizationTool(),
+        circularMetricsVisualizationTool: circularMetricsVisualizationTool(),
+        cyclicFourStepProcessVisualizationTool:
+          cyclicFourStepProcessVisualizationTool(),
+        fiveNodeCloudCentricVisualizationTool:
+          fiveNodeCloudCentricVisualizationTool(),
+        fiveStepBubbleFlowVisualizationTool:
+          fiveStepBubbleFlowVisualizationTool(),
+        fourLayeredLightbulbVisualizationTool:
+          fourLayeredLightbulbVisualizationTool(),
+        fourPointsZigzagPathVisualizationTool:
+          fourPointsZigzagPathVisualizationTool(),
+        fourStageOverlappingCircularVisualizationTool:
+          fourStageOverlappingCircularVisualizationTool(),
+        fourStepCircularNodeFlowVisualizationTool:
+          fourStepCircularNodeFlowVisualizationTool(),
+        gearCentricFourProcessesVisualizationTool:
+          gearCentricFourProcessesVisualizationTool(),
+        populationAndDistributionVisualizationTool:
+          populationAndDistributionVisualizationTool(),
+        problemVsSolutionComparisonVisualizationTool:
+          populationAndDistributionVisualizationTool(),
+        sixStageAlternatingDescriptionVisualizationTool:
+          sixStageAlternatingDescriptionVisualizationTool(),
+        threeCircleHorizontalVisualizationTool:
+          threeCircleHorizontalVisualizationTool(),
+        threeCircleSequentialFlowVisualizationTool:
+          threeCircleSequentialFlowVisualizationTool(),
+        threeSegmentCircularVisualizationTool:
+          threeSegmentCircularVisualizationTool(),
       },
     });
 

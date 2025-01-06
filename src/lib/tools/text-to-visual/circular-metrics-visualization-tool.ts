@@ -1,27 +1,18 @@
 import { tool } from "ai";
 import { z } from "zod";
 
-export const radialDataVisualizationTool = () =>
+export const circularMetricsVisualizationTool = () =>
   tool({
     description: `
-    This tool collects parameters for a 'Radial Data Visualization' template and outputs them with the template name.
+    This template represents a 'Circular Metrics Visualization' designed to display a central numeric value with supporting information. The layout includes:  
+    1. A main header at the top for the overall title, with a sub-header below for context.  
+    2. A large central number representing the primary metric, accompanied by a brief description of up to two lines below.  
+    3. A semi-circular graph surrounding the number, with multiple curved segments in different colors representing categories or sub-metrics.  
+    4. Four descriptive text blocks on the right, each connected to a graph segment with dotted lines. Each block includes:  
+      - A title summarizing the category.  
+      - A brief description for additional details.  
 
-    Purpose:
-    - Visualizes a central numerical value or metric surrounded by radial segments that represent related data points or categories.
-    - Highlights a key metric with supporting descriptions for clarity and context.
-
-    Structure:
-    - A main header and sub-header at the top summarizing the visualization.
-    - A large central numeric value representing the primary metric.
-    - Four radial segments (arc-like shapes) surrounding the central metric, each connected to a description block positioned externally.
-    - Each description block includes:
-    - A title summarizing the category.
-    - A line of supporting text for additional details.
-
-    Parameters:
-    - Main header and sub-header summarize the visualization.
-    - The central metric represents the primary data value.
-    - Each radial segment is linked to a title and description block.
+    This template is ideal for visualizing key metrics or statistics with clear supporting categories.
     `,
     parameters: z.object({
       header: z
@@ -80,7 +71,7 @@ export const radialDataVisualizationTool = () =>
     execute: async (input) => {
       return {
         ...input,
-        template_name: "radial-data-visualization",
+        template_name: "circular-metrics-visualization",
       };
     },
   });

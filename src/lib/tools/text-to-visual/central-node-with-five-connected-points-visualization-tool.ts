@@ -1,31 +1,26 @@
 import { tool } from "ai";
 import { z } from "zod";
 
-export const radialHubSpokeVisualizationTool = () =>
+export const centralNodeWithFiveConnectedPointsVisualizationTool = () =>
   tool({
     description: `
-        This tool collects parameters for a 'Radial Hub-and-Spoke Visualization' template and outputs them with the template name.
+    This template represents a 'Central Node with Five Connected Points Visualization' designed to illustrate a central concept with five supporting elements. The layout includes:  
+    1. A main header at the top for the overall title, with a sub-header below for additional context.  
+    2. A central circular node in the middle, symbolizing the core idea or concept.  
+    3. Five connected points branching outward from the central node, each represented by a marker-style shape containing:  
+      - An icon representing the supporting element or feature.  
+      - A corresponding text block positioned nearby, including:  
+        - A title summarizing the point.  
+        - A description of upto three lines providing additional details.  
 
-        Purpose:
-        - Visualizes a central concept surrounded by related ideas or components, emphasizing relationships and connections.
-
-        Structure:
-        - A main header and sub-header at the top summarizing the diagram.
-        - A central circular hub representing the core concept.
-        - Five surrounding nodes (spokes), each connected to the central hub by a line.
-        - Each node contains:
-        - An icon representing the idea.
-        - A title summarizing the node.
-        - A description block with up to three lines for additional details.
-
-        Parameters:
-        - Main header and sub-header summarize the central concept.
-        - Each node includes an icon, title, and corresponding description lines.
+    This template is ideal for presenting concepts, features, or components connected to a central idea in a clear and visually engaging manner.
     `,
     parameters: z.object({
       header: z
         .string()
-        .describe("The main title of the radial hub-and-spoke diagram."),
+        .describe(
+          "The main title of the central node with five connected points diagram."
+        ),
       sub_header: z
         .string()
         .describe(
@@ -130,7 +125,7 @@ export const radialHubSpokeVisualizationTool = () =>
         title_5_desc_line_2: "",
         title_5_desc_line_3: "",
         ...input,
-        template_name: "radial-hub-spoke-visualization",
+        template_name: "central-node-with-five-connected-points-visualization",
         fallback_icon_1: `<image width="64" height="64" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAGzUExURQAAAP///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////w+X5j0AAACRdFJOUwAtVQj2/xHPzA4HDXdmuwJ8531+IyIxlokkSEYP+vV2Ukvg43BlbwGB70DfEATyMjY9GzDs1gkuiJlE19PpP48+ZFe6IPtdlfg6w41sswMKBUeF0jMp8KwU3M0L9wbB5W1enjR1/lQqTv3dDMLkLB1/Ne7myyjbeoaiL5qkrqW5YXFpFr5fr+s5FSa0vB/aEuFEV6Y2AAAACXBIWXMAAA7DAAAOwwHHb6hkAAAC7klEQVRYR+WX6VsSURSHj+JvHBUQEjQtl8wyEtMMSwK1BQwrLUvJUtIWy/aifbW9LFP/5J47A8zcOxvwyZ7eLzNzz5mXO2e4c2aIthoVlQ5UiGfwuKrgQJVLPIdDAqplG6oBSTyHQ3JIcIqrCTWSJLmoVhKpK1YgA3CTR7x6eE0F9T4/n+Yk0OPfVk8+fsj5Enh85EdDIFig0ThFDglo1LIDDfATEOATnAT6eAAgICgmNHnN2a7Em1t27MynB80FrIhmqEVsBdra7QUdHnN2qUXs3A102Qps2APspe59CNUqhyUL9reiJ0zUewB9yrGFoMMTpH7PQRrQTf8QizZHAAwG6HAbjtgJZFTSEKJ0VFdANxGFY4i3DCMyMgp/r52gyXuMjnu7qE93C08Q9Z7EcIIScSSBMTXdQmDBKaTGiajmNHAmN1SS4Gzud5sjmJjMjVkI2GKSpHN0PreIlPSpJC6wbTiGi3X5dAuB+k/UijhNRDNpXKqnfCFKF8xexpU5ltCEeVYIe4HxEjJXsTDA4ovANV26hcDIdbTdYNupJB8vVnATS7fY9nZaeWJpFClYvgMf287eRawsQQ8W7hFR5j4ePCxHULcEVD9SCyHELQSLQwUeE9ETVGXxtL+dFaI4ge6RliWiMTx7/gLzSiGKE7yMFhglold4/eYtgHfdxQoE3mMeQOoD6+tlCeJAcuVj2CxuIZiZ1jP5aeXzFy6uoQpGtF6ltja+L3Az4ltbcEQRCEj0NatHnbsmEDAT2GAqMNTABtMaCIIQdwECIU3wLfvdRJBhrcOWH5lcqgdeRZDCT52AVrlbaMJqPnN2+heNI0W/EVnTNZCSWItggv6si5MshfUEkWtZ10P1RNGp7nQiKsZyLNu+91ZCVndYsy2H/1ewUfjLuDGo7gzCXRjcEPMNbIq3mmdTzDcApMUVpJEGxHwD/OISYIvHiX9dMCDLQFz81tOIA7KsvKpYEBTvmhk2M6Q58UPXDOVlawvxF89gqYfYGSmAAAAAAElFTkSuQmCC" preserveAspectRatio="none" id="img1"></image>`,
         fallback_icon_2: `<image width="64" height="64" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAFKUExURQAAAP///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////2ZxLZ0AAABudFJOUwAWzffLcAjT/9IcC0/XBxAM9s7HyFDB9Yr4bQ8CJn7A6/7qv30krv2sI2OkUx8F9F+oeWowl9n5XiUJmZgir44zqaqa4iwhfyixlu+7sBfm+zTYj7oteOP8IKdruEvwthlz6WUKHWRHt5LKMZGT15JfXAAAAAlwSFlzAAAOwwAADsMBx2+oZAAAAvdJREFUWEfll2lTGkEQhhtReCVIQozggqLrEVQulcssJEAiRtDE23hENOaOyf//mlr2mh33AKu0KpW3it3u6e6nmJ7ZZSD6l+QZGPDId+/gkI+P9SKPH/DLBADDAT7qLo8ffn+X8Cg4guEQH3eTXO/pXojo8QiG+AQXqaUaIYhBPsNZWqFmPEGYT3HWUwCjsjEKYICP9qBnACAb8r1L6l8agB/vWU6AsUhU/mpuklMVKxoZY+vH+UwbGQAA40b9GIRYnOHZiJ1CPCYgqEciiDF5tjL3IIaIHgkjrgS0j7XMgDii5ogdQN44ytKbAWwiX2OS0cA7A7TrPQIc9SAAR9YdAVaL1xfAavH6BGhXK4tJ4U3z0P8IcF68HgDOi8dUmKpuQa3KtJSJidtVPQMmE1PTojgzOzd/BwDR/HNRm2FyYbF/wFIYQiqdyWYz6ZSA3HK/gDlgRT+TBFaAVc3R8hjDArCEZJ6oUCyVy6VigSifxFo/gBdh5EmqqE0QqxLlkXvJAbQO3RbRK6yQFIG3Vvf56jUvZiVq4HXvgElRCNAbrDeV9OY6qhQQkhtmgIPeIkUF0dukzVZO9ptesUAppo9ugCmkqY0abW6pmTUUKY1tPYH/zmYRTSNDJdSphXfvuwV1lCiDnV4BEyKyVIaPclDqyYcyZbHLAHTTSjpAl8QBovLPu4Nm1Cno2sO+aQpuB4xZtYm6DtCmNA513+2IM6cto6ojobuMx0aG8yGL5pNCgCr6Rjr6gAoFhJNTA0BBp2Me0YKxlaW9AwEReSufMfVWSqCo24s508NUkegc+Ojyh2EQF4azrDzO7f1yeb9dIDpPih1cOhKuxKjEuKtAw3ihNCB+al47Ez6jxXhfvq7l2FcaOk1yIbTwzXC+R1u00UhqXT05+4FrF4IUFa8MT5nPxur2zu7uzuHxKYUuVcJPtojVBX6xrqmjshTCDTrmYUNVJFg3gSrrqoSbgh2A2UWMzDmhS3nMZgp8qSIuKfR7q/PHtokPqb9IYGnRWFeZrAAAAABJRU5ErkJggg==" preserveAspectRatio="none" id="img2"></image>`,
         fallback_icon_3: `<image width="64" height="64" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAKFUExURf///////////////////////////////////////wAAAP///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+QNh+8AAADXdFJOU0fu/68H0L/A73kAUbpAErKafG+kAzTGzMg7LPyPBOy38w5jbhoMCRUBMy7WW4ToUKw/AvJDp3VPoxPeXrQG5LkL+elyvv6oKDKUvKot0a0nLzhBSVL9ZNR7DTm7sB6xVk5FPCsYs5LKVZm1fSYgNorjve0I4GXdlm31wsTroDHq50tzWJ1wSveY8CrmWhmOiU3ZkToF5SR2NXdrjZNc9h8iIxcbYYN/2114oXT7U9Uc0sWbas4RMAoPX2AW18di9ETDFGaM+IiX2nGGKaZnth3ch88QomiVCen2FAAAAAlwSFlzAAAOwwAADsMBx2+oZAAABDhJREFUWEftl+tbFGUYxtc7QPZWDgooQuCSikMgC2ylIQsssiJBHtCVNsAQVKw0UbCCcAUjCRXUAkMzKqzsIJZKiYeCsNJOdu7v6XpnZk8Dy67Yh64u7w87+5x+O/PO8z4zq9NNw13oviDdNASHTFXTQ6HXIZhT1wzM1CFE670DhSFEBoRHzCAjZ5Gzo6LlQMycuf4UO88DEBd/PxMSY8n5hiQZ8IB2sSbQAg8AFyaQ4YvI5MXKqUlxKf70oOQJmKpkQGra1LVEAO5OITqkR01dM/+VNbgH+N8DjHNiYzOCtF63/AJCRLdmar1uTQIQm5VZJjz0MB7RxtzyDVhqWPYoOQ/ZXI4cM2nMzcvX5kwGWGoBClYUWrGSRUDikpVi301A8AVYZUHxYwAMJaWk/nEAJn0uVmvT3ADzmrXrytZvMCao/hRbfKm0sfwJu2I+WVFZxRJscpYVPVW9uSamdosbsFWdDqvNaso21InxbN7+9DMZz+4QnmoYdqrBTIOSbXvOBdgF1O/OydiDrQ1KzqJG7CUzn1cSX0imVI8X1frNTWiuzHvJipYqFyBrH0Id5Nr9yEuWkxpaYWSbBeUH2l5ut6AwiMF4Rak/2IFXsyi1ozPFYxGjS7D/EHnoMArltT6CuewKRbf8mCmtx1Eew3G53mjBaxKlYhhe97oLPRHoPUHuqMcb7DuZ0YJTfBMR6kn32ToWR6ej7vRbdqkJuyiuub9MRDxuY0MFGt8m3yl+dyAewOEzbESfCmAO3uP7NgDFXHCK5AewHJQDnn2Q34yzXeLLCSR+uCaL+eiX21noI/Gz9rKPESWbn+DcoBLwaqSkOpwXT7ZP8Zkwg1ovOOups84Wh0FcFIdLVluaGvDuxPBgDH0ubvkXsnnZ2RQkh+XPnisLSV61Wfc6/ZpWvnYdX8YV+dFX8ZBPZyIAzyid40d6d4EWwDaMXJ9cjajzyB8HGEWFhzWRavC1h3UPMAlg7IZeGeZdDodDfvHaUtsjOwIDrEoE0E7yG7GDCiQGLbOid1SEAgM0o7DbhDLG4NuhoaGL5Hfoz4ZpIGBAC67xJi5x0DmJs1Ej5eFKwIBbWM/q8w4OIkPxt2CM2+SpGBhAjxGjOA6i0m63S3cOiI6E7XsZIFTpB5C7c1iW2P6uPjhpww8CcM5kMkWOB0hKyfAsVOqGnLt0z5gLUPUjt1uspb7X4CfX3jbqukpaOmWVJ7kAZzsucx9+9g3oVko6U69S57wcWSqgF+uib2MjN4jrFzqOY+YLODJuDcS89LJUwGnYDBj5hbVWW3p6+m0xlq0jKBCTMTBAw80OpIaRXNEE4FeJWb814XeHCAUGIM1iPIvhPjAwIE/nnj8UR6AAn/rPA/pwy/VAnFhpyPF2eAN66vHnaNgkWt6Kv7wqNACO9rua1IfmO9/EVGkALPp7t/Y/uqc23dDU8x9jPLWF+rwfKAAAAABJRU5ErkJggg==" preserveAspectRatio="none" id="img3"></image>`,

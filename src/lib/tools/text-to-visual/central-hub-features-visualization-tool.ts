@@ -4,25 +4,18 @@ import { z } from "zod";
 export const centralHubFeaturesVisualizationTool = () =>
   tool({
     description: `
-    This tool collects parameters for a 'Central Hub with Connected Features Visualization' template and outputs them with the template name.
+    This template represents a 'Central Feature with Six Supporting Highlights' visualization. 
+    It is designed to present a central element (e.g., a product, feature, or concept) surrounded by six supporting points. The layout includes:  
+    1. A main header and sub-header at the top for the overall context.  
+    2. A central monitor in the middle of the template.  
+    3. Six supporting points distributed evenly on the left and right sides of the central element, each connected by dotted lines.  
 
-    Purpose:
-    - Visualizes a central concept (e.g., a system or platform) with connected features or components.
-    - Highlights relationships and dependencies between the central hub and its features.
+    Each supporting point consists of:  
+    - An icon contained within a circular shape to represent the feature.  
+    - A title positioned below the icon.  
+    - A description of up to three lines below the title for additional details.  
 
-    Structure:
-    - A main header and sub-header summarizing the visualization.
-    - A central hub (e.g., a monitor) symbolizing the core system.
-    - Six surrounding nodes (three on each side) connected to the hub via dotted lines.
-    - Each node includes:
-      - An icon visualizing the feature.
-      - A title summarizing the feature.
-      - A description block below or beside the node with up to three lines for details.
-
-    Parameters:
-    - Main header and sub-header summarize the central concept.
-    - The central hub represents the core system.
-    - Each node includes an icon, title, and description lines.
+    This template is ideal for highlighting key features, benefits, or functionalities related to a central concept.
     `,
     parameters: z.object({
       header: z

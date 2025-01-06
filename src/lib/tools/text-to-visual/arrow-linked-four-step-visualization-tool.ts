@@ -1,27 +1,18 @@
 import { tool } from "ai";
 import { z } from "zod";
 
-export const arrowLinkedFourStepTool = () =>
+export const arrowLinkedFourStepVisualizationTool = () =>
   tool({
     description: `
-    This tool collects parameters for an 'Arrow-Linked Four-Step Visualization' template and outputs them with the template name.
+  This template represents an 'Arrow-Linked Four-Step Visualization' designed to depict a sequential process or workflow divided into four stages. The layout includes:  
+  1. A main header at the top for the overall title, with a sub-header below for additional context.  
+  2. Four numbered circular icons (01, 02, 03, 04) arranged horizontally, connected by arrows to indicate progression.  
+  3. Below each numbered icon, there is:  
+   - A title summarizing the step.  
+   - An icon to visually represent the step.  
+   - A description of upto three lines providing additional details.  
 
-    Purpose:
-    - Visualizes a process or workflow divided into four sequential steps, connected by arrows to show progression.
-    - Highlights each step with a number, title, icon, and description, ideal for workflows or action plans.
-
-    Structure:
-    - A main header and sub-header summarizing the process.
-    - Four sequential steps arranged horizontally, linked by arrows pointing to the next step.
-    - Each step includes:
-      - A number indicating the order.
-      - A title summarizing the step.
-      - An icon representing the step.
-      - A description block positioned below with up to three lines for details.
-
-    Parameters:
-    - Main header and sub-header summarize the process.
-    - Each step includes a number, title, icon, and description lines.
+  The design is structured to visually emphasize the sequential flow of the steps, making it ideal for processes, timelines, or workflows with clearly defined stages.
     `,
     parameters: z.object({
       header: z

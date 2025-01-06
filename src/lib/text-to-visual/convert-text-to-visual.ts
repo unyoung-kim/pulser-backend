@@ -15,6 +15,8 @@ export const convertTextToVisual = async (
       return err(argumentsObject.error);
     }
 
+    console.log(argumentsObject.value);
+
     const svgImages: string[] = argumentsObject.value.map((argument) =>
       replacePlaceholders(argument)
     );
