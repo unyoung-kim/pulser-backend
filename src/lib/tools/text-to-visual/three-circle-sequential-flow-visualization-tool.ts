@@ -1,29 +1,25 @@
 import { tool } from "ai";
 import { z } from "zod";
 
-export const threeSequentialStepFlowTool = () =>
+export const threeCircleSequentialFlowVisualizationTool = () =>
   tool({
     description: `
-        This tool captures parameters based on the "Three Sequential Step Flow" template and outputs them with the template name.
+    This template represents a 'Three-Circle Sequential Flow Visualization' designed to showcase a linear process or progression through three stages. The layout includes:  
+    1. A main header at the top for the overall title, with a sub-header below for additional context.  
+    2. Three circular shapes arranged horizontally, each representing a step in the process.  
+    3. Each circle contains:  
+      - A bold title summarizing the step.  
+      - A description of upto two lines providing additional details below the title.  
+    4. Arrows between the circles indicate the sequential flow, visually emphasizing progression from the first to the third stage.  
 
-        Purpose:
-        - Visualizes a process or flow in three sequential steps represented as circular sections.
-        - Arrows indicate progression between each step.
-
-        Structure:
-        - A section title and sub-header at the top.
-        - Three circular sections, each containing:
-          - A title summarizing the step.
-          - Two optional description lines for context.
-
-        Parameters:
-        - Section title and sub-header provide the context for the flow.
-        - Each circle includes a title and up to two description lines.
+    This template is ideal for illustrating step-by-step processes, workflows, or sequential concepts in a clean and straightforward format.
     `,
     parameters: z.object({
       header: z
         .string()
-        .describe("The main title summarizing the three-step flow."),
+        .describe(
+          "The main title summarizing the three-circle-sequential-flow-visualization."
+        ),
       sub_header: z
         .string()
         .describe("The sub-header providing additional context."),
@@ -64,7 +60,7 @@ export const threeSequentialStepFlowTool = () =>
         title_2_desc_line_2: "",
         title_3_desc_line_2: "",
         ...input,
-        template_name: "three-sequential-step-flow",
+        template_name: "three-circle-sequential-flow-visualization",
       };
     },
   });

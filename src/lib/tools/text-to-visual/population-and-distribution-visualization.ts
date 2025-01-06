@@ -1,31 +1,25 @@
 import { tool } from "ai";
 import { z } from "zod";
 
-export const demographicDistributionVisualizationTool = () =>
+export const populationAndDistributionVisualizationTool = () =>
   tool({
     description: `
-        This tool collects parameters based on a "Demographic Distribution Visualization" template and outputs them with the template name.
+    This template represents a 'Population and Distribution Visualization' designed to display data related to proportions, distributions, or comparisons. The layout includes:  
+    1. A main header at the top for the overall title, with a sub-header below for context.  
+    2. Two sections at the top:  
+      - The first section includes a row of person icons, with a larger number of icons in blue to represent a higher proportion or count.  
+      - The second section also includes a row of person icons, with a smaller number of icons in green.  
+    3. A lower section with three titles and corresponding descriptions.  
+    4. A horizontal segmented bar beneath the lower section, divided into three labeled segments:  
+      - The first segment is the longest, indicating the largest proportion, followed by the second segment, then the third segment being the shortest.  
 
-        Purpose:
-        - Visualizes demographic data or comparative statistics using icons, titles, and progress bars.
-
-        Structure:
-        - A main header and sub-header summarize the concept.
-        - Two sections at the top visualize statistics with person icons and titles:
-          - The first section has more person icons than the second, representing a larger proportion or count.
-        - Three progress bars below, each with:
-          - A title summarizing the data.
-          - A label and description text.
-          - Progress bars vary in length: the first is the longest, followed by the second, and the third is the shortest, reflecting relative values.
-
-        Parameters:
-        - Includes a header, sub-header, titles and descriptions for each statistic and progress bar, and a label for each progress bar.
+    This template is ideal for presenting demographic comparisons, survey data, or proportional statistics.
     `,
     parameters: z.object({
       header: z
         .string()
         .describe(
-          "The main title summarizing the demographic distribution visualization."
+          "The main title summarizing the population/distribution visualization."
         ),
       sub_header: z
         .string()
@@ -64,7 +58,7 @@ export const demographicDistributionVisualizationTool = () =>
     execute: async (input) => {
       return {
         ...input,
-        template_name: "demographic-distribution-visualization",
+        template_name: "population-and-distribution-visualization",
       };
     },
   });
