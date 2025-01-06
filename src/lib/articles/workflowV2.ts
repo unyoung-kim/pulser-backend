@@ -72,8 +72,6 @@ export async function workflowV2({
     return err(outline.error);
   }
 
-  console.log("Outline: ", outline.value);
-
   const enrichedURLsResponse = await supabase
     .from("InternalLink")
     .select("url,summary")
@@ -98,8 +96,6 @@ export async function workflowV2({
   }
 
   // await new Promise((resolve) => setTimeout(resolve, 60000));
-
-  console.log("Enriched outline: ", enrichedOutline.value);
 
   const article: Result<string, string> = await writer(
     enrichedOutline.value,
@@ -174,7 +170,7 @@ export async function workflowV2({
   }
 
   const incrementUsageCreditResult: Result<string, string> =
-    await incrementUsageCredit(supabase, project.at(0)?.org_id ?? "");
+    await incrementUsageCredit(supabase, project.at(0)?.org_id ?? "", "NORMAL");
 
   if (incrementUsageCreditResult.isErr) {
     return err(incrementUsageCreditResult.error);

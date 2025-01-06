@@ -2,6 +2,9 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import { Result } from "true-myth";
 import { err, ok } from "true-myth/result";
 
+const NORMAL_CONTENT_CREDIT = 3;
+const GLOSSARY_CONTENT_CREDIT = 1;
+
 /**
  * Update the usage credit for an organization
  * @param supabase
@@ -10,7 +13,8 @@ import { err, ok } from "true-myth/result";
  */
 export async function incrementUsageCredit(
   supabase: SupabaseClient,
-  orgId: string
+  orgId: string,
+  postType: "NORMAL" | "GLOSSARY"
 ): Promise<Result<string, string>> {
   // Get active_usage_id from Organization
   const { data: org, error: orgError } = await supabase
@@ -23,10 +27,28 @@ export async function incrementUsageCredit(
     return err(`Error fetching org details: ${orgError.message}`);
   }
 
-  // Update the Usage record
-  const { error } = await supabase
+  // Determine credit amount based on post type
+  const creditAmount =
+    postType === "NORMAL" ? NORMAL_CONTENT_CREDIT : GLOSSARY_CONTENT_CREDIT;
+
+  // First, get the current usage data
+  const { data: currentUsage, error: usageError } = await supabase
     .from("Usage")
-    .update({ credits_used: supabase.rpc("increment") })
+    .select("*")
+    .eq("id", org.current_usage_id)
+    .single();
+
+  if (usageError) {
+    return err(`Error fetching usage data: ${usageError.message}`);
+  }
+
+  console.log("Current Usage: ", currentUsage);
+
+  const { data: usage, error } = await supabase
+    .from("Usage")
+    .update({
+      credits_used: currentUsage.credits_used + creditAmount,
+    })
     .eq("id", org.current_usage_id)
     .select();
 

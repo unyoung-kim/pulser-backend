@@ -97,13 +97,13 @@ Here are a few rules you must follow for the outline:
     4) Avoid being too salesy - this means that don't promote the client's products or services more than three times in the outline.
     5) Ensure that any specific instructions provided by the user are fully addressed in the outline.
     6) The outline should contain content so it's easy and natural to incorporate the provided keywords when the article is written. 
-    7) Don't make up any case studies or social proof that wasn't provided by the researcher.
+    7) NEVER add any case studies unless explicitly provided in the user instructions.
   </General>
 
   <Introduction>
     1) The introduction should provide value instantly and mention about the pain point of the audience.
-    2) If client background includes social proof, case studies, or credibility, make sure to include it in the introduction outline to build trust.
-    3) Conduct research to find some unique insight about the topic like a quote, statistic, or a surprising fact and add it to the outline with the source.
+    2) If client background includes social proof or credibility, make sure to include it in the introduction outline to build trust.
+    3) Conduct research to find some unique insight about the topic like a quote, statistic, or a surprising fact and add it to the outline with the source. And when you add the insight, make sure to add the source as well.
   </Introduction>
 
   <Links>
@@ -119,7 +119,6 @@ Here are a few rules you must follow for the outline:
 # Fitness Marketing Tips in 2024: Elevate Your Gym's Success
 
 ## I. Introduction
-- Hook (this should sound simple and natural): "Keeping up with fitness marketing trends is as important as staying ahead in your workouts."
 - Brief overview of the challenges facing fitness businesses in 2024
 - Unique insight: According to a recent study, 81% of gym-goers prefer a mix of digital and in-person fitness experiences [Link: https://www.wellnesscreatives.com/fitness-marketing-trends/]
 - Introduction to SpearPoint Marketing LLC and how they help fitness businesses thrive in the digital age
@@ -151,7 +150,6 @@ Here are a few rules you must follow for the outline:
 ### A. AI-Powered Fitness Apps and Platforms
 - The role of AI in personalizing fitness experiences
 - How to use AI for targeted marketing campaigns
-- Case study: A fitness app that increased user engagement by 50% with AI-driven recommendations
 
 ### B. Conversational Marketing for Gyms
 - Implementing chatbots and AI-driven interactions
@@ -179,7 +177,6 @@ Here are a few rules you must follow for the outline:
 ### B. Hybrid Fitness Experiences
 - Blending online and offline fitness offerings
 - Marketing strategies for hybrid fitness models
-- Case study: A gym that successfully transitioned to a hybrid model with SpearPoint's help
 
 ## VII. Sustainability and Wellness-Focused Marketing
 ### A. Incorporating the "New Green Reality"
@@ -202,7 +199,6 @@ Here are a few rules you must follow for the outline:
 ### B. Retargeting and Remarketing in the Fitness Industry
 - Strategies for re-engaging past members and leads
 - Implementing effective retargeting campaigns
-- Case study: How a gym increased member retention by 25% through strategic remarketing
 
 ## IX. Local SEO and Google My Business Optimization
 - The importance of local SEO for gyms and fitness studios
@@ -219,7 +215,7 @@ Here are a few rules you must follow for the outline:
 </outline>
 </Example>
 
-Think step by step before you come up with the outline.
+Think step by step before you come up with the outline and only return the outline inside <outline> tags.
 `;
 
 const SHORT_POST_INITIAL_OUTLINE_PROMPT = `As a professional seo expert, your task is to come up with a detailed outline for an SEO blog post for a client given:
@@ -247,13 +243,13 @@ Here are a few rules you must follow for the outline:
     4) Avoid being too salesy - this means that don't promote the client's products or services more than three times in the outline.
     5) Ensure that any specific instructions provided by the user are fully addressed in the article.
     6) The outline should contain content so it's easy and natural to incorporate the provided keywords when the article is written. 
-    7) Don't make up any case studies or social proof that wasn't provided by the researcher.
+    7) NEVER add any case studies unless explicitly provided in the user instructions.
   </General>
 
   <Introduction>
     1) The introduction should provide value instantly and mention about the pain point of the audience.
-    2) If client background includes social proof, case studies, or credibility, make sure to include it in the introduction outline to build trust.
-    3) Conduct research to find some unique insight about the topic like a quote, statistic, or a surprising fact and add it to the outline with the source.
+    2) If client background includes social proof or credibility, make sure to include it in the introduction outline to build trust.
+    3) Conduct research to find some unique insight about the topic like a quote, statistic, or a surprising fact and add it to the outline with the source. And when you add the insight, make sure to add the source as well.
   </Introduction>
 
   <Links>
@@ -263,7 +259,7 @@ Here are a few rules you must follow for the outline:
   </Links>
 </Rules>
 
-Think step by step before you come up with the outline.
+Think step by step before you come up with the outline and only return the outline inside <outline> tags.
 `;
 
 const FINAL_OUTLINE_PROMPT = `You are a professional SEO content writer. You will be given an outline of an SEO blog post.
@@ -314,7 +310,7 @@ export async function researcherSequential(
       maxTokens: 8000,
     });
 
-    console.log("FIRST OUTLINE: ", firstOutline);
+    console.log("FIRST OUTLINE: ", firstOutline.text);
 
     const detailedOutline = await generateText({
       model: await getThrottledGPT4o(),
@@ -328,7 +324,7 @@ export async function researcherSequential(
       maxTokens: 8000,
     });
 
-    console.log("DETAILED OUTLINE: ", detailedOutline);
+    console.log("DETAILED OUTLINE: ", detailedOutline.text);
 
     return ok(detailedOutline.text);
   } catch (error) {

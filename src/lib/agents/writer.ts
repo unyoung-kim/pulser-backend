@@ -33,6 +33,7 @@ Your task is to write a very long and detailed blog post based on the outline, a
 2. Keep the introduction short, under 200 words.  
 3. Use short sentences to keep the reader engaged.  
 4. If the outline includes credibility, case studies, or social proof, make sure they are naturally integrated, instead of being explicitly mentioned.  
+5. Use simple and direct language.
 </Introduction>  
 
 <WritingStyle>  
