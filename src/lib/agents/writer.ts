@@ -42,8 +42,39 @@ Your task is to write a very long and detailed blog post based on the outline, a
 3. Instead of asking questions in conclusion like "The future of healthcare billing is here – are you ready to embrace it?", use "The future of healthcare billing is here— it is those who embrace it who will lead the way."
 </WritingStyle>  
 
+<Introduction>
+  1. Make sure you follow the style of the example provided below. THIS IS VERY IMPORTANT. Follow the tone and style of the example.
+  <Example>
+    Title: The best 10 LoRaWAN® Gateways
+
+    Example Introduction:
+    Finding a reliable, high-quality IoT LoRaWAN® gateway is difficult. 
+
+    You spend all this time finding a manufacturer, researching how they develop their gateways, trying to find the perfect one that fits your business, and then you decide to order the first 5 units. You test them, and the problems begin. 
+
+    – Insufficient environmental protection. 
+
+    – 12 months and you have already had to schedule 2 maintenance visits. 
+
+    Why is that? 
+
+    Well, the market is big today. But choosing THE best gateway will get harder and harder as the market expands from $1,325 million in 2021 to over $4,200 million in 2030. 
+
+    That means the choices will be even greater. And so will the effort to select the best LoRaWAN® gateway in the field. 
+
+    Many players have a gateway to offer your company. But you don’t know which one will give you the best ROI. 
+
+    And here’s the thing. Choosing the best IoT is not an easy task, so we’ve used our 20 years of experience to create this list of the best IoT LoRaWAN® gateways. You just need to read for a few minutes and the solution will be there. 
+
+    In this blog post, we want to help you choose the best IoT LoRaWAN® gateway so you don’t spend hours searching, calling, and sending emails that lead you to a gateway that doesn’t work properly. 
+
+    We’ll cover 10 gateways (5 indoor and 5 outdoor) that will help you with out-of-the-box deployment and carrier-grade design.
+  </Example>
+</Introduction>
+
 Just output the formatted result without any new lines or other special characters.  
 </Rules> 
+
 `;
 
 export async function writer(
