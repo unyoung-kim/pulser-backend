@@ -99,7 +99,7 @@ export const handleInvoicePaid = async (
         }
 
         // If there is a free credits usage record, update its end date to today
-        if (usageData.length === 1) {
+        if (usageData.length !== 0) {
           const { error: usageEndDateUpdateError } = await supabase
             .from("Usage")
             .update({ end_date: new Date().toISOString().split("T")[0] })
@@ -109,6 +109,7 @@ export const handleInvoicePaid = async (
             return err("Error updating existing subscription usage date");
           }
         }
+        // TODO: We should set the term and plan field here. Check supabase for new fields. use product-list.ts STRIPE_PRODUCT_LIST to get the term and plan if required.
 
         // Insert into the Usage table for subscription creation
         const { data: newUsageInsertData, error: newUsageInsertError } =

@@ -23,6 +23,7 @@ Your task is to enrich the outline so that it includes at least around 4 to 5 in
 4. Preserve as much of the original outline as possible while adding the internal links.
 5. Don't include internal links like "privacy policy", "disclaimer", "terms of service", but one's like "contact us" are good.
 6. You must return the full outline with the internal links embedded. Don't add any additional comments like [Sections V through XII remain unchanged] or anything like that. Just return the full outline.
+7. Remove any existing case study sections from the outline
 </Rules>`;
 
 export async function outlineEnricher(
@@ -38,7 +39,7 @@ export async function outlineEnricher(
       maxTokens: 8000,
     });
 
-    console.log("OUTLINE ENRICHER RESULT: ", result);
+    console.log("OUTLINE ENRICHER RESULT: ", result.text);
 
     return ok(result.text);
   } catch (error) {

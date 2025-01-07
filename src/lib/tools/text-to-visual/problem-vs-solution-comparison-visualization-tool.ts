@@ -1,22 +1,21 @@
 import { tool } from "ai";
 import { z } from "zod";
 
-export const problemSolutionTool = () =>
+export const problemVsSolutionComparisonVisualizationTool = () =>
   tool({
     description: `
-        This tool collects parameters based on a "Problem-Solution Comparison" template and outputs them with the template name.
+    This template represents a 'Problem vs. Solution Comparison Visualization' designed to highlight problems and their corresponding solutions side by side. The layout includes:  
+    1. A main header at the top for the overall title, with a sub-header below for additional context.  
+    2. Two silhouette profiles placed in the center, facing opposite directions. The "Problem" silhouette on the left features a locked padlock icon, while the "Solution" silhouette on the right features an unlocked padlock icon to symbolize resolution.  
+    3. Three problems listed on the left side, each with:  
+      - A title summarizing the problem.  
+      - Up to three descriptive lines providing additional details for each problem.  
+    4. Three corresponding solutions listed on the right side, each with:  
+      - A title summarizing the solution.  
+      - Up to three descriptive lines providing additional details for each solution.  
+    5. Arrows connect each problem on the left to its respective solution on the right, emphasizing the direct relationship between them.  
 
-        Purpose:
-        - Visualizes a comparison between problems and their corresponding solutions in a structured format.
-
-        Structure:
-        - A section title and sub-header at the top.
-        - Three problems listed on the left with descriptions (up to three lines per problem).
-        - Three solutions listed on the right with descriptions (up to three lines per solution).
-
-        Parameters:
-        - Problems and solutions must include concise titles and up to three description lines.
-        - Section title and sub-header summarize the overall theme.
+    This template is ideal for visually contrasting challenges and their resolutions in a clear and engaging manner.
     `,
     parameters: z.object({
       header: z.string().describe("The main title summarizing the comparison."),
@@ -119,7 +118,7 @@ export const problemSolutionTool = () =>
         solution_3_desc_line_2: "",
         solution_3_desc_line_3: "",
         ...input,
-        template_name: "problem-solution",
+        template_name: "problem-vs-solution-comparison-visualization",
       };
     },
   });

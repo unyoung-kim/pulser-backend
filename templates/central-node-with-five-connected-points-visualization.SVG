@@ -1,0 +1,190 @@
+<svg width="1280" height="720" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" overflow="hidden">
+    <defs>
+        <filter id="fx0" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0"/>
+                <feFuncG type="discrete" tableValues="0 0"/>
+                <feFuncB type="discrete" tableValues="0 0"/>
+                <feFuncA type="linear" slope="0.2" intercept="0"/>
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="6.19574 6.19574"/>
+        </filter>
+        <filter id="fx1" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0"/>
+                <feFuncG type="discrete" tableValues="0 0"/>
+                <feFuncB type="discrete" tableValues="0 0"/>
+                <feFuncA type="linear" slope="0.2" intercept="0"/>
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="6.24615 6.19574"/>
+        </filter>
+        <filter id="fx2" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0"/>
+                <feFuncG type="discrete" tableValues="0 0"/>
+                <feFuncB type="discrete" tableValues="0 0"/>
+                <feFuncA type="linear" slope="0.2" intercept="0"/>
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="6.22222 6.19847"/>
+        </filter>
+        <filter id="fx3" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0"/>
+                <feFuncG type="discrete" tableValues="0 0"/>
+                <feFuncB type="discrete" tableValues="0 0"/>
+                <feFuncA type="linear" slope="0.2" intercept="0"/>
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="6.19847 6.22222"/>
+        </filter>
+        <filter id="fx4" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0"/>
+                <feFuncG type="discrete" tableValues="0 0"/>
+                <feFuncB type="discrete" tableValues="0 0"/>
+                <feFuncA type="linear" slope="0.2" intercept="0"/>
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="6.19574 6.19574"/>
+        </filter>
+        <clipPath id="clip5">
+            <rect x="0" y="0" width="87" height="78"/>
+        </clipPath>
+        <clipPath id="clip6">
+            <rect x="0" y="0" width="79" height="87"/>
+        </clipPath>
+        <clipPath id="clip7">
+            <rect x="0" y="0" width="87" height="79"/>
+        </clipPath>
+        <clipPath id="clip8">
+            <rect x="0" y="0" width="619125" height="609600"/>
+        </clipPath>
+        <clipPath id="clip10">
+            <rect x="0" y="0" width="609600" height="609600"/>
+        </clipPath>
+        <clipPath id="clip11">
+            <rect x="9.31323e-10" y="0" width="609600" height="619125"/>
+        </clipPath>
+        <clipPath id="clip13">
+            <rect x="0" y="0" width="609600" height="609600"/>
+        </clipPath>
+        <clipPath id="clip14">
+            <rect x="0" y="0" width="619125" height="609600"/>
+        </clipPath>
+        <clipPath id="clip16">
+            <rect x="0" y="0" width="609600" height="609600"/>
+        </clipPath>
+        <clipPath id="clip18">
+            <rect x="0" y="0" width="609600" height="609600"/>
+        </clipPath>
+        <clipPath id="clip20">
+            <rect x="0" y="0" width="609600" height="609600"/>
+        </clipPath>
+    </defs>
+    <g>
+        <rect x="0" y="0" width="1280" height="720" fill="#FFFFFF"/>
+        <rect x="29" y="95" width="28" height="4" fill="#10CF9B"/>
+        <rect x="0" y="95" width="29" height="4" fill="#009DD9"/>
+        <path d="M0.471766-0.471043 143.227 142.503 142.283 143.445-0.471766 0.471043ZM-2.8306 2.82625C-4.3915 1.26296-4.38955-1.2697-2.82625-2.8306-1.26296-4.3915 1.2697-4.38955 2.8306-2.82625 4.3915-1.26296 4.38955 1.2697 2.82625 2.8306 1.26296 4.3915-1.2697 4.38955-2.8306 2.82625ZM145.586 140.148C147.147 141.711 147.145 144.244 145.581 145.805 144.018 147.366 141.485 147.364 139.925 145.801 138.364 144.237 138.366 141.705 139.929 140.144 141.492 138.583 144.025 138.585 145.586 140.148Z" fill="#0F6FC6" transform="matrix(1 0 0 -1 696.5 544.474)"/>
+        <path d="M3.30969e-07-0.666667 211.474-0.666562 211.474 0.666772-3.30969e-07 0.666667ZM-1.98582e-06 4C-2.20914 4-4 2.20914-4-1.98582e-06-4-2.20914-2.20914-4 1.98582e-06-4 2.20914-4 4-2.20914 4 1.98582e-06 4 2.20914 2.20914 4-1.98582e-06 4ZM211.474-3.99989C213.683-3.99989 215.474-2.20903 215.474 0.000106973 215.474 2.20925 213.683 4.00011 211.474 4.0001 209.265 4.0001 207.474 2.20924 207.474 0.000103001 207.474-2.20904 209.265-3.9999 211.474-3.99989Z" fill="#0F6FC6" transform="matrix(1 0 0 -1 720.5 600.5)"/>
+        <path d="M560.719 601.167 368.5 601.167 368.5 599.833 560.719 599.833ZM560.719 596.5C562.928 596.5 564.719 598.291 564.719 600.5 564.719 602.709 562.928 604.5 560.719 604.5 558.51 604.5 556.719 602.709 556.719 600.5 556.719 598.291 558.51 596.5 560.719 596.5ZM368.5 604.5C366.291 604.5 364.5 602.709 364.5 600.5 364.5 598.291 366.291 596.5 368.5 596.5 370.709 596.5 372.5 598.291 372.5 600.5 372.5 602.709 370.709 604.5 368.5 604.5Z" fill="#0F6FC6"/>
+        <path d="M639.833 521.596 639.833 312.5 641.167 312.5 641.167 521.596ZM644.5 521.596C644.5 523.805 642.709 525.596 640.5 525.596 638.291 525.596 636.5 523.805 636.5 521.596 636.5 519.387 638.291 517.596 640.5 517.596 642.709 517.596 644.5 519.387 644.5 521.596ZM636.5 312.5C636.5 310.291 638.291 308.5 640.5 308.5 642.709 308.5 644.5 310.291 644.5 312.5 644.5 314.709 642.709 316.5 640.5 316.5 638.291 316.5 636.5 314.709 636.5 312.5Z" fill="#0F6FC6"/>
+        <path d="M583.854 544.946 441.028 401.971 441.972 401.029 584.797 544.003ZM587.155 541.647C588.717 543.21 588.715 545.743 587.152 547.304 585.589 548.866 583.057 548.864 581.496 547.301 579.934 545.738 579.936 543.206 581.498 541.645 583.061 540.083 585.594 540.085 587.155 541.647ZM438.67 404.327C437.109 402.764 437.11 400.231 438.673 398.67 440.236 397.109 442.769 397.11 444.33 398.673 445.891 400.236 445.89 402.769 444.327 404.33 442.764 405.891 440.231 405.89 438.67 404.327Z" fill="#0F6FC6"/>
+        <path d="M560 600.5C560 556.593 595.817 521 640 521 684.183 521 720 556.593 720 600.5 720 644.407 684.183 680 640 680 595.817 680 560 644.407 560 600.5Z" fill="#BFBFBF" fill-rule="evenodd"/>
+        <text fill="#0F6FC6" font-family="Open Sans,Open Sans_MSFontService,sans-serif" font-weight="700" font-size="48" transform="translate(85.6 111)">{{header}}</text>
+        <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(88 146)">{{sub_header}}</text>
+        <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(285 579)" text-anchor="end">{{title_1_desc_line_1}}</text>
+        <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(285 602)" text-anchor="end">{{title_1_desc_line_2}}</text>
+        <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(285 625)" text-anchor="end">{{title_1_desc_line_3}}</text>
+        <text fill="#17406D" font-family="Open Sans,Open Sans_MSFontService,sans-serif" font-weight="700" font-size="19" transform="translate(285 554)" text-anchor="end">{{title_1}}</text>
+        <g filter="url(#fx0)" transform="matrix(3.01282 0 0 3.01282 336 297)">
+            <g>
+                <path d="M39 18.9192C50.0904 18.9192 59.0809 27.9097 59.0809 39 59.0809 45.6936 59.0809 52.3872 59.0809 59.0809 52.3872 59.0809 45.6936 59.0809 39 59.0809 27.9097 59.0809 18.9192 50.0904 18.9192 39 18.9192 27.9097 27.9097 18.9192 39 18.9192Z" fill="#0F6FC6" fill-rule="evenodd"/>
+            </g>
+        </g>
+        <path d="M453.5 354C486.913 354 514 381.087 514 414.5 514 434.667 514 454.833 514 475 493.833 475 473.667 475 453.5 475 420.087 475 393 447.913 393 414.5 393 381.087 420.087 354 453.5 354Z" fill="#0F6FC6" fill-rule="evenodd"/>
+        <g filter="url(#fx1)" transform="matrix(2.98851 0 0 3.01282 247 473)">
+            <g clip-path="url(#clip5)" transform="translate(1.42109e-14 0)">
+                <path d="M27.1248 23.0352C35.9867 16.2667 48.7023 17.9057 55.526 26.696 59.6444 32.0015 63.7628 37.307 67.8812 42.6124 62.5326 46.6976 57.184 50.7828 51.8354 54.868 42.9735 61.6366 30.2578 59.9976 23.4342 51.2072 16.6106 42.4168 18.2629 29.8038 27.1248 23.0352Z" fill="#0F6FC6" fill-rule="evenodd"/>
+            </g>
+        </g>
+        <path d="M328.063 542.401C354.547 522.008 392.547 526.947 412.94 553.43 425.248 569.415 437.556 585.399 449.864 601.384 433.879 613.692 417.895 625.999 401.91 638.307 375.426 658.7 337.426 653.762 317.033 627.278 296.641 600.794 301.579 562.793 328.063 542.401Z" fill="#0F6FC6" fill-rule="evenodd"/>
+        <g filter="url(#fx2)" transform="matrix(3 0 0 3.01149 521 211)">
+            <g clip-path="url(#clip6)">
+                <path d="M53.4425 24.8996C61.4838 32.5823 61.7506 45.3042 54.0385 53.3148 49.3838 58.1496 44.7292 62.9844 40.0745 67.8192 35.2212 63.1823 30.3679 58.5454 25.5145 53.9085 17.4733 46.2258 17.2064 33.504 24.9185 25.4934 32.6306 17.4828 45.4012 17.217 53.4425 24.8996Z" fill="#0BD0D9" fill-rule="evenodd"/>
+            </g>
+        </g>
+        <path d="M681.328 285.985C705.451 309.121 706.252 347.433 683.116 371.557 669.152 386.117 655.188 400.677 641.224 415.237 626.664 401.273 612.104 387.309 597.544 373.345 573.42 350.209 572.619 311.897 595.755 287.773 618.892 263.649 657.204 262.849 681.328 285.985Z" fill="#0BD0D9" fill-rule="evenodd"/>
+        <g filter="url(#fx3)" transform="matrix(3.01149 0 0 3 772 475)">
+            <g clip-path="url(#clip7)" transform="matrix(1 0 0 1 0 -2.84217e-14)">
+                <path d="M63.2274 52.404C56.1718 61.0049 43.5064 62.2356 34.9383 55.153 29.7671 50.8783 24.5958 46.6035 19.4245 42.3288 23.683 37.1377 27.9414 31.9466 32.1998 26.7555 39.2554 18.1547 51.9209 16.9239 60.4889 24.0065 69.0569 31.0892 70.283 43.8032 63.2274 52.404Z" fill="#7CCA62" fill-rule="evenodd"/>
+            </g>
+        </g>
+        <path d="M962.409 632.212C941.161 658.015 903.019 661.707 877.217 640.459 861.643 627.635 846.07 614.811 830.497 601.986 843.321 586.413 856.145 570.84 868.97 555.267 890.217 529.464 928.359 525.772 954.162 547.02 979.965 568.268 983.657 606.409 962.409 632.212Z" fill="#7CCA62" fill-rule="evenodd"/>
+        <g filter="url(#fx4)" transform="matrix(3.01282 0 0 3.01282 708 299)">
+            <g transform="translate(-2.84217e-14 -1.42109e-14)">
+                <path d="M59.0809 39C59.0809 50.0904 50.0904 59.0809 39 59.0809 32.3064 59.0809 25.6128 59.0809 18.9192 59.0809 18.9192 52.3872 18.9192 45.6936 18.9192 39 18.9192 27.9097 27.9097 18.9192 39 18.9192 50.0904 18.9192 59.0809 27.9097 59.0809 39Z" fill="#10CF9B" fill-rule="evenodd"/>
+            </g>
+        </g>
+        <path d="M886 416.5C886 449.913 858.913 477 825.5 477 805.333 477 785.167 477 765 477 765 456.833 765 436.667 765 416.5 765 383.087 792.087 356 825.5 356 858.913 356 886 383.087 886 416.5Z" fill="#10CF9B" fill-rule="evenodd"/>
+        {{fallback_icon_1}}
+        {{fallback_icon_2}}
+        {{fallback_icon_3}}
+        {{fallback_icon_4}}
+        {{fallback_icon_5}}
+        <g id="img1" transform="translate(330 553) scale(3)" stroke="white" stroke-width="0.7" fill="none">
+            {{icon_1}}
+        </g>
+        <g id="img2" transform="translate(415 380) scale(3)" stroke="white" stroke-width="0.7" fill="none">
+            {{icon_2}}
+        </g>
+        <g id="img3" transform="translate(605 293) scale(3)" stroke="white" stroke-width="0.7" fill="none">
+            {{icon_3}}
+        </g>
+        <g id="img4" transform="translate(790 375) scale(3)" stroke="white" stroke-width="0.7" fill="none">
+            {{icon_4}}
+        </g>
+        <g id="img5" transform="translate(880 555) scale(3)" stroke="white" stroke-width="0.7" fill="none">
+            {{icon_5}}
+        </g>
+        <g clip-path="url(#clip8)" transform="matrix(0.000104987 0 0 0.000104987 420 382)">
+            <g clip-path="url(#clip10)" transform="matrix(1.01562 0 0 1 -0.25 0)">
+                <use width="100%" height="100%" xlink:href="#img2" transform="scale(9525 9525)"></use>
+            </g>
+        </g>
+        <g clip-path="url(#clip11)" transform="matrix(0.000104987 0 0 0.000104987 608 297)">
+            <g clip-path="url(#clip13)" transform="matrix(1 0 0 1.01562 -0.5 0)">
+                <use width="100%" height="100%" xlink:href="#img3" transform="scale(9525 9525)"></use>
+            </g>
+        </g>
+        <g clip-path="url(#clip14)" transform="matrix(0.000104987 0 0 0.000104987 792 382)">
+            <g clip-path="url(#clip16)" transform="matrix(1.01562 0 0 1 -0.5 0)">
+                <use width="100%" height="100%" xlink:href="#img4" transform="scale(9525 9525)"></use>
+            </g>
+        </g>
+        <g transform="matrix(0.000104987 0 0 0.000104987 884 563)">
+            <g clip-path="url(#clip18)" transform="scale(1.01562 1)">
+                <use width="100%" height="100%" xlink:href="#img5" transform="scale(9525 9525)"></use>
+            </g>
+        </g>
+        <g transform="matrix(0.000104987 0 0 0.000104987 333 557)">
+            <g clip-path="url(#clip20)" transform="scale(1 1.01562)">
+                <use width="100%" height="100%" xlink:href="#img1" transform="scale(9525 9525)"></use>
+            </g>
+        </g>
+        <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(989.167 583)">{{title_5_desc_line_1}}</text>
+        <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(989.167 606)">{{title_5_desc_line_2}}</text>
+        <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(989.167 629)">{{title_5_desc_line_3}}</text>
+        <text fill="#17406D" font-family="Open Sans,Open Sans_MSFontService,sans-serif" font-weight="700" font-size="19" transform="translate(989.167 558)">{{title_5}}</text>
+        <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(375 400)" text-anchor="end">{{title_2_desc_line_1}}</text>
+        <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(375 423)" text-anchor="end">{{title_2_desc_line_2}}</text>
+        <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(375 446)" text-anchor="end">{{title_2_desc_line_3}}</text>
+        <text fill="#17406D" font-family="Open Sans,Open Sans_MSFontService,sans-serif" font-weight="700" font-size="19" transform="translate(375 375)" text-anchor="end">{{title_2}}</text>
+        <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(901.2 404)">{{title_4_desc_line_1}}</text>
+        <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(901.2 427)">{{title_4_desc_line_2}}</text>
+        <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(901.2 450)">{{title_4_desc_line_3}}</text>
+        <text fill="#17406D" font-family="Open Sans,Open Sans_MSFontService,sans-serif" font-weight="700" font-size="19" transform="translate(901.2 379)">{{title_4}}</text>
+        <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(565 261)" text-anchor="end">{{title_3_desc_line_1}}</text>
+        <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(565 284)" text-anchor="end">{{title_3_desc_line_2}}</text>
+        <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(565 307)" text-anchor="end">{{title_3_desc_line_3}}</text>
+        <text fill="#17406D" font-family="Open Sans,Open Sans_MSFontService,sans-serif" font-weight="700" font-size="19" transform="translate(565 235)" text-anchor="end">{{title_3}}</text>
+    </g>
+</svg>

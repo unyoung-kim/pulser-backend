@@ -219,11 +219,11 @@ async function tavilySearchWithRawContent(
       url: string;
       content: string;
       score: number;
-      raw_content: string;
+      raw_content: string | null;
     }) => {
       return {
         ...result,
-        raw_content: result.raw_content.substring(0, 16000),
+        raw_content: result.raw_content?.substring(0, 16000) ?? "",
       };
     }
   );
