@@ -51,5 +51,14 @@ export const deleteSubscription = async (
     cancel_at_period_end: true, // Mark subscription for cancellation at the end of the period
   });
 
+  const { error: updateUsageError } = await supabase
+    .from("Usage")
+    .update({ is_cancelled: true })
+    .eq("id", currentUsageIdData.current_usage_id);
+
+  if (updateUsageError) {
+    return err("Error marking current usage as cancelled");
+  }
+
   return ok("Subscription successfully deleted");
 };

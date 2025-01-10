@@ -87,19 +87,20 @@ export const handleInvoicePaid = async (
         }
 
         // Search for the usage record for Free Credits with end date null
-        const { data: usageData, error: usageError } = await supabase
-          .from("Usage")
-          .select("id")
-          .eq("id", current_usage_id)
-          .eq("plan", "FREE_CREDIT")
-          .is("end_date", null);
+        const { data: freeCreditUsageData, error: freeCreditUsageError } =
+          await supabase
+            .from("Usage")
+            .select("id")
+            .eq("id", current_usage_id)
+            .eq("plan", "FREE_CREDIT")
+            .is("end_date", null);
 
-        if (usageError || !usageData) {
+        if (freeCreditUsageError || !freeCreditUsageData) {
           return err("Error fetching current usage id");
         }
 
         // If there is a free credits usage record, update its end date to today
-        if (usageData.length !== 0) {
+        if (freeCreditUsageData.length !== 0) {
           const { error: usageEndDateUpdateError } = await supabase
             .from("Usage")
             .update({ end_date: new Date().toISOString().split("T")[0] })
@@ -109,7 +110,27 @@ export const handleInvoicePaid = async (
             return err("Error updating existing subscription usage date");
           }
         }
-        // TODO: We should set the term and plan field here. Check supabase for new fields. use product-list.ts STRIPE_PRODUCT_LIST to get the term and plan if required.
+
+        // Fetch the remaining credits for the cancelled subscription, if applicable
+        const { data: currentUsageData, error: currentUsageError } =
+          await supabase
+            .from("Usage")
+            .select(
+              "is_cancelled,credits_used,credits_charged,additional_credits_charged"
+            )
+            .eq("id", current_usage_id)
+            .gt("end_date", new Date().toISOString().split("T")[0]);
+
+        if (currentUsageError || !currentUsageData) {
+          return err("Error fetching current usage details");
+        }
+
+        const creditsLeft =
+          currentUsageData.length === 1 && currentUsageData.at(0)?.is_cancelled
+            ? parseInt(currentUsageData.at(0)?.credits_charged, 10) +
+              parseInt(currentUsageData.at(0)?.additional_credits_charged, 10) -
+              parseInt(currentUsageData.at(0)?.credits_used, 10)
+            : 0;
 
         // Insert into the Usage table for subscription creation
         const { data: newUsageInsertData, error: newUsageInsertError } =
@@ -120,6 +141,7 @@ export const handleInvoicePaid = async (
               start_date: startDate.toISOString(),
               end_date: endDate.toISOString(),
               credits_charged: stripeProduct.credits,
+              additional_credits_charged: creditsLeft,
               org_id: orgId,
               plan: stripeProduct.plan,
               term: stripeProduct.term,
