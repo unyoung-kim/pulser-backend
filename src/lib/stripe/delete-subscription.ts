@@ -53,7 +53,7 @@ export const deleteSubscription = async (
 
   const { error: updateUsageError } = await supabase
     .from("Usage")
-    .update({ is_cancelled: true })
+    .update({ is_cancelled: true, updated_at: new Date().toISOString() })
     .eq("id", currentUsageIdData.current_usage_id);
 
   if (updateUsageError) {
