@@ -11,7 +11,7 @@ import { fiveNodeCloudCentricVisualizationTool } from "../tools/text-to-visual/f
 import { fourLayeredLightbulbVisualizationTool } from "../tools/text-to-visual/four-layered-lightbulb-visualization-tool.js";
 import { populationAndDistributionVisualizationTool } from "../tools/text-to-visual/population-and-distribution-visualization.js";
 import { arrowLinkedFourStepVisualizationTool } from "../tools/text-to-visual/arrow-linked-four-step-visualization-tool.js";
-import { centralFocusConnectedNodesTool } from "../tools/text-to-visual/central-focus-connected-nodes-tool.js";
+import { hubAndSpokeContributionVisualizationTool } from "../tools/text-to-visual/hub-and-spoke-contribution-visualization-tool.js";
 import { centralHubFeaturesVisualizationTool } from "../tools/text-to-visual/central-hub-features-visualization-tool.js";
 import { circularFourStepProcessVisualizationTool } from "../tools/text-to-visual/circular-four-step-process-visualization-tool.js";
 import { gearCentricFourProcessesVisualizationTool } from "../tools/text-to-visual/gear-centric-four-processes-visualization-tool.js";
@@ -64,7 +64,8 @@ export const getArguements = async (
       tools: {
         arrowLinkedFourStepVisualizationTool:
           arrowLinkedFourStepVisualizationTool(),
-        // centralFocusConnectedNodesTool: centralFocusConnectedNodesTool(),
+        hubAndSpokeContributionVisualizationTool:
+          hubAndSpokeContributionVisualizationTool(),
         centralHubFeaturesVisualizationTool:
           centralHubFeaturesVisualizationTool(),
         centralNodeWithFiveConnectedPointsVisualizationTool:

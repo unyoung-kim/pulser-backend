@@ -1,0 +1,151 @@
+<svg width="1280" height="720" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" overflow="hidden">
+    <defs>
+        <filter id="fx0" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0"/>
+                <feFuncG type="discrete" tableValues="0 0"/>
+                <feFuncB type="discrete" tableValues="0 0"/>
+                <feFuncA type="linear" slope="0.2" intercept="0"/>
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="6.22222 6.22222"/>
+        </filter>
+        <filter id="fx1" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0"/>
+                <feFuncG type="discrete" tableValues="0 0"/>
+                <feFuncB type="discrete" tableValues="0 0"/>
+                <feFuncA type="linear" slope="0.2" intercept="0"/>
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="6.25333 6.25333"/>
+        </filter>
+        <filter id="fx2" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0"/>
+                <feFuncG type="discrete" tableValues="0 0"/>
+                <feFuncB type="discrete" tableValues="0 0"/>
+                <feFuncA type="linear" slope="0.2" intercept="0"/>
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="6.19095 6.25333"/>
+        </filter>
+        <filter id="fx3" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0"/>
+                <feFuncG type="discrete" tableValues="0 0"/>
+                <feFuncB type="discrete" tableValues="0 0"/>
+                <feFuncA type="linear" slope="0.2" intercept="0"/>
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="6.25333 6.25333"/>
+        </filter>
+        <clipPath id="clip4">
+            <path d="M494 345.5C471.08 345.5 452.5 364.08 452.5 387 452.5 409.92 471.08 428.5 494 428.5 516.92 428.5 535.5 409.92 535.5 387 535.5 364.08 516.92 345.5 494 345.5ZM1.90735e-05 1.07288e-05 1280 1.07288e-05 1280 720 1.90735e-05 720Z" fill-rule="evenodd" clip-rule="evenodd"/>
+        </clipPath>
+        <clipPath id="clip5">
+            <rect x="0" y="0" width="67" height="67"/>
+        </clipPath>
+        <clipPath id="clip6">
+            <path d="M640.5 479.5C617.856 479.5 599.5 498.08 599.5 521 599.5 543.92 617.856 562.5 640.5 562.5 663.144 562.5 681.5 543.92 681.5 521 681.5 498.08 663.144 479.5 640.5 479.5ZM1.90735e-05 1.07288e-05 1280 1.07288e-05 1280 720 1.90735e-05 720Z" fill-rule="evenodd" clip-rule="evenodd"/>
+        </clipPath>
+        <clipPath id="clip7">
+            <rect x="0" y="0" width="66" height="67"/>
+        </clipPath>
+        <clipPath id="clip8">
+            <path d="M787 345.5C764.08 345.5 745.5 364.08 745.5 387 745.5 409.92 764.08 428.5 787 428.5 809.92 428.5 828.5 409.92 828.5 387 828.5 364.08 809.92 345.5 787 345.5ZM1.90735e-05 1.07288e-05 1280 1.07288e-05 1280 720 1.90735e-05 720Z" fill-rule="evenodd" clip-rule="evenodd"/>
+        </clipPath>
+        <image width="64" height="64" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAJ2UExURQAAAP///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////yo3L/gAAADSdFJOUwABLBYDSiUUft//4Qpw0mQFAvP98LFU9NMrI5Ag7nMdg5ni/gugtkiybOUOtW0Gp5pfqc4RS2VcL4FaUociOBuh+NlbD/KvkSg87K2M16IEFYjA+2bL8ZRP6Zecpm/Dhe9BNPa92jpot5I1k3UJ+nb1eb5Dxi3nTO356y4w9x+fmw2GwUnd3I7VRqoQqwgTEsrYJGB96B49YbA/MlCEeCcaqHG4ndZ624lYggw2HLRyWZXIVVe7pH93awdiMUdE1GMzQPyYyea6OeDjrsQYXXvFwgbr9GoAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAQVSURBVFhH1ZfrWxRlGMbvReRw71ouu8aGUcAShWGmeErBIoeD1bqoJJZJiC2CtooGFHgsbOUQUepmmSFgltjBzpZSkZRpJ/U/6prdmd2Z1xlguPzS78s8h3vua96ZnWfeBcbDljANQOL0JLExOZJTUml3ADPIO+6cKXYnxJmSRpebs5LuSne5SM/domAiMuiafU9CJknee19WGrNFwYTkeHOBjPs9eQ8AeJD5Yn8iEufwoXhWwLna5kQ8PO+R+QtYCGDhosVLltqAR5mzbHlRsSg0I0VeefoKPPZ4iRw9sRLJqXKQJwpNkEo5r6y8AqueZOlTT2f7yNX+yjVr89ZxhSg1porPyIeK9ayW5GDDs3xOPm7k86LUmFncJB9q+IJSqKjlZgB13JKrV5rwIgPFQD19frWylQ2As5HcpleaIG1noRNFfClWCabvcGAnm3Yl6oTm7GY9yvhyvNDMFrTyFa1GR/3uV91a2tjkXse0eEFOyPWxvL1gj/b8vfvkp2yN2v0agwM8GNSkk+C1Mr6uSTu4V5NNikNcoMlq2AIEa97QE9K+P4dDi4FNoSygpbMmCHSxWzTocYvLnK2RNLAIqOabwGZXbY+hAXrf0tNn00gS++QZ2eeU198LYwNLiAaety3yDst0BlOgQWew6IhFjt7ue/B/MDgWflebGhkcz9fznu57+D5PaFMjg1bxQXVFmvmhD+SDYnAi9aipwckP9fRHX/FjbD8FYEbnAIAEt/KJMjIwwTnIbti2VQ0tyQBO86No1YIB/Dvrpp+JrKmjbtWQMqmtGAAfe/lJ9tnBWrYNqyUjg7UuPaUJGDg3XAwMs6RKfo8/beSOzzDzeH/154YGX8SHcIQ5FThP8lwwzC8V4WE24yuSw4YGBuRWHfj6m2/ZoebBMCtWfrfmkHOyBhEao5/KCBs5PxpYMfiey2PxBZ6PBkYGXT/o+fFitFvOrTHldl6KBkYGJj9lDLNAFToDHIlGRgY/7dIzV7kCR7v3Z0U4xF+UUW1kYMooM3+NBJdcXuWqrBmgnK3ypvnymDf2PIwMbEE98XFgG+RvgPMML8RKRga/C/ewZGlMMG1fkwOXGYjteQwNuq/oCRyJK/7ghoGzzIoXjAzGY3XkmkbjBasGyzp9Pl+hZstv1eAWbqOBX5KkZl6VRHrkXYBCUGxK0kmWSZLkB5zXhIcXo1beUkSoLBV7Ktec6OWY3W7Psd/CGJNVg1NsE7t2u/tPWdOLXoZjV6ojlZVquIfN+p5KeDyDv3hamQv9f7Na7EYZ1yDpSnypgX/EbhTZwO/NFMsKC0fVwfCv2b+ETK8fCKkzxjojDAG4To9222yB/R5eB3DxBttuNkyBm228ERl6ueVN2t/G5NnSqN4bx8jVKTDikM/9D4Xd1U40h0UnAAAAAElFTkSuQmCC" preserveAspectRatio="none" id="img2"></image>
+        <clipPath id="clip10">
+            <rect x="0" y="0" width="457200" height="457200"/>
+        </clipPath>
+        <clipPath id="clip11">
+            <rect x="0" y="4.65661e-10" width="457200" height="457200"/>
+        </clipPath>
+        <!-- <image width="64" height="64" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAK+UExURQAAAP///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////9HSApAAAADqdFJOUwBs7f/nWCxZVRYo/vnj/PgTZO4pT5axNXkV246IsJExhWMEk64f3uv990LwrwYb363sew2q+oIClalICzhLfaXB0tjUxauGkHIBJTkXBbg7K0XWtXSkbUMkEg8gPLJavA5N+82s5RpJ9S8/lAfmYKOh3OkK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" preserveAspectRatio="none" id="img1"></image> -->
+        <clipPath id="clip13">
+            <rect x="0" y="-0.25" width="457200" height="457200"/>
+        </clipPath>
+        <clipPath id="clip14">
+            <rect x="0" y="4.65661e-10" width="457200" height="457200"/>
+        </clipPath>
+        <image width="64" height="64" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAKCUExURQAAAP///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////3GMjQ0AAADWdFJOUwAKbsXy//Mne/7404caM97v3x9n6Fst8a4xHIj7XQPRgUj69B1QwQGEjZ1TF/3awg/gBMoWYflg1wnkDOOiVzm5i6poRpviQKsOCDBeS0I9EIX2b/A+BSAU0O2YIZacn6wpGTWz903uxL/J5yR3BiPD5p5+3elw5ZpDB9S3P2NJIpkCxs1xT1rcGM71kfxzl62UKBt5k5BRgHTWuH1ELsAlsHJrE9t4OCYSyIJtfGpBpcySu4we6kW67DdSo89KLFWD2KRMNAuP0n8q62RZVoqxVGli4XX7Jc1zAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAEn0lEQVRYR52X/V8URRzHh+QD7gHCJT4BQXcmF+jBiXEg4BOBPPhQ3iHqCWgPB2aCmolghyh6diV4eRWUz4rhE1pqVj6gmZWWPVjp/9NrZ3ePmbkH7nz/sq/vZ+beuzs7M3tLSDhinhsXC5a4eELIeAnQJSQmib0DmZAMpOhZEp4nhExM1utTgbhJYn+RyVMwdZoYaqSlZ0gviCFPZhZeFDMWg3H6S2LGMQPZJjHjeBk5YsSRi5lixDPLnCdGHPmQR4zDYuHK2eYCrhaYg1eEpNBqLWLrYsxlS5FAQUmGMaWUqaMVFBjL5mE+E0QrWICFk7CICaIVlOPVClQyQZSCQiyOKUIik0QnqDAaq0g1ZjBRhIIai8ViqV0SKy0lSUbrsuXLq157XekRmWAFXce2VIwnxK6u6rqVtAcjqE9bJbJaFZQjb80aB7CWENLQWNmUm7tuPebwgjfKbdy2oSDhTUXwFiHr8DY7a52pnKDZhpYN74hkmbFRvldVUMX8njjfZQWbpptb29hmlc1bMDWEQLeVHlTBe9jGNo5S+j4mBBdYOcF2HbtAWNpldVDBDnpQBG0IuS1UoCO4wMgK5qKYbWPpRFMEgp3SB6MtS12lpCu7Qa1CCrhbILu6R1vysZvswTK1YgUr2A3WyQ0ii8PWQ7Zgs1qpgr0uVwmwz72/WeVDs4e2Bwo+wseEOA70qCUV9NJp2ZfFzdKDtJ0XFHm93k+g9zahzus9tMkvKIj3+Xy+T00LPuv9XKV/QPlJMWrlwxeFtJrNneJLvyAM23XywNTiMK0aDAbDERw1dKDSYDhG5/YYguPYKB/YeXACJ4kX+7VyDMEptMsHTbDSbre3SKftxUi32wfPyFFYQeYifEXHUBOUcGMwJEedSG09Kw+hyjnl8Zz3+XzTdu2D4zgtNUGX270HF9wXoXe73cPqFQhcktP56p+WcSeVS2HG4DIuka/xjVaSThw5Wu3ycwWNhLRdRd81l+vUt/65zQgOYYAMypunX8CNQTcayfUL+O57NuQEPyCe9EKdJVTAvodkQfcNbEhjM14wkGgiNxtHt5cAQZlZyqlnI5nacPtBB1t2A3W32EDBZHNoi4fl2MLUljjoWlQW3z5HzmKELhGRa2gWI0IuS3DWMWQg9iaZTNdOAHew9a6YrbLafuSuK+Yefgp2oZSr0N0/aNf4WY5ycFHslY1fxEjD5K5jZptUQ369DwSMVv/oIguktHnYrVKGM/EJAPc/gPIgMArKFUycAtc82nt17o68obX6h6flu49cAPNvPbR3/QisZsAM9EcluGFQe8/EidK7sSOW3x/1zYpcMOS6rp1uG/4gJKmGkNvoIuRPj/yxESlUMKw9y2woW0cUUMHujBSfXPwFT8g5FArlhu/hUTPJHMroqxDbx0QRmP6W8HgEB/6hWVRXoQ35nWQgn94H+de5ROgUDv8zqx28pb6WI32MCjmBa6E33FoIoB3pYrQXIT8Bg5Dm1P23kw3OP8DD8N9wAkV9kMwUW5fJbTMDjmjGUP48We95IpOCoWronhz2yjP8WXgKIzxRnpzjKfBY/Tx4NrpjW8MO3v+86EtbidpdgAAAAABJRU5ErkJggg==" preserveAspectRatio="none" id="img3"></image>
+        <clipPath id="clip16">
+            <rect x="0" y="-0.25" width="457200" height="457200"/>
+        </clipPath>
+    </defs>
+    <g>
+        <rect x="0" y="0" width="1280" height="720" fill="#FFFFFF"/>
+        <text fill="#0F6FC6" font-family="Open Sans,Open Sans_MSFontService,sans-serif" font-weight="700" font-size="48" transform="translate(85.6 111)">{{header}}</text>
+        <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(88 146)">{{sub_header}}</text>
+        <g filter="url(#fx0)" transform="matrix(3 0 0 3 423 231)">
+            <g>
+                <path d="M113.759 21.3232C128.357 44.0323 121.72 74.236 98.9333 88.7851 76.1468 103.334 45.8401 96.7192 31.2413 74.0102 20.922 57.958 20.9193 37.3886 31.2345 21.3338" stroke="#D9D9D9" stroke-width="9" stroke-miterlimit="8" fill="none" fill-rule="evenodd"/>
+            </g>
+        </g>
+        <path d="M764.276 294.97C808.072 363.097 788.16 453.708 719.8 497.355 651.44 541.003 560.52 521.158 516.724 453.031 485.766 404.874 485.758 343.166 516.704 295.001" stroke="#D9D9D9" stroke-width="26.6667" stroke-miterlimit="8" fill="none" fill-rule="evenodd"/>
+        <g clip-path="url(#clip4)">
+            <g filter="url(#fx1)" transform="matrix(2.98507 0 0 2.98507 394 287)">
+                <g clip-path="url(#clip5)">
+                    <path d="M19.5975 33.5C19.5975 25.8219 25.8219 19.5975 33.5 19.5975 41.1782 19.5975 47.4025 25.8219 47.4025 33.5 47.4025 41.1782 41.1782 47.4025 33.5 47.4025 25.8219 47.4025 19.5975 41.1782 19.5975 33.5Z" stroke="#FFFFFF" stroke-miterlimit="8" fill="#009DD9" fill-rule="evenodd"/>
+                </g>
+            </g>
+        </g>
+        <path d="M452.5 387C452.5 364.08 471.08 345.5 494 345.5 516.92 345.5 535.5 364.08 535.5 387 535.5 409.92 516.92 428.5 494 428.5 471.08 428.5 452.5 409.92 452.5 387Z" stroke="#FFFFFF" stroke-width="2.66667" stroke-miterlimit="8" fill="#009DD9" fill-rule="evenodd"/>
+        <g clip-path="url(#clip6)">
+            <g filter="url(#fx2)" transform="matrix(3.01515 0 0 2.98507 541 421)">
+                <g clip-path="url(#clip7)" transform="translate(2.84217e-14 0)">
+                    <path d="M19.402 33.5C19.402 25.8219 25.4901 19.5975 33 19.5975 40.51 19.5975 46.598 25.8219 46.598 33.5 46.598 41.1782 40.51 47.4025 33 47.4025 25.4901 47.4025 19.402 41.1782 19.402 33.5Z" stroke="#FFFFFF" stroke-miterlimit="8" fill="#0BD0D9" fill-rule="evenodd"/>
+                </g>
+            </g>
+        </g>
+        <path d="M599.5 521C599.5 498.08 617.856 479.5 640.5 479.5 663.144 479.5 681.5 498.08 681.5 521 681.5 543.92 663.144 562.5 640.5 562.5 617.856 562.5 599.5 543.92 599.5 521Z" stroke="#FFFFFF" stroke-width="2.66667" stroke-miterlimit="8" fill="#0BD0D9" fill-rule="evenodd"/>
+        <g clip-path="url(#clip8)">
+            <g filter="url(#fx3)" transform="matrix(2.98507 0 0 2.98507 687 287)">
+                <g>
+                    <path d="M19.5975 33.5C19.5975 25.8219 25.8219 19.5975 33.5 19.5975 41.1782 19.5975 47.4025 25.8219 47.4025 33.5 47.4025 41.1782 41.1782 47.4025 33.5 47.4025 25.8219 47.4025 19.5975 41.1782 19.5975 33.5Z" stroke="#FFFFFF" stroke-miterlimit="8" fill="#10CF9B" fill-rule="evenodd"/>
+                </g>
+            </g>
+        </g>
+        <path d="M745.5 387C745.5 364.08 764.08 345.5 787 345.5 809.92 345.5 828.5 364.08 828.5 387 828.5 409.92 809.92 428.5 787 428.5 764.08 428.5 745.5 409.92 745.5 387Z" stroke="#FFFFFF" stroke-width="2.66667" stroke-miterlimit="8" fill="#10CF9B" fill-rule="evenodd"/>
+        {{fallback_icon_1}}
+        {{fallback_icon_2}}
+        {{fallback_icon_3}}
+        {{fallback_icon_4}}
+        <g transform="translate(605 225) scale(2.9)" stroke="black" stroke-width="0.6" fill="none">
+            {{icon_1}}
+        </g>
+        <g id="img2" transform="translate(605 225) scale(2.9)" stroke="black" stroke-width="0.6" fill="none">
+            {{icon_2}}
+                        <path d="m13.11 7.664 1.78 2.672" /><path d="m14.162 12.788-3.324 1.424" /><path d="m20 4-6.06 1.515" /><path d="M3 3v16a2 2 0 0 0 2 2h16" /><circle cx="12" cy="6" r="2" /><circle cx="16" cy="12" r="2" /><circle cx="9" cy="15" r="2" />
+
+        </g>
+        <g id="img3" transform="scale(2.5)" stroke="white" stroke-width="0.7" fill="none">
+            {{icon_3}}
+        </g>
+        <g id="img4" transform="scale(2.5)" stroke="white" stroke-width="0.7" fill="none">
+            {{icon_4}}
+        </g>
+        <g transform="matrix(0.000104987 0 0 0.000104987 617 496)">
+            <g clip-path="url(#clip10)">
+                <use width="100%" height="100%" xlink:href="#img2" transform="scale(7143.75 7143.75)"></use>
+            </g>
+        </g>
+        <g clip-path="url(#clip11)" transform="matrix(0.000104987 0 0 0.000104987 471 364)">
+            <g clip-path="url(#clip13)">
+                <use width="100%" height="100%" xlink:href="#img1" transform="matrix(7143.75 0 0 7143.75 0 -0.25)"></use>
+            </g>
+        </g>
+        <g clip-path="url(#clip14)" transform="matrix(0.000104987 0 0 0.000104987 764 364)">
+            <g clip-path="url(#clip16)">
+                <use width="100%" height="100%" xlink:href="#img3" transform="matrix(7143.75 0 0 7143.75 0 -0.25)"></use>
+            </g>
+        </g>
+        <text fill="#17406D" font-family="Open Sans,Open Sans_MSFontService,sans-serif" font-weight="700" font-size="19" transform="translate(404 366)" text-anchor="end">{{title_1}}</text>
+        <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(404 396)" text-anchor="end">{{title_1_desc_line_1}}</text>
+        <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(404 419)" text-anchor="end">{{title_1_desc_line_2}}</text>
+        <text fill="#17406D" font-family="Open Sans,Open Sans_MSFontService,sans-serif" font-weight="700" font-size="19" transform="translate(871.521 366)">{{title_3}}</text>
+        <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(871.521 396)">{{title_3_desc_line_1}}</text>
+        <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(871.521 419)">{{title_3_desc_line_2}}</text>
+        <text fill="#17406D" font-family="Open Sans,Open Sans_MSFontService,sans-serif" font-weight="700" font-size="19" transform="translate(642 616)" text-anchor="middle">{{title_2}}</text>
+        <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(642 646)" text-anchor="middle">{{title_2_desc_line_1}}</text>
+        <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(642 669)" text-anchor="middle">{{title_2_desc_line_2}}</text>
+        <text font-family="Open Sans,Open Sans_MSFontService,sans-serif" font-weight="700" font-size="21" transform="translate(638 324)" text-anchor="middle">{{central_label}}</text>
+    </g>
+</svg>
