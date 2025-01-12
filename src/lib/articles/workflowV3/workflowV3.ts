@@ -2,8 +2,8 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import { Result, err, ok } from "true-myth/result";
 import { researcherV2 } from "../../agents/researcherV2.js";
 import { fineTunedWriter, ftWriterEnhancer } from "../../agents/writer-ft.js";
-import { EnrichedURL } from "../../enrich-internal-links.js";
 import { getSupabaseClient } from "../../get-supabase-client.js";
+import { EnrichedURL } from "../../internal-link/enrich-internal-links.js";
 import { incrementUsageCredit } from "../../supabase/usage.js";
 
 /**

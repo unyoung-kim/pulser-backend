@@ -2,8 +2,8 @@ import { openai } from "@ai-sdk/openai";
 import { generateText } from "ai";
 import { Result } from "true-myth";
 import { err, ok } from "true-myth/result";
-import { EnrichedURL } from "../enrich-internal-links.js";
 import { getThrottledGPTo1Mini } from "../get-llm-models.js";
+import { EnrichedURL } from "../internal-link/enrich-internal-links.js";
 
 export const SYSTEM_PROMPT = `You are an expert SEO content writer. You will be given an outline for the article in markdown format. Write an SEO blog post following the outline in html format. Use <h2> for subtopics and <h3> for subsubtopics. 
 
