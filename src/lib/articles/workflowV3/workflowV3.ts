@@ -1,13 +1,9 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Result, err, ok } from "true-myth/result";
-import { outlineEnricher } from "../agents/outline-enricher.js";
-import { researcherSequential } from "../agents/researcher.js";
-import { writer } from "../agents/writer.js";
-import { EnrichedURL } from "../internal-link/enrich-internal-links.js";
-import { getSupabaseClient } from "../get-supabase-client.js";
-import { postFormatterAndHumanizer } from "../post-formatter.js";
-import { incrementUsageCredit } from "../supabase/usage.js";
-import { extractFirstImageUrl } from "../utility/extractFirstImageUrl.js";
+import { EnrichedURL } from "../../enrich-internal-links.js";
+import { getSupabaseClient } from "../../get-supabase-client.js";
+import { incrementUsageCredit } from "../../supabase/usage.js";
+import { writerV3 } from "./writerV3.js";
 
 /**
  * Based on user query, generate a blog post
@@ -17,7 +13,7 @@ import { extractFirstImageUrl } from "../utility/extractFirstImageUrl.js";
  * @param query
  * @returns
  */
-export async function workflowV2({
+export async function workflowV3({
   projectId,
   inputTopic,
   keywordId,
@@ -40,38 +36,25 @@ export async function workflowV2({
 
   const supabase = supabaseClient.value;
 
-  const { data: projectData, error: projectError } = await supabase
+  const { data: project, error: projectError } = await supabase
     .from("Project")
     .select("name,domain,background,description,org_id")
-    .eq("id", projectId)
-    .single();
+    .eq("id", projectId);
 
   if (projectError) {
     return err(`Error fetching project details: ${projectError.message}`);
   }
 
-  const projectName: string | null = projectData?.name ?? null;
+  const projectName: string | null = project?.at(0)?.name ?? null;
 
   const projectBackground: Record<string, any> | null =
-    projectData?.background ?? null;
+    project?.at(0)?.background ?? null;
 
   const clientDetails = `
   Client Information:
   - Name: ${projectName}
   - Background Information: ${JSON.stringify(projectBackground, null, 2)}
 `.trim();
-
-  const outline: Result<string, string> = await researcherSequential(
-    inputTopic,
-    clientDetails,
-    length,
-    secondaryKeywords,
-    instruction
-  );
-
-  if (outline.isErr) {
-    return err(outline.error);
-  }
 
   const enrichedURLsResponse = await supabase
     .from("InternalLink")
@@ -85,23 +68,14 @@ export async function workflowV2({
     })
   );
 
-  console.log("Enriched URLs: ", enrichedURLs);
-
-  const enrichedOutline: Result<string, string> =
-    enrichedURLs.length === 0
-      ? ok(outline.value)
-      : await outlineEnricher(enrichedURLs, outline.value);
-
-  if (enrichedOutline.isErr) {
-    return err(enrichedOutline.error);
-  }
-
   // await new Promise((resolve) => setTimeout(resolve, 60000));
-
-  const article: Result<string, string> = await writer(
-    enrichedOutline.value,
+  const article: Result<string, string> = await writerV3(
+    inputTopic,
+    clientDetails,
     length,
-    secondaryKeywords
+    secondaryKeywords,
+    enrichedURLs,
+    instruction
   );
 
   if (article.isErr) {
@@ -121,18 +95,18 @@ export async function workflowV2({
 
   // console.log("Related queries: ", relatedQueries.value);
 
-  const finalPost: Result<string, string> = await postFormatterAndHumanizer(
-    `Topic: ${inputTopic}\nArticle: ${article.value}`,
-    "HTML"
-  );
+  //   const finalPost: Result<string, string> = await postFormatterAndHumanizer(
+  //     `Topic: ${inputTopic}\nArticle: ${article.value}`,
+  //     "HTML"
+  //   );
 
-  if (finalPost.isErr) {
-    return err(finalPost.error);
-  }
+  //   if (finalPost.isErr) {
+  //     return err(finalPost.error);
+  //   }
 
-  console.log("Final post: " + finalPost.value);
+  //   console.log("Final post: " + finalPost.value);
 
-  const firstImageUrl = extractFirstImageUrl(finalPost.value);
+  //   const firstImageUrl = extractFirstImageUrl(finalPost.value);
 
   const { data: dataContentInsert, error: errorContentInsert } = await supabase
     .from("Content")
@@ -141,7 +115,7 @@ export async function workflowV2({
         status: "draft",
         project_id: projectId,
         title: inputTopic,
-        image_url: firstImageUrl,
+        // image_url: firstImageUrl,
         keyword_id: keywordId,
       },
     ])
@@ -162,7 +136,7 @@ export async function workflowV2({
     .insert([
       {
         content_id: id,
-        body: finalPost.value,
+        body: article.value,
       },
     ]);
 
@@ -171,11 +145,11 @@ export async function workflowV2({
   }
 
   const incrementUsageCreditResult: Result<string, string> =
-    await incrementUsageCredit(supabase, projectData?.org_id ?? "", "NORMAL");
+    await incrementUsageCredit(supabase, project.at(0)?.org_id ?? "", "NORMAL");
 
   if (incrementUsageCreditResult.isErr) {
     return err(incrementUsageCreditResult.error);
   }
 
-  return ok(finalPost.value);
+  return ok(article.value);
 }

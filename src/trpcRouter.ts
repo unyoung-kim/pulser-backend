@@ -11,6 +11,7 @@ import { stripeSessionCreationHandler } from "./handler/stripe-session-creation-
 import { stripeSessionVerificationHandler } from "./handler/stripe-session-verification-handler.js";
 import { stripeWebhook } from "./handler/stripe-webhook.js";
 import { subscriptionStatusRetrievalHandler } from "./handler/subscription-status-retrieval-handler.js";
+import { summarizeLinkHandler } from "./handler/summarize-link-handler.js";
 import { testEndpointHandler } from "./handler/test-handler.js";
 import { textToVisualHandler } from "./handler/text-to-visual-handler.js";
 import { topicGenerationHandler } from "./handler/topic-generation-handler.js";
@@ -72,4 +73,5 @@ export const trpcRouter = t.router({
   "share-google-doc": googleDocSharingHandler(t, "share-google-doc"),
   "upload-docx": uploadDocxHandler(t, "upload-docx"),
   "autofill-background": autoFillBackgroundHandler(t, "autofill-background"),
+  "summarize-link": summarizeLinkHandler(t, "summarize-link"),
 });
