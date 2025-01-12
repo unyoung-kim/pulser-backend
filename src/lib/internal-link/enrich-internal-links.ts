@@ -2,10 +2,10 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import Exa from "exa-js";
 import pThrottle from "p-throttle";
 import { err, ok, Result } from "true-myth/result";
-import { getSupabaseClient } from "./get-supabase-client.js";
+import { getSupabaseClient } from "../get-supabase-client.js";
 // import { crawlImportantInternalLinks } from "./internal-link/scrape.js";
-import { crawlImportantInternalLinks } from "./internal-link/scrape-cheerio.js";
-import { extractDomain } from "./internal-link/util.js";
+import { crawlImportantInternalLinks } from "./scrape-cheerio.js";
+import { extractDomain } from "./util.js";
 
 // Define the interface for enriched URL
 export interface EnrichedURL {
@@ -16,7 +16,7 @@ export interface EnrichedURL {
 }
 
 // Define the interface for the response item
-interface ExaResponseItem {
+export interface ExaResponseItem {
   id: string; // Adjust the type as necessary
   summary: string; // Adjust the type as necessary
 }

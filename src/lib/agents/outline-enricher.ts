@@ -1,6 +1,6 @@
 import { generateText } from "ai";
 import { Result, err, ok } from "true-myth/result";
-import { EnrichedURL } from "../enrich-internal-links.js";
+import { EnrichedURL } from "../internal-link/enrich-internal-links.js";
 import { getThrottledClaudeSonnet } from "../get-llm-models.js";
 
 // const SYSTEM_PROMPT = `As a professional search expert, you possess the ability to search for any information on the web.
