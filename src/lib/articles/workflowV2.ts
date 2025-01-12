@@ -3,7 +3,7 @@ import { Result, err, ok } from "true-myth/result";
 import { outlineEnricher } from "../agents/outline-enricher.js";
 import { researcherSequential } from "../agents/researcher.js";
 import { writer } from "../agents/writer.js";
-import { EnrichedURL } from "../enrich-internal-links.js";
+import { EnrichedURL } from "../internal-link/enrich-internal-links.js";
 import { getSupabaseClient } from "../get-supabase-client.js";
 import { postFormatterAndHumanizer } from "../post-formatter.js";
 import { incrementUsageCredit } from "../supabase/usage.js";
