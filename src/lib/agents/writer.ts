@@ -43,7 +43,7 @@ Your task is to write a very long and detailed blog post based on the outline, a
 </WritingStyle>  
 
 <Introduction>
-  1. Make sure you follow the style of the example provided below. THIS IS VERY IMPORTANT. Follow the tone and style of the example.
+  1. Make sure you follow the style of the example provided below. THIS IS VERY IMPORTANT. Strictly follow the style of the example.
   <Example>
     Title: The best 10 LoRaWAN® Gateways
 
