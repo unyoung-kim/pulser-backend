@@ -1,6 +1,10 @@
 import { tool } from "ai";
 import Exa from "exa-js";
-import { multiSearchSchema, searchSchema } from "../../schema/search.js";
+import {
+  multiSearchSchema,
+  multiSearchSchemaV2,
+  searchSchema,
+} from "../../schema/search.js";
 import {
   SearchResultImage,
   SearchResultItem,
@@ -32,6 +36,41 @@ export const searchSubTopicsTool = () =>
             return await tavilySearch(
               query,
               2, // max_results,
+              "advanced",
+              include_domains,
+              exclude_domains
+            );
+          })
+        );
+      } catch (error) {
+        throw new Error(`Search sub-topic tool error: ${error}`);
+      }
+    },
+  });
+
+/**
+ * Subtic reserach tool. This is basically calling tavily for multiple topics.
+ *
+ * Use this so that we can enrich our research from the initial outline.
+ */
+export const searchToolResearcher = () =>
+  tool({
+    description: "Search the web for SEO outline",
+    parameters: multiSearchSchemaV2,
+    execute: async ({
+      queries,
+      // max_results,
+      search_depth,
+      include_domains,
+      exclude_domains,
+    }) => {
+      console.log("QUERIES: ", queries);
+      try {
+        return await Promise.all(
+          queries.map(async (query) => {
+            return await tavilySearch(
+              query,
+              3, // max_results,
               "advanced",
               include_domains,
               exclude_domains
@@ -115,7 +154,7 @@ export const searchTool = () =>
     },
   });
 
-async function tavilySearch(
+export async function tavilySearch(
   query: string,
   maxResults: number = 5,
   searchDepth: "basic" | "advanced" = "basic",
@@ -174,7 +213,7 @@ async function tavilySearch(
   };
 }
 
-async function tavilySearchWithRawContent(
+export async function tavilySearchWithRawContent(
   query: string,
   maxResults: number = 5,
   searchDepth: "basic" | "advanced" = "basic",

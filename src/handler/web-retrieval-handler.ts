@@ -1,6 +1,6 @@
 import { Result } from "true-myth/result";
 import { glossaryWorkflow } from "../lib/articles/glossary.js";
-import { workflowV2 } from "../lib/articles/workflowV2.js";
+import { workflowV3 } from "../lib/articles/workflowV3/workflowV3.js";
 import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
 import { WebRetrievalSchema } from "../lib/schema/web-retrieval-schema.js";
 import { tRPC } from "../lib/trpc.js";
@@ -23,7 +23,7 @@ export function webRetrievalHandler(t: tRPC, path: string) {
         console.log("TYPE: ", input.type);
         const result: Result<string, string> =
           input.type === "NORMAL"
-            ? await workflowV2({
+            ? await workflowV3({
                 projectId: input.projectId,
                 inputTopic: input.inputTopic,
                 keywordId: input.keywordId,

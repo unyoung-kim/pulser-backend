@@ -1,9 +1,10 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Result, err, ok } from "true-myth/result";
+import { researcherV2 } from "../../agents/researcherV2.js";
+import { fineTunedWriter, ftWriterEnhancer } from "../../agents/writer-ft.js";
 import { EnrichedURL } from "../../enrich-internal-links.js";
 import { getSupabaseClient } from "../../get-supabase-client.js";
 import { incrementUsageCredit } from "../../supabase/usage.js";
-import { writerV3 } from "./writerV3.js";
 
 /**
  * Based on user query, generate a blog post
@@ -56,6 +57,18 @@ export async function workflowV3({
   - Background Information: ${JSON.stringify(projectBackground, null, 2)}
 `.trim();
 
+  const outline: Result<string, string> = await researcherV2(
+    inputTopic,
+    // clientDetails,
+    instruction
+  );
+
+  if (outline.isErr) {
+    return err(outline.error);
+  }
+
+  console.log("outline: ", outline.value);
+
   const enrichedURLsResponse = await supabase
     .from("InternalLink")
     .select("url,summary")
@@ -68,26 +81,38 @@ export async function workflowV3({
     })
   );
 
+  //   const researchResults = await tavilySearch(inputTopic, 5, "basic");
+
+  //   console.log("Research results: ", researchResults);
+
   // await new Promise((resolve) => setTimeout(resolve, 60000));
-  const article: Result<string, string> = await writerV3(
-    inputTopic,
-    clientDetails,
-    length,
-    secondaryKeywords,
-    enrichedURLs,
-    instruction
-  );
+  const article: Result<string, string> = await fineTunedWriter(outline.value);
+
+  console.log("article: ", article.isOk ? article.value : article.error);
 
   if (article.isErr) {
     return err(article.error);
   }
 
-  console.log("Article: ", article.value);
+  const enhancedArticle: Result<string, string> = await ftWriterEnhancer(
+    article.value,
+    clientDetails,
+    enrichedURLs
+  );
 
-  // const relatedQueries: Result<{ query: string }[], string> =
-  //   await throttledQuerySuggestor(
-  //     `${clientDetails}\nBlog Topic for client: ${inputTopic}`
-  //   );
+  if (enhancedArticle.isErr) {
+    return err(enhancedArticle.error);
+  }
+
+  console.log("enhancedArticle: ", enhancedArticle);
+  console.log("enrichedURLs: ", enrichedURLs);
+
+  console.log("enhancedArticle: ", enhancedArticle.value);
+
+  //   const relatedQueries: Result<{ query: string }[], string> =
+  //     await throttledQuerySuggestor(
+  //       `${clientDetails}\nBlog Topic for client: ${inputTopic}`
+  //     );
 
   // if (relatedQueries.isErr) {
   //   return err(relatedQueries.error);
@@ -136,7 +161,7 @@ export async function workflowV3({
     .insert([
       {
         content_id: id,
-        body: article.value,
+        body: enhancedArticle.value,
       },
     ]);
 
@@ -151,5 +176,5 @@ export async function workflowV3({
     return err(incrementUsageCreditResult.error);
   }
 
-  return ok(article.value);
+  return ok(enhancedArticle.value);
 }
