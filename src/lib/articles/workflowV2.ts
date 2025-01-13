@@ -40,19 +40,20 @@ export async function workflowV2({
 
   const supabase = supabaseClient.value;
 
-  const { data: project, error: projectError } = await supabase
+  const { data: projectData, error: projectError } = await supabase
     .from("Project")
     .select("name,domain,background,description,org_id")
-    .eq("id", projectId);
+    .eq("id", projectId)
+    .single();
 
   if (projectError) {
     return err(`Error fetching project details: ${projectError.message}`);
   }
 
-  const projectName: string | null = project?.at(0)?.name ?? null;
+  const projectName: string | null = projectData?.name ?? null;
 
   const projectBackground: Record<string, any> | null =
-    project?.at(0)?.background ?? null;
+    projectData?.background ?? null;
 
   const clientDetails = `
   Client Information:
@@ -170,7 +171,7 @@ export async function workflowV2({
   }
 
   const incrementUsageCreditResult: Result<string, string> =
-    await incrementUsageCredit(supabase, project.at(0)?.org_id ?? "", "NORMAL");
+    await incrementUsageCredit(supabase, projectData?.org_id ?? "", "NORMAL");
 
   if (incrementUsageCreditResult.isErr) {
     return err(incrementUsageCreditResult.error);

@@ -5,7 +5,7 @@ import { googleDocCreationHandler } from "./handler/google-doc-creation-handler.
 import { googleDocSharingHandler } from "./handler/google-doc-sharing-handler.js";
 import { googleTokenGenerationHandler } from "./handler/google-token-generation-handler.js";
 import { imageSearchHandler } from "./handler/image-search-handler.js";
-import { initializeOrgHandler } from "./handler/initialize-org.js";
+import { initializeOrgHandler } from "./handler/initialize-org-handler.js";
 import { internalLinksHandler } from "./handler/internal-links-handler.js";
 import { stripeSessionCreationHandler } from "./handler/stripe-session-creation-handler.js";
 import { stripeSessionVerificationHandler } from "./handler/stripe-session-verification-handler.js";

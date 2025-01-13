@@ -1,8 +1,6 @@
 import Result, { err, ok } from "true-myth/result";
-import { getStripeClient } from "./get-stripe-client.js";
 import { getSupabaseClient } from "../get-supabase-client.js";
 import { SupabaseClient } from "@supabase/supabase-js";
-import Stripe from "stripe";
 
 export async function getSubscriptionStatusFromStripe(
   orgId: string
@@ -21,7 +19,7 @@ export async function getSubscriptionStatusFromStripe(
       .single();
 
   if (currentUsageIdFetchError || !currentUsageIdData?.current_usage_id) {
-    return err("Error in fetching currnet usage id");
+    return err("Error in fetching current usage id");
   }
 
   const { data: currentUsageData, error: currentUsageFetchError } =
@@ -34,44 +32,12 @@ export async function getSubscriptionStatusFromStripe(
   if (currentUsageFetchError || !currentUsageData) {
     return err("Error in fetching current usage record");
   }
-
-  if (!currentUsageData.stripe_subscription_id) {
-    return ok(`
-      "subscribed": "false",
+  return ok(`
+      "plan": ${currentUsageData.plan},
+      "term": ${currentUsageData.term},
       "credits_used": ${currentUsageData.credits_used},
       "credits_charged": ${currentUsageData.credits_charged},
       "additional_credits": ${currentUsageData.additional_credits_charged},
       "start_date": ${currentUsageData.start_date},
       "end_date": ${currentUsageData.end_date}`);
-  } else {
-    const stripeClientResult = getStripeClient();
-    if (stripeClientResult.isErr) {
-      return err(stripeClientResult.error);
-    }
-    const stripe = stripeClientResult.value;
-
-    const subscription: Stripe.Subscription =
-      await stripe.subscriptions.retrieve(
-        currentUsageData.stripe_subscription_id
-      );
-
-    const productId = subscription.items.data.at(0)?.plan.product;
-
-    if (!productId || typeof productId !== "string") {
-      return err("Error fetching product plan");
-    }
-
-    const product: Stripe.Product = await stripe.products.retrieve(
-      productId as string
-    );
-
-    return ok(`
-      "subscribed": "true",
-      "subscription_name": ${product.name},
-      "credits_used": ${currentUsageData.credits_used},
-      "credits_charged": ${currentUsageData.credits_charged},
-      "additional_credits": ${currentUsageData.additional_credits_charged},
-      "start_date": ${currentUsageData.start_date},
-      "end_date": ${currentUsageData.end_date}`);
-  }
 }
