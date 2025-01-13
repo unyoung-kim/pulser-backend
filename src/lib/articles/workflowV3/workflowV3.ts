@@ -1,13 +1,10 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Result, err, ok } from "true-myth/result";
-import { outlineEnricher } from "../agents/outline-enricher.js";
-import { researcherSequential } from "../agents/researcher.js";
-import { writer } from "../agents/writer.js";
-import { EnrichedURL } from "../internal-link/enrich-internal-links.js";
-import { getSupabaseClient } from "../get-supabase-client.js";
-import { postFormatterAndHumanizer } from "../post-formatter.js";
-import { incrementUsageCredit } from "../supabase/usage.js";
-import { extractFirstImageUrl } from "../utility/extractFirstImageUrl.js";
+import { researcherV2 } from "../../agents/researcherV2.js";
+import { fineTunedWriter, ftWriterEnhancer } from "../../agents/writer-ft.js";
+import { getSupabaseClient } from "../../get-supabase-client.js";
+import { EnrichedURL } from "../../internal-link/enrich-internal-links.js";
+import { incrementUsageCredit } from "../../supabase/usage.js";
 
 /**
  * Based on user query, generate a blog post
@@ -17,7 +14,7 @@ import { extractFirstImageUrl } from "../utility/extractFirstImageUrl.js";
  * @param query
  * @returns
  */
-export async function workflowV2({
+export async function workflowV3({
   projectId,
   inputTopic,
   keywordId,
@@ -60,17 +57,17 @@ export async function workflowV2({
   - Background Information: ${JSON.stringify(projectBackground, null, 2)}
 `.trim();
 
-  const outline: Result<string, string> = await researcherSequential(
+  const outline: Result<string, string> = await researcherV2(
     inputTopic,
-    clientDetails,
-    length,
-    secondaryKeywords,
+    // clientDetails,
     instruction
   );
 
   if (outline.isErr) {
     return err(outline.error);
   }
+
+  console.log("outline: ", outline.value);
 
   const enrichedURLsResponse = await supabase
     .from("InternalLink")
@@ -84,35 +81,38 @@ export async function workflowV2({
     })
   );
 
-  console.log("Enriched URLs: ", enrichedURLs);
+  //   const researchResults = await tavilySearch(inputTopic, 5, "basic");
 
-  const enrichedOutline: Result<string, string> =
-    enrichedURLs.length === 0
-      ? ok(outline.value)
-      : await outlineEnricher(enrichedURLs, outline.value);
-
-  if (enrichedOutline.isErr) {
-    return err(enrichedOutline.error);
-  }
+  //   console.log("Research results: ", researchResults);
 
   // await new Promise((resolve) => setTimeout(resolve, 60000));
+  const article: Result<string, string> = await fineTunedWriter(outline.value);
 
-  const article: Result<string, string> = await writer(
-    enrichedOutline.value,
-    length,
-    secondaryKeywords
-  );
+  console.log("article: ", article.isOk ? article.value : article.error);
 
   if (article.isErr) {
     return err(article.error);
   }
 
-  console.log("Article: ", article.value);
+  const enhancedArticle: Result<string, string> = await ftWriterEnhancer(
+    article.value,
+    clientDetails,
+    enrichedURLs
+  );
 
-  // const relatedQueries: Result<{ query: string }[], string> =
-  //   await throttledQuerySuggestor(
-  //     `${clientDetails}\nBlog Topic for client: ${inputTopic}`
-  //   );
+  if (enhancedArticle.isErr) {
+    return err(enhancedArticle.error);
+  }
+
+  console.log("enhancedArticle: ", enhancedArticle);
+  console.log("enrichedURLs: ", enrichedURLs);
+
+  console.log("enhancedArticle: ", enhancedArticle.value);
+
+  //   const relatedQueries: Result<{ query: string }[], string> =
+  //     await throttledQuerySuggestor(
+  //       `${clientDetails}\nBlog Topic for client: ${inputTopic}`
+  //     );
 
   // if (relatedQueries.isErr) {
   //   return err(relatedQueries.error);
@@ -120,18 +120,18 @@ export async function workflowV2({
 
   // console.log("Related queries: ", relatedQueries.value);
 
-  const finalPost: Result<string, string> = await postFormatterAndHumanizer(
-    `Topic: ${inputTopic}\nArticle: ${article.value}`,
-    "HTML"
-  );
+  //   const finalPost: Result<string, string> = await postFormatterAndHumanizer(
+  //     `Topic: ${inputTopic}\nArticle: ${article.value}`,
+  //     "HTML"
+  //   );
 
-  if (finalPost.isErr) {
-    return err(finalPost.error);
-  }
+  //   if (finalPost.isErr) {
+  //     return err(finalPost.error);
+  //   }
 
-  console.log("Final post: " + finalPost.value);
+  //   console.log("Final post: " + finalPost.value);
 
-  const firstImageUrl = extractFirstImageUrl(finalPost.value);
+  //   const firstImageUrl = extractFirstImageUrl(finalPost.value);
 
   const { data: dataContentInsert, error: errorContentInsert } = await supabase
     .from("Content")
@@ -140,7 +140,7 @@ export async function workflowV2({
         status: "draft",
         project_id: projectId,
         title: inputTopic,
-        image_url: firstImageUrl,
+        // image_url: firstImageUrl,
         keyword_id: keywordId,
       },
     ])
@@ -161,7 +161,7 @@ export async function workflowV2({
     .insert([
       {
         content_id: id,
-        body: finalPost.value,
+        body: enhancedArticle.value,
       },
     ]);
 
@@ -176,5 +176,5 @@ export async function workflowV2({
     return err(incrementUsageCreditResult.error);
   }
 
-  return ok(finalPost.value);
+  return ok(enhancedArticle.value);
 }

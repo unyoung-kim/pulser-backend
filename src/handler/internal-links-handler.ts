@@ -4,7 +4,7 @@ import { tRPC } from "../lib/trpc.js";
 import {
   EnrichedURL,
   throttledEnrichInternalLinks,
-} from "../lib/enrich-internal-links.js";
+} from "../lib/internal-link/enrich-internal-links.js";
 import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
 
 export function internalLinksHandler(t: tRPC, endpoint: string) {
