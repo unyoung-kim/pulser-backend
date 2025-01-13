@@ -1,8 +1,8 @@
 import { generateText } from "ai";
 import { Result } from "true-myth";
 import { err, ok } from "true-myth/result";
-import { EnrichedURL } from "../../enrich-internal-links.js";
 import { getThrottledClaudeSonnet } from "../../get-llm-models.js";
+import { EnrichedURL } from "../../internal-link/enrich-internal-links.js";
 
 const LONG_POST_INITIAL_WRITER_PROMPT = `
 As a professional SEO blog writer, you task is to write a very long and detailed SEO blog post for a company based on the information provided. You will be given these details. Strictly study how the example is written and follow a similar style with variety of formatting styles. 
