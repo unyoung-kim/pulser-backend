@@ -12,7 +12,7 @@ export function stripeWebhook(t: tRPC, path: string) {
         path: "/stripe-webhook",
         summary: "Stripe webhook endpoint",
         description: "Handles Stripe webhook events",
-        tags: ["Stripe"],
+        tags: ["Webhook", "Stripe"],
       },
     })
     .input(

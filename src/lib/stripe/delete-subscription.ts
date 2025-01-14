@@ -1,5 +1,4 @@
 import { SupabaseClient } from "@supabase/supabase-js";
-import Stripe from "stripe";
 import { Result } from "true-myth";
 import { getSupabaseClient } from "../get-supabase-client.js";
 import { err, ok } from "true-myth/result";
@@ -51,6 +50,15 @@ export const deleteSubscription = async (
   await stripe.subscriptions.update(subscriptionId, {
     cancel_at_period_end: true, // Mark subscription for cancellation at the end of the period
   });
+
+  const { error: updateUsageError } = await supabase
+    .from("Usage")
+    .update({ is_cancelled: true, updated_at: new Date().toISOString() })
+    .eq("id", currentUsageIdData.current_usage_id);
+
+  if (updateUsageError) {
+    return err("Error marking current usage as cancelled");
+  }
 
   return ok("Subscription successfully deleted");
 };
