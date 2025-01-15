@@ -22,6 +22,17 @@ import { fourPointsZigzagPathVisualizationTool } from "../tools/text-to-visual/f
 import { circularMetricsVisualizationTool } from "../tools/text-to-visual/circular-metrics-visualization-tool.js";
 import { centralNodeWithFiveConnectedPointsVisualizationTool } from "../tools/text-to-visual/central-node-with-five-connected-points-visualization-tool.js";
 import { threeSegmentCircularVisualizationTool } from "../tools/text-to-visual/three-segment-circular-visualization-tool.js";
+import { fiveStepAscendingProgressionVisualizationTool } from "../tools/text-to-visual/five-step-ascending-progression-visualization-tool.js";
+import { fourDirectionalArrowVisualizationTool } from "../tools/text-to-visual/four-directional-arrow-visualization-tool.js";
+import { fourSegmentFunnelVisualizationTool } from "../tools/text-to-visual/four-segment-funnel-visualization-tool.js";
+import { fourStepProcessVisualizationTool } from "../tools/text-to-visual/four-step-process-visualization-tool.js";
+import { hexagonalIdeaContributionLayoutTool } from "../tools/text-to-visual/hexagonal-idea-contribution-layout-tool.js";
+import { megaphoneCommunicationVisualizationTool } from "../tools/text-to-visual/megaphone-communication-visualization-tool.js";
+import { prismToOutcomeVisualizationTool } from "../tools/text-to-visual/prism-to-outcome-visualization-tool.js";
+import { sixCardInformationVisualizationTool } from "../tools/text-to-visual/six-card-information-visualization-tool.js";
+import { threeCascadingArrowsVisualizationTool } from "../tools/text-to-visual/three-cascading-arrows-visualization-tool.js";
+import { threeElementContributionVisualizationTool } from "../tools/text-to-visual/three-element-contribution-visualization-tool.js";
+import { threeVerticallyTieredContentLayoutTool } from "../tools/text-to-visual/three-vertically-tiered-content-layout-tool.js";
 
 const SYSTEM_PROMPT = `
 You are provided with:  
@@ -77,30 +88,50 @@ export const getArguements = async (
           cyclicFourStepProcessVisualizationTool(),
         fiveNodeCloudCentricVisualizationTool:
           fiveNodeCloudCentricVisualizationTool(),
+        fiveStepAscendingProgressionVisualizationTool:
+          fiveStepAscendingProgressionVisualizationTool(),
         fiveStepBubbleFlowVisualizationTool:
           fiveStepBubbleFlowVisualizationTool(),
+        fourDirectionalArrowVisualizationTool:
+          fourDirectionalArrowVisualizationTool(),
         fourLayeredLightbulbVisualizationTool:
           fourLayeredLightbulbVisualizationTool(),
         fourPointsZigzagPathVisualizationTool:
           fourPointsZigzagPathVisualizationTool(),
+        fourSegmentFunnelVisualizationTool:
+          fourSegmentFunnelVisualizationTool(),
         fourStageOverlappingCircularVisualizationTool:
           fourStageOverlappingCircularVisualizationTool(),
         fourStepCircularNodeFlowVisualizationTool:
           fourStepCircularNodeFlowVisualizationTool(),
+        fourStepProcessVisualizationTool: fourStepProcessVisualizationTool(),
         gearCentricFourProcessesVisualizationTool:
           gearCentricFourProcessesVisualizationTool(),
+        hexagonalIdeaContributionLayoutTool:
+          hexagonalIdeaContributionLayoutTool(),
+        megaphoneCommunicationVisualizationTool:
+          megaphoneCommunicationVisualizationTool(),
         populationAndDistributionVisualizationTool:
           populationAndDistributionVisualizationTool(),
+        prismToOutcomeVisualizationTool: prismToOutcomeVisualizationTool(),
         problemVsSolutionComparisonVisualizationTool:
           populationAndDistributionVisualizationTool(),
+        sixCardInformationVisualizationTool:
+          sixCardInformationVisualizationTool(),
         sixStageAlternatingDescriptionVisualizationTool:
           sixStageAlternatingDescriptionVisualizationTool(),
+        threeCascadingArrowsVisualizationTool:
+          threeCascadingArrowsVisualizationTool(),
         threeCircleHorizontalVisualizationTool:
           threeCircleHorizontalVisualizationTool(),
         threeCircleSequentialFlowVisualizationTool:
           threeCircleSequentialFlowVisualizationTool(),
+        threeElementContributionVisualizationTool:
+          threeElementContributionVisualizationTool(),
         threeSegmentCircularVisualizationTool:
           threeSegmentCircularVisualizationTool(),
+        threeVerticallyTieredContentLayoutTool:
+          threeVerticallyTieredContentLayoutTool(),
       },
     });
 
