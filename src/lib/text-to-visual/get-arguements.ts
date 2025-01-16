@@ -33,6 +33,9 @@ import { sixCardInformationVisualizationTool } from "../tools/text-to-visual/six
 import { threeCascadingArrowsVisualizationTool } from "../tools/text-to-visual/three-cascading-arrows-visualization-tool.js";
 import { threeElementContributionVisualizationTool } from "../tools/text-to-visual/three-element-contribution-visualization-tool.js";
 import { threeVerticallyTieredContentLayoutTool } from "../tools/text-to-visual/three-vertically-tiered-content-layout-tool.js";
+import { balancedComparisonVisualizationTool } from "../tools/text-to-visual/balanced-comparison-visualization-tool.js";
+import { fourSegmentNumberedVisualizationTool } from "../tools/text-to-visual/four-segment-numbered-visualization-tool.js";
+import { threeBranchCentralIdeaVisualizationTool } from "../tools/text-to-visual/three-branch-central-idea-visualization-tool.js";
 
 const SYSTEM_PROMPT = `
 You are provided with:  
@@ -75,6 +78,8 @@ export const getArguements = async (
       tools: {
         arrowLinkedFourStepVisualizationTool:
           arrowLinkedFourStepVisualizationTool(),
+        balancedComparisonVisualizationTool:
+          balancedComparisonVisualizationTool(),
         hubAndSpokeContributionVisualizationTool:
           hubAndSpokeContributionVisualizationTool(),
         centralHubFeaturesVisualizationTool:
@@ -100,6 +105,8 @@ export const getArguements = async (
           fourPointsZigzagPathVisualizationTool(),
         fourSegmentFunnelVisualizationTool:
           fourSegmentFunnelVisualizationTool(),
+        fourSegmentNumberedVisualizationTool:
+          fourSegmentNumberedVisualizationTool(),
         fourStageOverlappingCircularVisualizationTool:
           fourStageOverlappingCircularVisualizationTool(),
         fourStepCircularNodeFlowVisualizationTool:
@@ -120,6 +127,8 @@ export const getArguements = async (
           sixCardInformationVisualizationTool(),
         sixStageAlternatingDescriptionVisualizationTool:
           sixStageAlternatingDescriptionVisualizationTool(),
+        threeBranchCentralIdeaVisualizationTool:
+          threeBranchCentralIdeaVisualizationTool(),
         threeCascadingArrowsVisualizationTool:
           threeCascadingArrowsVisualizationTool(),
         threeCircleHorizontalVisualizationTool:
