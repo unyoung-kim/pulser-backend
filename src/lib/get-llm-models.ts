@@ -28,6 +28,10 @@ export function getClaudeSonnet() {
   return anthropic("claude-3-5-sonnet-20240620");
 }
 
+export function getFineTunedGPT4o() {
+  return openai("ft:gpt-4o-2024-08-06:personal::Aoh3T16f");
+}
+
 export const getThrottledGPT4o = pThrottle({
   limit: maxConcurrentCallToGPT4o,
   interval: 1000,
@@ -52,3 +56,8 @@ export const getThrottledClaudeSonnet = pThrottle({
   limit: maxConcurrentCallToClaudeSonnet3_5,
   interval: 1000,
 })(getClaudeSonnet);
+
+export const getThrottledFineTunedGPT4o = pThrottle({
+  limit: maxConcurrentCallToGPT4o,
+  interval: 1000,
+})(getFineTunedGPT4o);
