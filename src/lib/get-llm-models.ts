@@ -2,10 +2,11 @@ import { anthropic } from "@ai-sdk/anthropic";
 import { openai } from "@ai-sdk/openai";
 import pThrottle from "p-throttle";
 
-const maxConcurrentCallToGPT4o: number = 2; // TPM: 30,000
-const maxConcurrentCallToGPT4oMini: number = 10; // TPM: 200,000
-const maxConcurrentCallToGPTo1Mini: number = 10; // TPM: 200,000
-const maxConcurrentCallToGPT4oPreview: number = 2; // TPM: 30,000
+// Considering maximum max_tokens/LLM call is 10,000 and one call may take 1-2 minutes, so TPM / (10,000 * 2)
+const maxConcurrentCallToGPT4o: number = 100; // TPM: 2,000,000
+const maxConcurrentCallToGPT4oMini: number = 500; // TPM: 10,000,000
+const maxConcurrentCallToGPTo1Mini: number = 500; // TPM: 10,000,000
+const maxConcurrentCallToGPT4oPreview: number = 100; // TPM: 2,000,000
 const maxConcurrentCallToClaudeSonnet3_5: number = 1; // TPM: 16,000
 
 export function getGPT4o() {
@@ -34,30 +35,30 @@ export function getFineTunedGPT4o() {
 
 export const getThrottledGPT4o = pThrottle({
   limit: maxConcurrentCallToGPT4o,
-  interval: 1000,
+  interval: 60 * 1000,
 })(getGPT4o);
 
 export const getThrottledGPT4oMini = pThrottle({
   limit: maxConcurrentCallToGPT4oMini,
-  interval: 1000,
+  interval: 60 * 1000,
 })(getGPT4oMini);
 
 export const getThrottledGPTo1Mini = pThrottle({
   limit: maxConcurrentCallToGPTo1Mini,
-  interval: 1000,
+  interval: 60 * 1000,
 })(getGPTo1Mini);
 
 export const getThrottledGPTo1Preview = pThrottle({
   limit: maxConcurrentCallToGPT4oPreview,
-  interval: 1000,
+  interval: 60 * 1000,
 })(getGPTo1Preview);
 
 export const getThrottledClaudeSonnet = pThrottle({
   limit: maxConcurrentCallToClaudeSonnet3_5,
-  interval: 1000,
+  interval: 60 * 1000,
 })(getClaudeSonnet);
 
 export const getThrottledFineTunedGPT4o = pThrottle({
   limit: maxConcurrentCallToGPT4o,
-  interval: 1000,
+  interval: 60 * 1000,
 })(getFineTunedGPT4o);
