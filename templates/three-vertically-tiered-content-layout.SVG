@@ -1,0 +1,147 @@
+<svg width="1280" height="720" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" overflow="hidden">
+    <defs>
+        <filter id="fx0" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0"/>
+                <feFuncG type="discrete" tableValues="0 0"/>
+                <feFuncB type="discrete" tableValues="0 0"/>
+                <feFuncA type="linear" slope="0.2" intercept="0"/>
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="6.22222 6.22222"/>
+        </filter>
+        <filter id="fx1" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0"/>
+                <feFuncG type="discrete" tableValues="0 0"/>
+                <feFuncB type="discrete" tableValues="0 0"/>
+                <feFuncA type="linear" slope="0.2" intercept="0"/>
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="6.22222 6.22222"/>
+        </filter>
+        <filter id="fx2" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0"/>
+                <feFuncG type="discrete" tableValues="0 0"/>
+                <feFuncB type="discrete" tableValues="0 0"/>
+                <feFuncA type="linear" slope="0.2" intercept="0"/>
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="6.17544 6.26237"/>
+        </filter>
+        <filter id="fx3" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0"/>
+                <feFuncG type="discrete" tableValues="0 0"/>
+                <feFuncB type="discrete" tableValues="0 0"/>
+                <feFuncA type="linear" slope="0.2" intercept="0"/>
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="6.17544 6.26237"/>
+        </filter>
+        <filter id="fx4" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0"/>
+                <feFuncG type="discrete" tableValues="0 0"/>
+                <feFuncB type="discrete" tableValues="0 0"/>
+                <feFuncA type="linear" slope="0.2" intercept="0"/>
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="6.17544 6.26237"/>
+        </filter>
+        <filter id="fx5" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0"/>
+                <feFuncG type="discrete" tableValues="0 0"/>
+                <feFuncB type="discrete" tableValues="0 0"/>
+                <feFuncA type="linear" slope="0.2" intercept="0"/>
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="6.22222 6.22222"/>
+        </filter>
+        <clipPath id="clip6">
+            <rect x="-2.32831e-10" y="0" width="609600" height="619125"/>
+        </clipPath>
+        <clipPath id="clip8">
+            <rect x="0" y="0" width="609600" height="609600"/>
+        </clipPath>
+        <clipPath id="clip9">
+            <rect x="0" y="0" width="619125" height="619125"/>
+        </clipPath>
+        <clipPath id="clip11">
+            <rect x="-0.125" y="0" width="619125" height="619125"/>
+        </clipPath>
+        <clipPath id="clip13">
+            <rect x="0" y="0" width="609600" height="609600"/>
+        </clipPath>
+    </defs>
+    <g>
+        <rect x="0" y="0" width="1280" height="720" fill="#FFFFFF"/>
+        <g filter="url(#fx0)" transform="matrix(3 0 0 3 96 142)">
+            <g transform="matrix(1 0 0 1 0 -7.10543e-15)">
+                <path d="M19 46C19 31.0883 31.0883 19 46 19 60.9117 19 73 31.0883 73 46 73 60.9117 60.9117 73 46 73 31.0883 73 19 60.9117 19 46Z" fill="#10CF9B" fill-rule="evenodd"/>
+            </g>
+        </g>
+        <path d="M153 280C153 235.265 189.265 199 234 199 278.735 199 315 235.265 315 280 315 324.735 278.735 361 234 361 189.265 361 153 324.735 153 280Z" fill="#10CF9B" fill-rule="evenodd"/>
+        <g filter="url(#fx1)" transform="matrix(3 0 0 3 96 399)">
+            <g>
+                <path d="M19 46C19 31.0883 31.0883 19 46 19 60.9117 19 73 31.0883 73 46 73 60.9117 60.9117 73 46 73 31.0883 73 19 60.9117 19 46Z" fill="#10CF9B" fill-rule="evenodd"/>
+            </g>
+        </g>
+        <path d="M153 537C153 492.265 189.265 456 234 456 278.735 456 315 492.265 315 537 315 581.735 278.735 618 234 618 189.265 618 153 581.735 153 537Z" fill="#10CF9B" fill-rule="evenodd"/>
+        <g filter="url(#fx2)" transform="matrix(3.02273 0 0 2.98077 305 202)">
+            <g>
+                <path d="M18.8571 19.1226 22 19.1226 25.1429 26 22 32.8774 18.8571 32.8774 22 26Z" fill="#10CF9B" fill-rule="evenodd"/>
+            </g>
+        </g>
+        <path d="M362 259 371.5 259 381 279.5 371.5 300 362 300 371.5 279.5Z" fill="#10CF9B" fill-rule="evenodd"/>
+        <g filter="url(#fx3)" transform="matrix(3.02273 0 0 2.98077 305 331)">
+            <g>
+                <path d="M18.8571 19.1226 22 19.1226 25.1429 26 22 32.8774 18.8571 32.8774 22 26Z" fill="#0F6FC6" fill-rule="evenodd"/>
+            </g>
+        </g>
+        <path d="M362 388 371.5 388 381 408.5 371.5 429 362 429 371.5 408.5Z" fill="#0F6FC6" fill-rule="evenodd"/>
+        <g filter="url(#fx4)" transform="matrix(3.02273 0 0 2.98077 305 459)">
+            <g>
+                <path d="M18.8571 19.1226 22 19.1226 25.1429 26 22 32.8774 18.8571 32.8774 22 26Z" fill="#10CF9B" fill-rule="evenodd"/>
+            </g>
+        </g>
+        <path d="M362 516 371.5 516 381 536.5 371.5 557 362 557 371.5 536.5Z" fill="#10CF9B" fill-rule="evenodd"/>
+        <text fill="#0F6FC6" font-family="Open Sans,Open Sans_MSFontService,sans-serif" font-weight="700" font-size="48" transform="translate(85.6 111)">{{header}}</text>
+        <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(88 146)">{{sub_header}}</text>
+        <g filter="url(#fx5)" transform="matrix(3 0 0 3 96 270)">
+            <g>
+                <path d="M19 46C19 31.0883 31.0883 19 46 19 60.9117 19 73 31.0883 73 46 73 60.9117 60.9117 73 46 73 31.0883 73 19 60.9117 19 46Z" fill="#009DD9" fill-rule="evenodd"/>
+            </g>
+        </g>
+        <path d="M153 408C153 363.265 189.265 327 234 327 278.735 327 315 363.265 315 408 315 452.735 278.735 489 234 489 189.265 489 153 452.735 153 408Z" fill="#009DD9" fill-rule="evenodd"/>
+        <text fill="#17406D" font-family="Open Sans,Open Sans_MSFontService,sans-serif" font-weight="700" font-size="19" transform="translate(448.248 271)">{{title_1}}</text>
+        <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(448.248 301)">{{title_1_desc_line_1}}</text>
+        <text fill="#17406D" font-family="Open Sans,Open Sans_MSFontService,sans-serif" font-weight="700" font-size="19" transform="translate(448.248 400)">{{title_2}}</text>
+        <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(448.248 430)">{{title_2_desc_line_1}}</text>
+        <text fill="#17406D" font-family="Open Sans,Open Sans_MSFontService,sans-serif" font-weight="700" font-size="19" transform="translate(448.248 528)">{{title_3}}</text>
+        <text font-family="Open Sans Light,Open Sans Light_MSFontService,sans-serif" font-weight="300" font-size="16" transform="translate(448.248 559)">{{title_3_desc_line_1}}</text>
+        {{fallback_icon_1}}
+        {{fallback_icon_2}}
+        {{fallback_icon_3}}
+        <g id="img1" transform="translate(198 243) scale(3)" stroke="white" stroke-width="0.7" fill="none">
+            {{icon_1}}
+        </g>
+        <g id="img2" transform="translate(198 373) scale(3)" stroke="white" stroke-width="0.7" fill="none">
+            {{icon_2}}
+        </g>
+        <g id="img3" transform="translate(198 500) scale(3)" stroke="white" stroke-width="0.7" fill="none">
+            {{icon_3}}
+        </g>
+        <g clip-path="url(#clip6)" transform="matrix(0.000104987 0 0 0.000104987 202 375)">
+            <g clip-path="url(#clip8)" transform="matrix(1 0 0 1.01562 0 -0.25)">
+                <use width="100%" height="100%" xlink:href="#img2" transform="scale(9525 9525)"></use>
+            </g>
+        </g>
+        <g clip-path="url(#clip9)" transform="matrix(0.000104987 0 0 0.000104987 203 504)">
+            <g clip-path="url(#clip11)">
+                <use width="100%" height="100%" xlink:href="#img3" transform="matrix(4836.91 0 0 4836.91 -0.125 0)"></use>
+            </g>
+        </g>
+        <g transform="matrix(0.000104987 0 0 0.000104987 202 247)">
+            <g clip-path="url(#clip13)">
+                <use width="100%" height="100%" xlink:href="#img1" transform="scale(9525 9525)"></use>
+            </g>
+        </g>
+    </g>
+</svg>

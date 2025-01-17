@@ -2,6 +2,7 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import Stripe from "stripe";
 import Result, { err, ok } from "true-myth/result";
 import { STRIPE_PRODUCT_LIST, StripeProduct } from "./product-list.js";
+import { COUPON_CODE_LIST } from "./coupon-code-list.js";
 
 export const handleInvoicePaid = async (
   invoice: Stripe.Invoice,
@@ -73,6 +74,7 @@ export const handleInvoicePaid = async (
         }
 
         const productId = session.metadata.productId;
+        const credits = parseInt(session.metadata.credits, 10);
 
         if (productId == null) {
           return err("productId metadata is missing");
@@ -140,7 +142,7 @@ export const handleInvoicePaid = async (
               stripe_subscription_id: subscriptionId,
               start_date: startDate.toISOString(),
               end_date: endDate.toISOString(),
-              credits_charged: stripeProduct.credits,
+              credits_charged: credits,
               additional_credits_charged: creditsLeft,
               org_id: orgId,
               plan: stripeProduct.plan,
@@ -243,6 +245,13 @@ export const handleInvoicePaid = async (
         return err("Product not found for productId: " + productId);
       }
 
+      const credits =
+        stripeProduct.credits +
+        (subscription.metadata.couponCode &&
+        COUPON_CODE_LIST.includes(subscription.metadata.couponCode)
+          ? stripeProduct.credits * 0.2
+          : 0);
+
       const { error: existingUsageEndDateUpdateError } = await supabase
         .from("Usage")
         .update({ end_date: new Date().toISOString() })
@@ -258,7 +267,7 @@ export const handleInvoicePaid = async (
             stripe_subscription_id: subscriptionId,
             start_date: startDate.toISOString(),
             end_date: endDate.toISOString(),
-            credits_charged: stripeProduct.credits,
+            credits_charged: credits,
             additional_credits_charged: creditsLeft,
             org_id: orgId,
             plan: stripeProduct.plan,

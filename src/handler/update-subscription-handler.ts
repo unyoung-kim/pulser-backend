@@ -24,29 +24,17 @@ export function updateSubscriptionHandler(t: tRPC, path: string) {
         orgId: z.string(),
         plan: z.enum(["BASIC", "PRO", "AGENCY"]),
         term: z.enum(["MONTHLY", "YEARLY"]),
+        couponCode: z.string().optional().describe("Coupon code to apply"),
       })
     )
     .output(ApiResponseSchema)
     .mutation(async ({ input }) => {
       try {
-        // Find the stripe product for the given plan and term
-        const stripeProduct: StripeProduct | undefined =
-          STRIPE_PRODUCT_LIST.find(
-            (product: StripeProduct) =>
-              product.plan === input.plan && product.term === input.term
-          );
-
-        if (!stripeProduct) {
-          return {
-            success: false,
-            error: "Couldn't find the plan or term",
-          };
-        }
-
         const result: Result<string, string> = await updateSubscription(
           input.orgId,
-          stripeProduct.stripeProductId,
-          stripeProduct.stripePriceId
+          input.plan,
+          input.term,
+          input.couponCode
         );
         if (result.isErr) {
           return {

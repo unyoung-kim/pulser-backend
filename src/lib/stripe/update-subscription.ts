@@ -2,12 +2,23 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import Result, { err, ok } from "true-myth/result";
 import { getSupabaseClient } from "../get-supabase-client.js";
 import { getStripeClient } from "./get-stripe-client.js";
+import { STRIPE_PRODUCT_LIST, StripeProduct } from "./product-list.js";
 
 export const updateSubscription = async (
   orgId: string,
-  productId: string,
-  priceId: string
+  plan: "BASIC" | "PRO" | "AGENCY",
+  term: "MONTHLY" | "YEARLY",
+  couponCode?: string
 ): Promise<Result<string, string>> => {
+  // Find the stripe product for the given plan and term
+  const stripeProduct: StripeProduct | undefined = STRIPE_PRODUCT_LIST.find(
+    (product: StripeProduct) => product.plan === plan && product.term === term
+  );
+
+  if (!stripeProduct) {
+    return err("Couldn't find the plan or term");
+  }
+
   const supabaseClient: Result<SupabaseClient, string> = getSupabaseClient();
   if (supabaseClient.isErr) {
     return err(supabaseClient.error);
@@ -53,8 +64,9 @@ export const updateSubscription = async (
 
   await stripe.subscriptions.update(stripeSubscriptionId, {
     metadata: {
-      productId: productId,
+      productId: stripeProduct.stripeProductId,
       forUpdate: "true",
+      couponCode: couponCode ?? null,
     },
   });
 
@@ -62,7 +74,7 @@ export const updateSubscription = async (
     items: [
       {
         id: subscriptionItemId,
-        price: priceId,
+        price: stripeProduct.stripePriceId,
       },
     ],
     proration_behavior: "none",
