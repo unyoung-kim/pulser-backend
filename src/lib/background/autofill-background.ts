@@ -101,6 +101,8 @@ export async function autoFillBackground(
       )}`,
     });
 
+    console.log("Generated object for autofilling background: ", object);
+
     // Merge existing and new data, preserving existing fields
     const updatedBackground = {
       ...existingBackground, // Keep all existing fields
