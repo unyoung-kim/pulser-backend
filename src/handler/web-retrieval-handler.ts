@@ -13,7 +13,7 @@ export function webRetrievalHandler(t: tRPC, path: string) {
         path: "/web-retrieval",
         summary: "Web Retrieval API endpoint",
         description: "Processes web retrieval messages and returns a response",
-        tags: ["Web Retrieval"],
+        tags: ["Post"],
       },
     })
     .input(WebRetrievalSchema)
