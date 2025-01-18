@@ -46,12 +46,15 @@ export const BackgroundSchema2 = z.object({
       .describe("Customer profile of the company's target audience"),
     // additionalInfo: z.record(z.string()).optional(),
   }),
-  // socialProof: z.object({
-  //   testimonials: z.string().nullish(),
-  //   caseStudies: z.string().nullish(),
-  //   achievements: z.string().nullish(),
-  //   additionalInfo: z.record(z.string()).optional(),
-  // }),
+  socialProof: z.object({
+    testimonials: z.string().nullish().describe("Testimonials of the company"),
+    caseStudies: z.string().nullish().describe("Case studies of the company"),
+    achievements: z
+      .string()
+      .nullish()
+      .describe("Achievements of the company or key customers"),
+    // additionalInfo: z.record(z.string()).optional(),
+  }),
 });
 
 export async function autoFillBackground(
