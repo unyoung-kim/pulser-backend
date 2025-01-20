@@ -1,11 +1,8 @@
-import { SupabaseClient } from "@supabase/supabase-js";
 import Stripe from "stripe";
 import Result, { err, ok } from "true-myth/result";
-import { getSupabaseClient } from "../get-supabase-client.js";
 import { getOrCreateCustomer } from "./get-or-create-customer.js";
 import { getStripeClient } from "./get-stripe-client.js";
 import { STRIPE_PRODUCT_LIST, StripeProduct } from "./product-list.js";
-import { COUPON_CODE_LIST } from "./coupon-code-list.js";
 
 export const createStripeSession = async (
   orgId: string,
@@ -14,11 +11,6 @@ export const createStripeSession = async (
   mode: "payment" | "subscription",
   couponCode?: string
 ): Promise<Result<string, string>> => {
-  const supabaseClient: Result<SupabaseClient, string> = getSupabaseClient();
-  if (supabaseClient.isErr) {
-    return err(supabaseClient.error);
-  }
-
   const stripeProduct: StripeProduct | undefined = STRIPE_PRODUCT_LIST.find(
     (product: StripeProduct) => product.plan === plan && product.term === term
   );
@@ -42,13 +34,6 @@ export const createStripeSession = async (
   }
 
   const customerId = customerResult.value;
-  const credits =
-    stripeProduct.credits +
-    (couponCode && COUPON_CODE_LIST.includes(couponCode)
-      ? stripeProduct.credits * 0.2
-      : 0);
-  console.log("credits", credits);
-  console.log(couponCode && COUPON_CODE_LIST.includes(couponCode));
 
   try {
     const sessionConfig: Stripe.Checkout.SessionCreateParams = {
@@ -63,9 +48,9 @@ export const createStripeSession = async (
       cancel_url: `${process.env.FRONTEND_CANCEL_URL}`,
       customer: customerId,
       metadata: {
-        credits: credits.toString(),
         orgId,
         productId: stripeProduct.stripeProductId,
+        couponCode: couponCode ?? null,
       },
     };
 
