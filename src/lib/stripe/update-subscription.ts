@@ -77,6 +77,7 @@ export const updateSubscription = async (
         price: stripeProduct.stripePriceId,
       },
     ],
+    billing_cycle_anchor: "now",
     proration_behavior: "none",
     payment_behavior: "pending_if_incomplete",
   });

@@ -2,7 +2,10 @@ import { openai } from "@ai-sdk/openai";
 import { generateText } from "ai";
 import { Result } from "true-myth";
 import { err, ok } from "true-myth/result";
-import { getThrottledGPTo1Mini } from "../get-llm-models.js";
+import {
+  getThrottledFineTunedGPT4o,
+  getThrottledGPTo1Mini,
+} from "../get-llm-models.js";
 import { EnrichedURL } from "../internal-link/enrich-internal-links.js";
 
 export const SYSTEM_PROMPT = `You are an expert SEO content writer. You will be given an outline for the article in markdown format. Write an SEO blog post following the outline in html format. Use <h2> for subtopics and <h3> for subsubtopics. 
@@ -36,14 +39,12 @@ export async function fineTunedWriter(
   //   researchResults: string
 ): Promise<Result<string, string>> {
   console.log("Using fine-tuned writer...");
-  const ftModel = openai("ft:gpt-4o-2024-08-06:personal::Aoh3T16f");
 
   try {
-    const model = ftModel;
     const currentDate = new Date().toLocaleString();
     const result = await generateText({
       // model: await getThrottledClaudeSonnet(),
-      model: model,
+      model: await getThrottledFineTunedGPT4o(),
       system: SYSTEM_PROMPT,
       prompt: outline,
       maxTokens: 6000,
