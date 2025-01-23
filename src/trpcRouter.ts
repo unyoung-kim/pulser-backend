@@ -7,6 +7,7 @@ import { googleTokenGenerationHandler } from "./handler/google-token-generation-
 import { imageSearchHandler } from "./handler/image-search-handler.js";
 import { initializeOrgHandler } from "./handler/initialize-org-handler.js";
 import { internalLinksHandler } from "./handler/internal-links-handler.js";
+import { postBatchCreationHandler } from "./handler/post-batch-creation-handler.js";
 import { stripeSessionCreationHandler } from "./handler/stripe-session-creation-handler.js";
 import { stripeSessionVerificationHandler } from "./handler/stripe-session-verification-handler.js";
 import { stripeWebhook } from "./handler/stripe-webhook.js";
@@ -74,4 +75,5 @@ export const trpcRouter = t.router({
   "upload-docx": uploadDocxHandler(t, "upload-docx"),
   "autofill-background": autoFillBackgroundHandler(t, "autofill-background"),
   "summarize-link": summarizeLinkHandler(t, "summarize-link"),
+  "post-batch-creation": postBatchCreationHandler(t, "post-batch-creation"),
 });
