@@ -1,16 +1,9 @@
 import { Result } from "true-myth";
-import { ok } from "true-myth/result";
-import { z } from "zod";
+import result, { ok, err } from "true-myth/result";
+import { semrushKeywordOverviewOneDb } from "./semrush-keyword-overview-one-db.js";
 
 const exportColumns = "Ph,Nq,Cp,Co,Nr,Td,Fk,In,Kd";
-const displayLimit = 50;
-
-const intentEnum = z.enum([
-  "Commercial",
-  "Informational",
-  "Navigational",
-  "Transactional",
-]);
+const displayLimit = 70;
 
 const intentMapping: Record<string, string> = {
   "0": "Commercial",
@@ -19,13 +12,17 @@ const intentMapping: Record<string, string> = {
   "3": "Transactional",
 };
 
-export const semrushBroadMatchKeyword = async (
+export const semrushKeywordBroadMatchAndOverview = async (
   phrase: string,
   database: string,
   displayOffset: number,
-  kdFilter: number,
-  intentFilter: z.infer<typeof intentEnum>
-): Promise<Result<Record<string, string>[], string>> => {
+  kdFilter: number
+): Promise<
+  Result<
+    { inputKeywordOverview: string; broadMatches: Record<string, string>[] },
+    string
+  >
+> => {
   const response = await fetch(
     `https://api.semrush.com/?type=phrase_fullsearch&key=${process.env.SEMRUSH_API_KEY}&phrase=${phrase}&database=${database}&display_offset=${displayOffset}&display_filter=%2B|Kd|Lt|${kdFilter}&display_limit=${displayLimit}&export_columns=${exportColumns}`
   );
@@ -45,7 +42,7 @@ export const semrushBroadMatchKeyword = async (
         .replace(/\s+/g, "")
     );
   // Create an array of objects
-  const result = data.slice(1).map((row) => {
+  const broadMatchResult = data.slice(1).map((row) => {
     const values = row.trim().split(";");
     const obj: Record<string, string> = {};
 
@@ -62,6 +59,18 @@ export const semrushBroadMatchKeyword = async (
     });
     return obj;
   });
+
+  const overviewResult: Result<string, string> =
+    await semrushKeywordOverviewOneDb(phrase, database);
+
+  if (overviewResult.isErr) {
+    return err(overviewResult.error);
+  }
+
+  const result = {
+    inputKeywordOverview: overviewResult.value,
+    broadMatches: broadMatchResult,
+  };
 
   return ok(result);
 };

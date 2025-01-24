@@ -2,17 +2,20 @@ import { Result } from "true-myth";
 import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
 import { z } from "zod";
 import { tRPC } from "../lib/trpc.js";
-import { semrushBroadMatchKeyword } from "../lib/semrush/semrush-broad-match-keyword.js";
+import { semrushKeywordBroadMatchAndOverview } from "../lib/semrush/semrush-keyword-broad-match-and-overview.js";
 
-export function semrushBroadMatchKeywordHandler(t: tRPC, endpoint: string) {
+export function semrushKeywordBroadMatchAndOverviewHandler(
+  t: tRPC,
+  endpoint: string
+) {
   return t.procedure
     .meta({
       openapi: {
         method: "POST",
-        path: "/semrush-broad-match-keyword",
-        summary: "Semrush Broad Match Keyword API endpoint",
+        path: "/semrush-keyword-broad-match-and-overview",
+        summary: "Semrush Keyword Broad Match and Overview API endpoint",
         description:
-          "Retrieves the semrush broad match keyword for a given phrase",
+          "Retrieves the semrush broad match keyword and overview for a given phrase",
         tags: ["Semrush", "Keyword"],
       },
     })
@@ -26,27 +29,23 @@ export function semrushBroadMatchKeywordHandler(t: tRPC, endpoint: string) {
         database: z.string().describe("The database to use"),
         displayOffset: z.number().describe("The offset to use"),
         kdFilter: z.number().describe("The kd filter to use"),
-        intentFilter: z
-          .enum([
-            "Commercial",
-            "Informational",
-            "Navigational",
-            "Transactional",
-          ])
-          .describe("The intent filter to use"),
       })
     )
     .output(ApiResponseSchema)
     .mutation(async ({ input }) => {
       try {
-        const result: Result<Record<string, string>[], string> =
-          await semrushBroadMatchKeyword(
-            input.phrase,
-            input.database,
-            input.displayOffset,
-            input.kdFilter,
-            input.intentFilter
-          );
+        const result: Result<
+          {
+            inputKeywordOverview: string;
+            broadMatches: Record<string, string>[];
+          },
+          string
+        > = await semrushKeywordBroadMatchAndOverview(
+          input.phrase,
+          input.database,
+          input.displayOffset,
+          input.kdFilter
+        );
         if (result.isErr) {
           return {
             success: false,
@@ -58,7 +57,10 @@ export function semrushBroadMatchKeywordHandler(t: tRPC, endpoint: string) {
           data: result.value,
         };
       } catch (error) {
-        console.error("Error in semrush broad match keyword API:", error);
+        console.error(
+          "Error in semrush keyword broad match and overview API:",
+          error
+        );
         return {
           success: false,
           error: "Internal server error",
