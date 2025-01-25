@@ -2,7 +2,7 @@ import { Result } from "true-myth/result";
 import { glossaryWorkflow } from "../lib/articles/glossary.js";
 import { workflowV3 } from "../lib/articles/workflowV3/workflowV3.js";
 import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
-import { WebRetrievalSchema } from "../lib/schema/web-retrieval-schema.js";
+import { PostSchema } from "../lib/schema/post-schema.js";
 import { tRPC } from "../lib/trpc.js";
 
 export function webRetrievalHandler(t: tRPC, path: string) {
@@ -16,7 +16,7 @@ export function webRetrievalHandler(t: tRPC, path: string) {
         tags: ["Post"],
       },
     })
-    .input(WebRetrievalSchema)
+    .input(PostSchema)
     .output(ApiResponseSchema)
     .mutation(async ({ input }) => {
       try {

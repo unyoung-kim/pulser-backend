@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const WebRetrievalSchema = z.object({
+export const PostSchema = z.object({
   projectId: z
     .string()
     .describe("Id of the project or which blog post needs to be generated"),
@@ -28,4 +28,4 @@ export const WebRetrievalSchema = z.object({
   //   .describe("Ideal word count of the blog post"),
 });
 
-export type ApiResponse = z.infer<typeof WebRetrievalSchema>;
+export type PostSchema = z.infer<typeof PostSchema>;
