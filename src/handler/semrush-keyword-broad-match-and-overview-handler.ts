@@ -21,6 +21,7 @@ export function semrushKeywordBroadMatchAndOverviewHandler(
     })
     .input(
       z.object({
+        orgId: z.string().describe("The organization id"),
         phrase: z
           .string()
           .describe(
@@ -41,6 +42,7 @@ export function semrushKeywordBroadMatchAndOverviewHandler(
           },
           string
         > = await semrushKeywordBroadMatchAndOverview(
+          input.orgId,
           input.phrase,
           input.database,
           input.displayOffset,

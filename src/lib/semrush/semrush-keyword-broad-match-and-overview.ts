@@ -1,6 +1,9 @@
 import { Result } from "true-myth";
 import result, { ok, err } from "true-myth/result";
 import { semrushKeywordOverviewOneDb } from "./semrush-keyword-overview-one-db.js";
+import { incrementUsageCredit } from "../supabase/usage.js";
+import { SupabaseClient } from "@supabase/supabase-js";
+import { getSupabaseClient } from "../get-supabase-client.js";
 
 const exportColumns = "Ph,Nq,Cp,Co,Nr,Td,Fk,In,Kd";
 const displayLimit = 70;
@@ -13,6 +16,7 @@ const intentMapping: Record<string, string> = {
 };
 
 export const semrushKeywordBroadMatchAndOverview = async (
+  orgId: string,
   phrase: string,
   database: string,
   displayOffset: number,
@@ -65,6 +69,21 @@ export const semrushKeywordBroadMatchAndOverview = async (
 
   if (overviewResult.isErr) {
     return err(overviewResult.error);
+  }
+
+  const supabaseClient: Result<SupabaseClient, string> = getSupabaseClient();
+
+  if (supabaseClient.isErr) {
+    return err(supabaseClient.error);
+  }
+
+  const supabase = supabaseClient.value;
+
+  const incrementUsageCreditResult: Result<string, string> =
+    await incrementUsageCredit(supabase, orgId, "GLOSSARY");
+
+  if (incrementUsageCreditResult.isErr) {
+    return err(incrementUsageCreditResult.error);
   }
 
   const result = {
