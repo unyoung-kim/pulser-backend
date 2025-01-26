@@ -28,7 +28,7 @@ export async function workflowV3({
   keywordId?: string;
   secondaryKeywords?: string[];
   instruction?: string;
-}): Promise<Result<string, string>> {
+}): Promise<Result<{ contentId: string; content: string }, string>> {
   const supabaseClient: Result<SupabaseClient, string> = getSupabaseClient();
 
   if (supabaseClient.isErr) {
@@ -176,5 +176,8 @@ export async function workflowV3({
     return err(incrementUsageCreditResult.error);
   }
 
-  return ok(enhancedArticle.value);
+  return ok({
+    contentId: id,
+    content: enhancedArticle.value,
+  });
 }

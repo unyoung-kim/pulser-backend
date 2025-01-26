@@ -328,7 +328,7 @@ export async function glossaryWorkflow({
   projectId: string;
   inputTopic?: string;
   keywordId: string;
-}): Promise<Result<string, string>> {
+}): Promise<Result<{ contentId: string; content: string }, string>> {
   try {
     console.log("Generating Glossary Article..");
     const supabaseClient: Result<SupabaseClient, string> = getSupabaseClient();
@@ -452,7 +452,10 @@ export async function glossaryWorkflow({
       project.name
     );
 
-    return ok("Successfully created and saved glossary article");
+    return ok({
+      contentId: id,
+      content: glossaryArticle.text,
+    });
   } catch (error) {
     console.error("Error in glossary workflow:", error);
     return err("An error has occured from the glossary workflow");

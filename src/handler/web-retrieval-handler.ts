@@ -21,7 +21,7 @@ export function webRetrievalHandler(t: tRPC, path: string) {
     .mutation(async ({ input }) => {
       try {
         console.log("TYPE: ", input.type);
-        const result: Result<string, string> =
+        const result: Result<{ contentId: string; content: string }, string> =
           input.type === "NORMAL"
             ? await workflowV3({
                 projectId: input.projectId,
