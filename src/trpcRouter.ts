@@ -9,6 +9,8 @@ import { initializeOrgHandler } from "./handler/initialize-org-handler.js";
 import { internalLinksHandler } from "./handler/internal-links-handler.js";
 import { postBatchCreationHandler } from "./handler/post-batch-creation-handler.js";
 import { schedulePostHandler } from "./handler/schedule-post-handler.js";
+import { semrushKeywordOverviewOneDbHandler } from "./handler/semrush-keyword-overview-one-db-handler.js";
+import { semrushKeywordBroadMatchAndOverviewHandler } from "./handler/semrush-keyword-broad-match-and-overview-handler.js";
 import { stripeSessionCreationHandler } from "./handler/stripe-session-creation-handler.js";
 import { stripeSessionVerificationHandler } from "./handler/stripe-session-verification-handler.js";
 import { stripeWebhook } from "./handler/stripe-webhook.js";
@@ -78,4 +80,13 @@ export const trpcRouter = t.router({
   "summarize-link": summarizeLinkHandler(t, "summarize-link"),
   "post-batch-creation": postBatchCreationHandler(t, "post-batch-creation"),
   "schedule-post": schedulePostHandler(t, "schedule-post"),
+  "semrush-keyword-overview-one-db": semrushKeywordOverviewOneDbHandler(
+    t,
+    "semrush-keyword-overview-one-db"
+  ),
+  "semrush-keyword-broad-match-and-overview":
+    semrushKeywordBroadMatchAndOverviewHandler(
+      t,
+      "semrush-keyword-broad-match-and-overview"
+    ),
 });
