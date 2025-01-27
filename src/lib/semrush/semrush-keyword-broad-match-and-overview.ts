@@ -23,7 +23,10 @@ export const semrushKeywordBroadMatchAndOverview = async (
   kdFilter: number
 ): Promise<
   Result<
-    { inputKeywordOverview: string; broadMatches: Record<string, string>[] },
+    {
+      inputKeywordOverview: Record<string, string>;
+      broadMatches: Record<string, string>[];
+    },
     string
   >
 > => {
@@ -52,7 +55,8 @@ export const semrushKeywordBroadMatchAndOverview = async (
 
     fields.forEach((field, index) => {
       if (field === "intent") {
-        obj[field] = intentMapping[values[index]] || values[index];
+        const value = values[index].split(",")[0];
+        obj[field] = intentMapping[value] || value;
       } else {
         if (field === "cPC") {
           obj["CPC"] = values[index];
@@ -64,8 +68,10 @@ export const semrushKeywordBroadMatchAndOverview = async (
     return obj;
   });
 
-  const overviewResult: Result<string, string> =
-    await semrushKeywordOverviewOneDb(phrase, database);
+  const overviewResult: Result<
+    Record<string, string>,
+    string
+  > = await semrushKeywordOverviewOneDb(phrase, database);
 
   if (overviewResult.isErr) {
     return err(overviewResult.error);
