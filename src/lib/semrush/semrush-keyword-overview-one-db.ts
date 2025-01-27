@@ -13,7 +13,7 @@ const intentMapping: Record<string, string> = {
 export const semrushKeywordOverviewOneDb = async (
   phrase: string,
   database: string
-): Promise<Result<string, string>> => {
+): Promise<Result<Record<string, string>, string>> => {
   const response = await fetch(
     `https://api.semrush.com/?type=phrase_this&key=${process.env.SEMRUSH_API_KEY}&phrase=${phrase}&database=${database}&export_columns=${exportColumns}`
   );
@@ -36,7 +36,8 @@ export const semrushKeywordOverviewOneDb = async (
 
       // Map the "intent" field
       if (camelCaseField === "intent") {
-        acc[camelCaseField] = intentMapping[values[index]] || values[index]; // Default to original value if not found
+        const value = values[index].split(",")[0];
+        acc[camelCaseField] = intentMapping[value] || value; // Default to original value if not found
       } else {
         // Check for specific abbreviations
         if (camelCaseField === "cPC") {
@@ -51,8 +52,5 @@ export const semrushKeywordOverviewOneDb = async (
     {}
   );
 
-  // Convert to JSON string if needed
-  const jsonString = JSON.stringify(jsonObject, null, 2);
-
-  return ok(jsonString);
+  return ok(jsonObject);
 };

@@ -37,7 +37,7 @@ export function semrushKeywordBroadMatchAndOverviewHandler(
       try {
         const result: Result<
           {
-            inputKeywordOverview: string;
+            inputKeywordOverview: Record<string, string>;
             broadMatches: Record<string, string>[];
           },
           string

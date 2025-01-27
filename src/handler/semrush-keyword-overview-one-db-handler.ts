@@ -29,8 +29,10 @@ export function semrushKeywordOverviewOneDbHandler(t: tRPC, endpoint: string) {
     .output(ApiResponseSchema)
     .mutation(async ({ input }) => {
       try {
-        const result: Result<string, string> =
-          await semrushKeywordOverviewOneDb(input.phrase, input.database);
+        const result: Result<
+          Record<string, string>,
+          string
+        > = await semrushKeywordOverviewOneDb(input.phrase, input.database);
         if (result.isErr) {
           return {
             success: false,
