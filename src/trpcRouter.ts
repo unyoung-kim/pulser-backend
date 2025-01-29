@@ -8,6 +8,7 @@ import { imageSearchHandler } from "./handler/image-search-handler.js";
 import { initializeOrgHandler } from "./handler/initialize-org-handler.js";
 import { internalLinksHandler } from "./handler/internal-links-handler.js";
 import { postBatchCreationHandler } from "./handler/post-batch-creation-handler.js";
+import { schedulePostHandler } from "./handler/schedule-post-handler.js";
 import { semrushKeywordOverviewOneDbHandler } from "./handler/semrush-keyword-overview-one-db-handler.js";
 import { semrushKeywordBroadMatchAndOverviewHandler } from "./handler/semrush-keyword-broad-match-and-overview-handler.js";
 import { stripeSessionCreationHandler } from "./handler/stripe-session-creation-handler.js";
@@ -78,6 +79,7 @@ export const trpcRouter = t.router({
   "autofill-background": autoFillBackgroundHandler(t, "autofill-background"),
   "summarize-link": summarizeLinkHandler(t, "summarize-link"),
   "post-batch-creation": postBatchCreationHandler(t, "post-batch-creation"),
+  "schedule-post": schedulePostHandler(t, "schedule-post"),
   "semrush-keyword-overview-one-db": semrushKeywordOverviewOneDbHandler(
     t,
     "semrush-keyword-overview-one-db"
