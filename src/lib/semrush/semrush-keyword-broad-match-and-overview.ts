@@ -1,12 +1,13 @@
-import { Result } from "true-myth";
-import result, { ok, err } from "true-myth/result";
-import { semrushKeywordOverviewOneDb } from "./semrush-keyword-overview-one-db.js";
-import { incrementUsageCredit } from "../supabase/usage.js";
 import { SupabaseClient } from "@supabase/supabase-js";
+import { Result } from "true-myth";
+import { err, ok } from "true-myth/result";
 import { getSupabaseClient } from "../get-supabase-client.js";
+import { incrementUsageCredit } from "../supabase/usage.js";
+import { semrushKeywordOverviewOneDb } from "./semrush-keyword-overview-one-db.js";
 
 const exportColumns = "Ph,Nq,Cp,Co,Nr,Td,Fk,In,Kd";
 const displayLimit = 70;
+const displayLimitFreeTrial = 5;
 
 const intentMapping: Record<string, string> = {
   "0": "Commercial",
@@ -20,7 +21,8 @@ export const semrushKeywordBroadMatchAndOverview = async (
   phrase: string,
   database: string,
   displayOffset: number,
-  kdFilter: number
+  kdFilter: number,
+  isFreeTrial: boolean = false
 ): Promise<
   Result<
     {
@@ -31,7 +33,11 @@ export const semrushKeywordBroadMatchAndOverview = async (
   >
 > => {
   const response = await fetch(
-    `https://api.semrush.com/?type=phrase_fullsearch&key=${process.env.SEMRUSH_API_KEY}&phrase=${phrase}&database=${database}&display_offset=${displayOffset}&display_filter=%2B|Kd|Lt|${kdFilter}&display_limit=${displayLimit}&export_columns=${exportColumns}`
+    `https://api.semrush.com/?type=phrase_fullsearch&key=${
+      process.env.SEMRUSH_API_KEY
+    }&phrase=${phrase}&database=${database}&display_offset=${displayOffset}&display_filter=%2B|Kd|Lt|${kdFilter}&display_limit=${
+      isFreeTrial ? displayLimitFreeTrial : displayLimit
+    }&export_columns=${exportColumns}`
   );
 
   const data = (await response.text()).split("\n");

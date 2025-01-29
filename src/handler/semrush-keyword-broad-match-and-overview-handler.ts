@@ -1,8 +1,8 @@
 import { Result } from "true-myth";
-import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
 import { z } from "zod";
-import { tRPC } from "../lib/trpc.js";
+import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
 import { semrushKeywordBroadMatchAndOverview } from "../lib/semrush/semrush-keyword-broad-match-and-overview.js";
+import { tRPC } from "../lib/trpc.js";
 
 export function semrushKeywordBroadMatchAndOverviewHandler(
   t: tRPC,
@@ -30,6 +30,10 @@ export function semrushKeywordBroadMatchAndOverviewHandler(
         database: z.string().describe("The database to use"),
         displayOffset: z.number().describe("The offset to use"),
         kdFilter: z.number().describe("The kd filter to use"),
+        isFreeTrial: z
+          .boolean()
+          .optional()
+          .describe("Whether the user is on a free trial"),
       })
     )
     .output(ApiResponseSchema)
@@ -46,7 +50,8 @@ export function semrushKeywordBroadMatchAndOverviewHandler(
           input.phrase,
           input.database,
           input.displayOffset,
-          input.kdFilter
+          input.kdFilter,
+          input.isFreeTrial ?? undefined
         );
         if (result.isErr) {
           return {
