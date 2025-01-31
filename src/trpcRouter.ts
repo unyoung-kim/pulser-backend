@@ -11,6 +11,7 @@ import { postBatchCreationHandler } from "./handler/post-batch-creation-handler.
 import { schedulePostHandler } from "./handler/schedule-post-handler.js";
 import { semrushKeywordOverviewOneDbHandler } from "./handler/semrush-keyword-overview-one-db-handler.js";
 import { semrushKeywordBroadMatchAndOverviewHandler } from "./handler/semrush-keyword-broad-match-and-overview-handler.js";
+import { sendEmailHandler } from "./handler/send-email-handler.js";
 import { stripeSessionCreationHandler } from "./handler/stripe-session-creation-handler.js";
 import { stripeSessionVerificationHandler } from "./handler/stripe-session-verification-handler.js";
 import { stripeWebhook } from "./handler/stripe-webhook.js";
@@ -89,4 +90,5 @@ export const trpcRouter = t.router({
       t,
       "semrush-keyword-broad-match-and-overview"
     ),
+  "send-email": sendEmailHandler(t, "send-email"),
 });
