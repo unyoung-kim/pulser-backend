@@ -9,6 +9,7 @@ export const schedulePost = async (
   input: z.infer<typeof PostSchema> & {
     orgId: string;
     scheduledTime: Date;
+    emailId: string;
   }
 ): Promise<Result<string, string>> => {
   const supabaseClient: Result<SupabaseClient, string> = getSupabaseClient();
@@ -29,6 +30,7 @@ export const schedulePost = async (
       length: input.length,
       secondary_keywords: input.secondaryKeywords,
       instruction: input.instruction,
+      email_id: input.emailId,
     });
 
   if (orgError) {

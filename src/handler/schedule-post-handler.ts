@@ -22,6 +22,7 @@ export function schedulePostHandler(t: tRPC, path: string) {
         orgId: z.string().describe("Organization id"),
         scheduledTime: z.string().describe("Scheduled time for the post"),
         ...PostSchema.shape,
+        emailId: z.string().describe("Email id"),
       })
     )
     .output(ApiResponseSchema)
