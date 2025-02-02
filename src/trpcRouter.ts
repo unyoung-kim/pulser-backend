@@ -28,6 +28,7 @@ import { wordpressAuthHandler } from "./handler/wordpress-auth-handler.js";
 import { createPostHandler } from "./handler/wordpress-post-creation.js";
 import { wordpressTokenGenerationHandler } from "./handler/wordpress-token-generation-handler.js";
 import { t } from "./lib/trpc.js";
+import { processScheduledPostHandler } from "./handler/process-scheduled-post-handler.js";
 
 /**
  * tRPC routers from here
@@ -91,4 +92,8 @@ export const trpcRouter = t.router({
       "semrush-keyword-broad-match-and-overview"
     ),
   "send-email": sendEmailHandler(t, "send-email"),
+  "process-scheduled-post": processScheduledPostHandler(
+    t,
+    "process-scheduled-post"
+  ),
 });
