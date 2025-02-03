@@ -18,16 +18,16 @@ export async function workflowV3({
   projectId,
   inputTopic,
   keywordId,
-  secondaryKeywords,
   instruction,
+  secondaryKeywords,
   length,
 }: {
   projectId: string;
   inputTopic: string;
-  length: "LONG" | "SHORT";
   keywordId?: string;
-  secondaryKeywords?: string[];
   instruction?: string;
+  secondaryKeywords?: string[];
+  length?: "LONG" | "SHORT";
 }): Promise<Result<{ contentId: string; content: string }, string>> {
   const supabaseClient: Result<SupabaseClient, string> = getSupabaseClient();
 

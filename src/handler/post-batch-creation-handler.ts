@@ -43,9 +43,9 @@ export function postBatchCreationHandler(t: tRPC, path: string) {
                     projectId: input.projectId,
                     inputTopic: inputTopic,
                     keywordId: input.arguments.keywordIds[index],
+                    instruction: input.arguments.instructions?.[index],
                     secondaryKeywords:
                       input.arguments.secondaryKeywords?.[index],
-                    instruction: input.arguments.instructions?.[index],
                     length: input.arguments.lengths[index],
                   });
                 })

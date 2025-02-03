@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { tRPC } from "../lib/trpc.js";
 import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
-import { Result } from "true-myth/result";
 import { processScheduledPost } from "../lib/articles/process-scheduled-post.js";
 
 export function processScheduledPostHandler(t: tRPC, path: string) {
@@ -11,8 +10,7 @@ export function processScheduledPostHandler(t: tRPC, path: string) {
         method: "POST",
         path: "/process-scheduled-post",
         summary: "Process scheduled post endpoint",
-        description:
-          "Processes the scheduled post for the given keyword and compay background",
+        description: "Processes the scheduled post",
         tags: ["Post"],
       },
     })
@@ -22,20 +20,12 @@ export function processScheduledPostHandler(t: tRPC, path: string) {
       })
     )
     .output(ApiResponseSchema)
-    .mutation(async ({ input }) => {
+    .mutation(({ input }) => {
       try {
-        const result: Result<string, string> = await processScheduledPost(
-          input.scheduledContentId
-        );
-        if (result.isErr) {
-          return {
-            success: false,
-            error: result.error,
-          };
-        }
+        processScheduledPost(input.scheduledContentId);
         return {
           success: true,
-          data: result.value,
+          data: "Scheduled post processing started",
         };
       } catch (error) {
         return {
