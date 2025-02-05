@@ -2,7 +2,6 @@ import { z } from "zod";
 import { tRPC } from "../lib/trpc.js";
 import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
 import { Result } from "true-myth/result";
-import { PostSchema } from "../lib/schema/post-schema.js";
 import { schedulePost } from "../lib/articles/schedule-post.js";
 
 export function schedulePostHandler(t: tRPC, path: string) {
@@ -22,8 +21,8 @@ export function schedulePostHandler(t: tRPC, path: string) {
         projectId: z.string().describe("Project id"),
         scheduledTime: z.string().describe("Scheduled time for the post"),
         keywordId: z.string().describe("Keyword id"),
-        topic: z.string().describe("Topic for the post"),
-        instruction: z.string().describe("Instruction for the post"),
+        topic: z.string().optional().describe("Topic for the post"),
+        instruction: z.string().optional().describe("Instruction for the post"),
       })
     )
     .output(ApiResponseSchema)

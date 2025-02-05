@@ -1,6 +1,4 @@
 import { Result } from "true-myth";
-import { z } from "zod";
-import { PostSchema } from "../schema/post-schema.js";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { err, ok } from "true-myth/result";
 import { getSupabaseClient } from "../get-supabase-client.js";
@@ -9,8 +7,8 @@ export const schedulePost = async (
   projectId: string,
   scheduledTime: Date,
   keywordId: string,
-  topic: string,
-  instruction: string
+  topic?: string,
+  instruction?: string
 ): Promise<Result<string, string>> => {
   const supabaseClient: Result<SupabaseClient, string> = getSupabaseClient();
   if (supabaseClient.isErr) {
