@@ -5,6 +5,7 @@ import { getSupabaseClient } from "../get-supabase-client.js";
 import { sendEmail } from "../utility/send-email.js";
 import { workflowV3 } from "./workflowV3/workflowV3.js";
 import { topicGenerator } from "../agents/topic-generator.js";
+import { getClerkEmailId } from "../utility/get-clerk-email-id.js";
 
 export const processScheduledPost = async (
   scheduledContentId: string
@@ -26,15 +27,25 @@ export const processScheduledPost = async (
       .eq("id", scheduledContentId)
       .single();
 
+  const { data: projectData, error: projectError } = await supabase
+    .from("Project")
+    .select("org_id,clerk_user_id")
+    .eq("id", scheduledContent.project_id)
+    .single();
+
   try {
     if (scheduledContentError) {
       throw new Error(scheduledContentError.message);
     }
 
+    if (projectError) {
+      throw new Error(projectError.message);
+    }
+
     const { data: organization, error: organizationError } = await supabase
       .from("Organization")
       .select("current_usage_id")
-      .eq("org_id", scheduledContent.org_id)
+      .eq("org_id", projectData.org_id)
       .single();
 
     if (organizationError) {
@@ -70,11 +81,20 @@ export const processScheduledPost = async (
         throw new Error(error.message);
       }
 
-      await sendEmail(
-        scheduledContent.email_id,
-        "Insufficient credits for Scheduled Post: " + scheduledContent.topic,
-        "You have insufficient credits to generate a post. Please upgrade your plan."
-      );
+      const clerkEmailId = await getClerkEmailId(projectData.clerk_user_id);
+
+      if (clerkEmailId.isErr) {
+        console.error(
+          `Error getting clerk email id for project_id: ${scheduledContent.project_id}`,
+          clerkEmailId.error
+        );
+      } else {
+        await sendEmail(
+          clerkEmailId.value,
+          "Insufficient credits for Scheduled Post",
+          "You have insufficient credits to generate a post. Please upgrade your plan."
+        );
+      }
 
       return ok(`Insufficient credits for content_id: ${scheduledContentId}`);
     } else {
@@ -131,10 +151,22 @@ export const processScheduledPost = async (
         throw new Error(error.message);
       }
 
-      await sendEmail(
-        scheduledContent.email_id,
-        "Scheduled Post Generated Successfully: " + scheduledContent.topic,
-        "Your scheduled post has been generated successfully."
+      const clerkEmailId = await getClerkEmailId(projectData.clerk_user_id);
+
+      if (clerkEmailId.isErr) {
+        console.error(
+          `Error getting clerk email id for project_id: ${scheduledContent.project_id}`,
+          clerkEmailId.error
+        );
+      } else {
+        await sendEmail(
+          clerkEmailId.value,
+          "Scheduled Post Generated Successfully: " + topic,
+          "Your scheduled post has been generated successfully."
+        );
+      }
+      return ok(
+        `Scheduled post generated successfully for content_id: ${scheduledContentId}`
       );
     }
   } catch (error) {
@@ -143,11 +175,22 @@ export const processScheduledPost = async (
       error
     );
 
-    await sendEmail(
-      scheduledContent.email_id,
-      "Scheduled Post Generation Failed: " + scheduledContent.topic,
-      "Your scheduled post generation failed. Please try again."
-    );
+    if (projectData) {
+      const clerkEmailId = await getClerkEmailId(projectData.clerk_user_id);
+
+      if (clerkEmailId.isErr) {
+        console.error(
+          `Error getting clerk email id for project_id: ${scheduledContent.project_id}`,
+          clerkEmailId.error
+        );
+      } else {
+        await sendEmail(
+          clerkEmailId.value,
+          "Scheduled Post Generation Failed: " + scheduledContent.topic,
+          "Your scheduled post generation failed. Please try again."
+        );
+      }
+    }
 
     const { error: updateError } = await supabase
       .from("ScheduledContent")
@@ -164,7 +207,4 @@ export const processScheduledPost = async (
 
     return err(`Scheduled post generation failed, error: ${String(error)}`);
   }
-  return ok(
-    `Scheduled post generated successfully for content_id: ${scheduledContentId}`
-  );
 };

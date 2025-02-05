@@ -19,20 +19,24 @@ export function schedulePostHandler(t: tRPC, path: string) {
     })
     .input(
       z.object({
-        orgId: z.string().describe("Organization id"),
+        projectId: z.string().describe("Project id"),
         scheduledTime: z.string().describe("Scheduled time for the post"),
-        ...PostSchema.shape,
-        emailId: z.string().describe("Email id"),
+        keywordId: z.string().describe("Keyword id"),
+        topic: z.string().describe("Topic for the post"),
+        instruction: z.string().describe("Instruction for the post"),
       })
     )
     .output(ApiResponseSchema)
     .mutation(async ({ input }) => {
       try {
         const parsedScheduledTime = new Date(input.scheduledTime);
-        const result: Result<string, string> = await schedulePost({
-          ...input,
-          scheduledTime: parsedScheduledTime,
-        });
+        const result: Result<string, string> = await schedulePost(
+          input.projectId,
+          parsedScheduledTime,
+          input.keywordId,
+          input.topic,
+          input.instruction
+        );
         if (result.isErr) {
           return {
             success: false,
