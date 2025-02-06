@@ -6,6 +6,8 @@ import { getThrottledGPT4o } from "../get-llm-models.js";
 import { getSupabaseClient } from "../get-supabase-client.js";
 import { postFormatter } from "../post-formatter.js";
 import { incrementUsageCredit } from "../supabase/usage.js";
+import { getClerkEmailId } from "../utility/get-clerk-email-id.js";
+import { sendEmail } from "../utility/send-email.js";
 
 const GLOSSARY_SYSTEM_PROMPT = `You are an expert in writing glossary articles for brands for SEO purposes. 
 
@@ -329,37 +331,63 @@ export async function glossaryWorkflow({
   inputTopic?: string;
   keywordId: string;
 }): Promise<Result<{ contentId: string; content: string }, string>> {
+  console.log("Generating Glossary Article..");
+  const supabaseClient: Result<SupabaseClient, string> = getSupabaseClient();
+
+  if (supabaseClient.isErr) {
+    return err(supabaseClient.error);
+  }
+
+  const supabase = supabaseClient.value;
+
+  const { data: dataContentInsert, error: errorContentInsert } = await supabase
+    .from("Content")
+    .insert([
+      {
+        status: "generating",
+        project_id: projectId,
+        title: inputTopic,
+        keyword_id: keywordId,
+        type: "GLOSSARY",
+      },
+    ])
+    .select();
+
+  if (errorContentInsert) {
+    return err(`Error saving content: ${errorContentInsert.message}`);
+  }
+
+  const contentId: string | null = dataContentInsert?.at(0)?.id ?? null;
+
+  if (contentId == null || contentId.length == 0) {
+    return err("Error fetching content id");
+  }
+
+  const { data: project, error } = await supabase
+    .from("Project")
+    .select("name, background, org_id")
+    .eq("id", projectId)
+    .single();
+
+  if (error) {
+    return err(`Failed to fetch project: ${error.message}`);
+  }
+
+  if (!project) {
+    return err(`Project not found with id: ${projectId}`);
+  }
   try {
-    console.log("Generating Glossary Article..");
-    const supabaseClient: Result<SupabaseClient, string> = getSupabaseClient();
-    const currentDate = new Date().toLocaleString();
-
-    if (supabaseClient.isErr) {
-      return err(supabaseClient.error);
-    }
-
-    const supabase = supabaseClient.value;
-
-    // Fetch project data from Supabase
-    const { data: project, error } = await supabase
-      .from("Project")
-      .select("name, background, org_id")
-      .eq("id", projectId)
-      .single();
-
-    if (error) {
-      return err(`Failed to fetch project: ${error.message}`);
-    }
-
-    if (!project) {
-      return err(`Project not found with id: ${projectId}`);
-    }
-
     // Fetch all internal links of the project
     const { data: internalLinks, error: internalLinksError } = await supabase
       .from("InternalLink")
       .select("url")
       .eq("project_id", projectId);
+
+    if (internalLinksError) {
+      throw new Error(
+        `Failed to fetch internal links: ${internalLinksError.message}`
+      );
+    }
 
     // Find keyword using keywordId
     const { data: keyword, error: keywordError } = await supabase
@@ -368,10 +396,8 @@ export async function glossaryWorkflow({
       .eq("id", keywordId)
       .single();
 
-    if (internalLinksError) {
-      return err(
-        `Failed to fetch internal links: ${internalLinksError.message}`
-      );
+    if (keywordError) {
+      throw new Error(`Failed to fetch keyword: ${keywordError.message}`);
     }
 
     const prompt = `Below is the information about the company and the internal links of the website.
@@ -404,47 +430,38 @@ export async function glossaryWorkflow({
     );
 
     if (finalPost.isErr) {
-      return err(finalPost.error);
-    }
-
-    const { data: dataContentInsert, error: errorContentInsert } =
-      await supabase
-        .from("Content")
-        .insert([
-          {
-            status: "draft",
-            project_id: projectId,
-            title: inputTopic,
-            keyword_id: keywordId,
-            type: "GLOSSARY",
-          },
-        ])
-        .select();
-
-    if (errorContentInsert) {
-      return err(`Error saving content: ${errorContentInsert.message}`);
-    }
-
-    const id: string | null = dataContentInsert?.at(0)?.id ?? null;
-
-    if (id == null || id.length == 0) {
-      return err("Error fetching content id");
+      throw new Error(finalPost.error);
     }
 
     const { error: errorContentBodyInsert } = await supabase
       .from("ContentBody")
       .insert([
         {
-          content_id: id,
+          content_id: contentId,
           body: finalPost.value,
         },
       ]);
+
+    if (errorContentBodyInsert) {
+      throw new Error(
+        `Error saving content body: ${errorContentBodyInsert.message}`
+      );
+    }
+
+    await supabase
+      .from("Content")
+      .update({
+        status: "draft",
+      })
+      .eq("id", contentId);
 
     const incrementUsageCreditResult: Result<string, string> =
       await incrementUsageCredit(supabase, project?.org_id ?? "", "GLOSSARY");
 
     if (incrementUsageCreditResult.isErr) {
-      return err(incrementUsageCreditResult.error);
+      console.error(
+        `Error incrementing usage credit: ${incrementUsageCreditResult.error}`
+      );
     }
 
     console.log(
@@ -452,12 +469,47 @@ export async function glossaryWorkflow({
       project.name
     );
 
+    const emailId: Result<string, string> = await getClerkEmailId(
+      project?.org_id ?? ""
+    );
+
+    if (emailId.isErr) {
+      console.error(`Error fetching email id: ${emailId.error}`);
+    } else {
+      sendEmail(
+        emailId.value,
+        "Glossary Article Created",
+        `Your glossary article for: ${inputTopic} has been created`
+      );
+    }
+
     return ok({
-      contentId: id,
+      contentId: contentId,
       content: glossaryArticle.text,
     });
   } catch (error) {
     console.error("Error in glossary workflow:", error);
+    const emailId: Result<string, string> = await getClerkEmailId(
+      project?.org_id ?? ""
+    );
+
+    if (emailId.isErr) {
+      console.error(`Error fetching email id: ${emailId.error}`);
+    } else {
+      sendEmail(
+        emailId.value,
+        "Glossary Article Creation Failed",
+        `Your glossary article for: ${inputTopic} has failed to create`
+      );
+    }
+
+    await supabase
+      .from("Content")
+      .update({
+        status: "failed",
+      })
+      .eq("id", contentId);
+
     return err("An error has occured from the glossary workflow");
   }
 }

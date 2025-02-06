@@ -1,16 +1,14 @@
 import { Result } from "true-myth";
-import { z } from "zod";
-import { PostSchema } from "../schema/post-schema.js";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { err, ok } from "true-myth/result";
 import { getSupabaseClient } from "../get-supabase-client.js";
 
 export const schedulePost = async (
-  input: z.infer<typeof PostSchema> & {
-    orgId: string;
-    scheduledTime: Date;
-    emailId: string;
-  }
+  projectId: string,
+  scheduledTime: Date,
+  keywordId: string,
+  topic?: string,
+  instruction?: string
 ): Promise<Result<string, string>> => {
   const supabaseClient: Result<SupabaseClient, string> = getSupabaseClient();
   if (supabaseClient.isErr) {
@@ -18,20 +16,13 @@ export const schedulePost = async (
   }
   const supabase = supabaseClient.value;
 
-  const { data: orgData, error: orgError } = await supabase
-    .from("ScheduledContent")
-    .insert({
-      org_id: input.orgId,
-      scheduled_time: input.scheduledTime,
-      project_id: input.projectId,
-      input_topic: input.inputTopic,
-      keyword_id: input.keywordId,
-      type: input.type,
-      length: input.length,
-      secondary_keywords: input.secondaryKeywords,
-      instruction: input.instruction,
-      email_id: input.emailId,
-    });
+  const { error: orgError } = await supabase.from("ScheduledContent").insert({
+    project_id: projectId,
+    scheduled_time: scheduledTime,
+    keyword_id: keywordId,
+    topic: topic,
+    instruction: instruction,
+  });
 
   if (orgError) {
     return err(
