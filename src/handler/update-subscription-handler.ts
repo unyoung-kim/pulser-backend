@@ -24,7 +24,6 @@ export function updateSubscriptionHandler(t: tRPC, path: string) {
         orgId: z.string(),
         plan: z.enum(["BASIC", "PRO", "AGENCY"]),
         term: z.enum(["MONTHLY", "YEARLY"]),
-        couponCode: z.string().optional().describe("Coupon code to apply"),
       })
     )
     .output(ApiResponseSchema)
@@ -33,8 +32,7 @@ export function updateSubscriptionHandler(t: tRPC, path: string) {
         const result: Result<string, string> = await updateSubscription(
           input.orgId,
           input.plan,
-          input.term,
-          input.couponCode
+          input.term
         );
         if (result.isErr) {
           return {

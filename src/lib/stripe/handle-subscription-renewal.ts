@@ -16,7 +16,7 @@ export const handleSubscriptionRenewal = async (
   const { data: currentSubscriptionData, error: currentSubscriptionError } =
     await supabase
       .from("Usage")
-      .select("credits_charged,plan,term,coupon_code")
+      .select("credits_charged,plan,term")
       .eq("id", current_usage_id)
       .single();
 
@@ -35,7 +35,6 @@ export const handleSubscriptionRenewal = async (
         org_id: orgId,
         plan: currentSubscriptionData.plan,
         term: currentSubscriptionData.term,
-        coupon_code: currentSubscriptionData.coupon_code,
       })
       .select("id")
       .single();

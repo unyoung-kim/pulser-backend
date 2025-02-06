@@ -8,8 +8,7 @@ export const createStripeSession = async (
   orgId: string,
   plan: "BASIC" | "PRO" | "AGENCY",
   term: "MONTHLY" | "YEARLY",
-  mode: "payment" | "subscription",
-  couponCode?: string
+  mode: "payment" | "subscription"
 ): Promise<Result<string, string>> => {
   const stripeProduct: StripeProduct | undefined = STRIPE_PRODUCT_LIST.find(
     (product: StripeProduct) => product.plan === plan && product.term === term
@@ -50,7 +49,6 @@ export const createStripeSession = async (
       metadata: {
         orgId,
         productId: stripeProduct.stripeProductId,
-        couponCode: couponCode ?? null,
       },
     };
 

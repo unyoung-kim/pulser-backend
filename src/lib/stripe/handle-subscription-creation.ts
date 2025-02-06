@@ -3,7 +3,6 @@ import Stripe from "stripe";
 import { StripeProduct } from "./product-list.js";
 import { err } from "true-myth/result";
 import { STRIPE_PRODUCT_LIST } from "./product-list.js";
-import { COUPON_CODE_LIST } from "./coupon-code-list.js";
 import { SupabaseClient } from "@supabase/supabase-js";
 
 export const handleSubscriptionCreation = async (
@@ -16,7 +15,7 @@ export const handleSubscriptionCreation = async (
 ) => {
   const { data: orgData, error: orgIdError } = await supabase
     .from("Organization")
-    .select("org_id,current_usage_id")
+    .select("org_id,current_usage_id,referral_code")
     .eq("stripe_customer_id", customer)
     .single();
 
@@ -37,7 +36,6 @@ export const handleSubscriptionCreation = async (
   }
 
   const productId = session.metadata.productId;
-  const couponCode = session.metadata.couponCode;
 
   if (productId == null) {
     return err("productId metadata is missing");
@@ -53,9 +51,7 @@ export const handleSubscriptionCreation = async (
 
   const credits =
     stripeProduct.credits +
-    (couponCode && COUPON_CODE_LIST.includes(couponCode)
-      ? stripeProduct.credits * 0.2
-      : 0);
+    (orgData?.referral_code ? stripeProduct.credits * 0.2 : 0);
 
   // Search for the usage record for Free Credits with end date null
   const { data: freeCreditUsageData, error: freeCreditUsageError } =
@@ -115,10 +111,6 @@ export const handleSubscriptionCreation = async (
         org_id: orgId,
         plan: stripeProduct.plan,
         term: stripeProduct.term,
-        coupon_code:
-          couponCode && COUPON_CODE_LIST.includes(couponCode)
-            ? couponCode
-            : null,
       })
       .select("id")
       .single();
