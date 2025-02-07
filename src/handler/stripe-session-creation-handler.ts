@@ -25,7 +25,6 @@ export function stripeSessionCreationHandler(t: tRPC, path: string) {
         plan: z.enum(["BASIC", "PRO", "AGENCY"]),
         term: z.enum(["MONTHLY", "YEARLY"]),
         mode: z.enum(["subscription", "payment"]).default("subscription"),
-        couponCode: z.string().optional().describe("Coupon code to apply"),
       })
     )
     .output(ApiResponseSchema)
@@ -35,8 +34,7 @@ export function stripeSessionCreationHandler(t: tRPC, path: string) {
           input.orgId,
           input.plan,
           input.term,
-          input.mode,
-          input.couponCode
+          input.mode
         );
         if (result.isErr) {
           return {

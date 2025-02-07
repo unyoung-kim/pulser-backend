@@ -2,7 +2,6 @@ import { ok, err } from "true-myth/result";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { STRIPE_PRODUCT_LIST } from "./product-list.js";
 import { StripeProduct } from "./product-list.js";
-import { COUPON_CODE_LIST } from "./coupon-code-list.js";
 import Stripe from "stripe";
 
 export const handleSubscriptionChange = async (
@@ -21,9 +20,7 @@ export const handleSubscriptionChange = async (
 
   const { data: usageData, error: usageError } = await supabase
     .from("Usage")
-    .select(
-      "credits_charged,additional_credits_charged,credits_used,coupon_code"
-    )
+    .select("credits_charged,additional_credits_charged,credits_used")
     .eq("id", current_usage_id)
     .single();
 
@@ -37,8 +34,6 @@ export const handleSubscriptionChange = async (
     parseInt(usageData.credits_used, 10);
 
   const productId = subscription.metadata.productId;
-  const newCouponCode = subscription.metadata.couponCode;
-  const oldCouponCode = usageData.coupon_code;
 
   const stripeProduct = STRIPE_PRODUCT_LIST.find(
     (product: StripeProduct) => product.stripeProductId === productId
@@ -47,13 +42,6 @@ export const handleSubscriptionChange = async (
   if (!stripeProduct) {
     return err("Product not found for productId: " + productId);
   }
-
-  const credits =
-    stripeProduct.credits +
-    ((newCouponCode && COUPON_CODE_LIST.includes(newCouponCode)) ||
-    oldCouponCode
-      ? stripeProduct.credits * 0.2
-      : 0);
 
   const { error: existingUsageEndDateUpdateError } = await supabase
     .from("Usage")
@@ -70,15 +58,11 @@ export const handleSubscriptionChange = async (
         stripe_subscription_id: subscriptionId,
         start_date: startDate.toISOString(),
         end_date: endDate.toISOString(),
-        credits_charged: credits,
+        credits_charged: stripeProduct.credits,
         additional_credits_charged: creditsLeft,
         org_id: orgId,
         plan: stripeProduct.plan,
         term: stripeProduct.term,
-        coupon_code:
-          newCouponCode && COUPON_CODE_LIST.includes(newCouponCode)
-            ? newCouponCode
-            : oldCouponCode,
       })
       .select("id")
       .single();

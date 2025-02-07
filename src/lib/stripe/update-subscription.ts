@@ -7,8 +7,7 @@ import { STRIPE_PRODUCT_LIST, StripeProduct } from "./product-list.js";
 export const updateSubscription = async (
   orgId: string,
   plan: "BASIC" | "PRO" | "AGENCY",
-  term: "MONTHLY" | "YEARLY",
-  couponCode?: string
+  term: "MONTHLY" | "YEARLY"
 ): Promise<Result<string, string>> => {
   // Find the stripe product for the given plan and term
   const stripeProduct: StripeProduct | undefined = STRIPE_PRODUCT_LIST.find(
@@ -66,7 +65,6 @@ export const updateSubscription = async (
     metadata: {
       productId: stripeProduct.stripeProductId,
       forUpdate: "true",
-      couponCode: couponCode ?? null,
     },
   });
 
