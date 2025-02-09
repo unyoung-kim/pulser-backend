@@ -201,7 +201,7 @@ export async function workflowV3({
     } else {
       await sendEmail(
         emailId.value,
-        "Article generation successful",
+        "Your article is ready!",
         `Your article: ${inputTopic} has been generated`
       );
     }

@@ -20,23 +20,23 @@ export const processScheduledPost = async (
 
   const supabase = supabaseClient.value;
 
-  const { data: scheduledContent, error: scheduledContentError } =
-    await supabase
-      .from("ScheduledContent")
-      .select("*")
-      .eq("id", scheduledContentId)
-      .single();
-
-  const { data: projectData, error: projectError } = await supabase
-    .from("Project")
-    .select("org_id,clerk_user_id")
-    .eq("id", scheduledContent.project_id)
-    .single();
-
   try {
+    const { data: scheduledContent, error: scheduledContentError } =
+      await supabase
+        .from("ScheduledContent")
+        .select("*")
+        .eq("id", scheduledContentId)
+        .single();
+
     if (scheduledContentError) {
       throw new Error(scheduledContentError.message);
     }
+
+    const { data: projectData, error: projectError } = await supabase
+      .from("Project")
+      .select("org_id,clerk_user_id")
+      .eq("id", scheduledContent.project_id)
+      .single();
 
     if (projectError) {
       throw new Error(projectError.message);
@@ -151,20 +151,6 @@ export const processScheduledPost = async (
         throw new Error(error.message);
       }
 
-      const clerkEmailId = await getClerkEmailId(projectData.clerk_user_id);
-
-      if (clerkEmailId.isErr) {
-        console.error(
-          `Error getting clerk email id for project_id: ${scheduledContent.project_id}`,
-          clerkEmailId.error
-        );
-      } else {
-        await sendEmail(
-          clerkEmailId.value,
-          "Scheduled Post Generated Successfully: " + topic,
-          "Your scheduled post has been generated successfully."
-        );
-      }
       return ok(
         `Scheduled post generated successfully for content_id: ${scheduledContentId}`
       );
@@ -174,23 +160,6 @@ export const processScheduledPost = async (
       `Error generating scheduled post for content_id: ${scheduledContentId}`,
       error
     );
-
-    if (projectData) {
-      const clerkEmailId = await getClerkEmailId(projectData.clerk_user_id);
-
-      if (clerkEmailId.isErr) {
-        console.error(
-          `Error getting clerk email id for project_id: ${scheduledContent.project_id}`,
-          clerkEmailId.error
-        );
-      } else {
-        await sendEmail(
-          clerkEmailId.value,
-          "Scheduled Post Generation Failed: " + scheduledContent.topic,
-          "Your scheduled post generation failed. Please try again."
-        );
-      }
-    }
 
     const { error: updateError } = await supabase
       .from("ScheduledContent")
