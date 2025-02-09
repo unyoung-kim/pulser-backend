@@ -120,7 +120,7 @@ export const processScheduledPost = async (
           throw new Error(topicResult.error);
         }
 
-        topic = topicResult.value;
+        topic = topicResult.value.split('"')[1];
       }
 
       const result = await workflowV3({
