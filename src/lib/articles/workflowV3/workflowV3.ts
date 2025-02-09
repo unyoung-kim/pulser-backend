@@ -63,7 +63,7 @@ export async function workflowV3({
 
   const { data: project, error: projectError } = await supabase
     .from("Project")
-    .select("name,domain,background,description,org_id")
+    .select("name,domain,background,description,org_id,clerk_user_id")
     .eq("id", projectId)
     .single();
 
@@ -193,7 +193,7 @@ export async function workflowV3({
     }
 
     const emailId: Result<string, string> = await getClerkEmailId(
-      project?.org_id ?? ""
+      project?.clerk_user_id ?? ""
     );
 
     if (emailId.isErr) {
@@ -213,7 +213,7 @@ export async function workflowV3({
   } catch (error) {
     console.error("Error in workflowV3: ", error);
     const emailId: Result<string, string> = await getClerkEmailId(
-      project?.org_id ?? ""
+      project?.clerk_user_id ?? ""
     );
 
     if (emailId.isErr) {

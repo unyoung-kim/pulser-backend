@@ -365,7 +365,7 @@ export async function glossaryWorkflow({
 
   const { data: project, error } = await supabase
     .from("Project")
-    .select("name, background, org_id")
+    .select("name, background, org_id, clerk_user_id")
     .eq("id", projectId)
     .single();
 
@@ -470,7 +470,7 @@ export async function glossaryWorkflow({
     );
 
     const emailId: Result<string, string> = await getClerkEmailId(
-      project?.org_id ?? ""
+      project?.clerk_user_id ?? ""
     );
 
     if (emailId.isErr) {
@@ -490,7 +490,7 @@ export async function glossaryWorkflow({
   } catch (error) {
     console.error("Error in glossary workflow:", error);
     const emailId: Result<string, string> = await getClerkEmailId(
-      project?.org_id ?? ""
+      project?.clerk_user_id ?? ""
     );
 
     if (emailId.isErr) {
