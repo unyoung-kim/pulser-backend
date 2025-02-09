@@ -25,5 +25,5 @@ export const immediateProcessScheduledPost = async (
     return err(scheduledContentError.message);
   }
 
-  return ok("Scheduled post generated successfully");
+  return ok("Scheduled post generation started");
 };

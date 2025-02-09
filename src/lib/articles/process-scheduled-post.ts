@@ -103,7 +103,7 @@ export const processScheduledPost = async (
       if (!topic) {
         const { data: keyword, error: keywordError } = await supabase
           .from("Keyword")
-          .select("name")
+          .select("keyword")
           .eq("id", scheduledContent.keyword_id)
           .single();
 
@@ -112,7 +112,7 @@ export const processScheduledPost = async (
         }
 
         const topicResult = await topicGenerator(
-          keyword.name,
+          keyword.keyword,
           scheduledContent.project_id
         );
 
