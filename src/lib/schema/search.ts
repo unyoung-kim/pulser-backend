@@ -57,7 +57,7 @@ export const multiSearchSchemaV2 = z.object({
   queries: z
     .array(z.string())
     .describe(
-      "Exactly 2 queries to search for. 1) The topic given. 2) Interesting and relevant statistic that could be used in the introduction."
+      "Exactly 3 queries to search for. 1) The topic given. 2) Interesting and relevant statistic that could be used in the introduction. 3) User instruction/outline if provided."
     ),
   max_results: z.coerce
     .number()
