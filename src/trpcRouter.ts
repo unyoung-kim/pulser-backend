@@ -30,6 +30,7 @@ import { wordpressTokenGenerationHandler } from "./handler/wordpress-token-gener
 import { t } from "./lib/trpc.js";
 import { processScheduledPostHandler } from "./handler/process-scheduled-post-handler.js";
 import { immediateProcessScheduledPostHandler } from "./handler/immediate-process-scheduled-post-handler.js";
+import { filesToArticlesHandler } from "./handler/files-to-articles-handler.js";
 
 /**
  * tRPC routers from here
@@ -101,4 +102,5 @@ export const trpcRouter = t.router({
     t,
     "immediate-process-scheduled-post"
   ),
+  "files-to-articles": filesToArticlesHandler(t, "files-to-articles"),
 });
