@@ -7,6 +7,7 @@ import { sendEmail } from "../utility/send-email.js";
 import { fileToArticleGenerator } from "./file-to-article-generator.js";
 import { extractTextFromDocx } from "../utility/extract-text-from-docx.js";
 import { promises as fsPromises } from "fs";
+import { generateTitleFromInputText } from "./generate-title-from-input-text.js";
 
 export async function filesToArticlesWorkflow(
   projectId: string,
@@ -34,6 +35,8 @@ export async function filesToArticlesWorkflow(
       return err("Either file or text is required");
     }
 
+    const title = await generateTitleFromInputText(text);
+
     const { data: dataContentInsert, error: errorContentInsert } =
       await supabase
         .from("Content")
@@ -42,7 +45,7 @@ export async function filesToArticlesWorkflow(
             status: "generating",
             project_id: projectId,
             type: "FILETOARTICLE",
-            // title: TBD
+            title: title,
           },
         ])
         .select();
