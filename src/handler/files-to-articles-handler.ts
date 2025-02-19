@@ -1,4 +1,4 @@
-import { filesToArticlesWorkflow } from "../lib/articles/files-to-articles-workflow.js";
+import { filesToArticlesWorkflowFT } from "../lib/articles/files-to-articles-workflow-ft.js";
 import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
 import { tRPC } from "../lib/trpc.js";
 import { z } from "zod";
@@ -38,7 +38,7 @@ export function filesToArticlesHandler(t: tRPC, path: string) {
     .mutation(async ({ input, ctx }) => {
       const files: any = ctx.req?.files;
       try {
-        filesToArticlesWorkflow(
+        filesToArticlesWorkflowFT(
           input.projectId,
           files,
           input.texts,
