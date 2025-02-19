@@ -10,10 +10,10 @@ export function wordpressTokenGenerationHandler(t: tRPC, path: string) {
     .meta({
       openapi: {
         method: "POST",
-        path: "/auth/wordpress/callback",
-        summary: "Handle the callback from WordPress and get access token",
+        path: "/generate-wordpress-token",
+        summary: "Generate WordPress access token",
         description:
-          "Processes the callback from WordPress OAuth and retrieves the access token",
+          "Generates a WordPress access token using the provided code",
         tags: ["WordPress"],
       },
     })

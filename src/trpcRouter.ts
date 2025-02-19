@@ -41,13 +41,10 @@ import { filesToArticlesHandler } from "./handler/files-to-articles-handler.js";
  */
 export const trpcRouter = t.router({
   hello: testEndpointHandler(t, "hello"),
-  "auth/wordpress/authorize": wordpressAuthHandler(
+  "wordpress-auth-url": wordpressAuthHandler(t, "wordpress-auth-url"),
+  "generate-wordpress-token": wordpressTokenGenerationHandler(
     t,
-    "auth/wordpress/authorize"
-  ),
-  "auth/wordpress/callback": wordpressTokenGenerationHandler(
-    t,
-    "auth/wordpress/callback"
+    "generate-wordpress-token"
   ),
   "create-post": createPostHandler(t, "create-post"),
   "web-retrieval": webRetrievalHandler(t, "web-retrieval"),
