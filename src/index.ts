@@ -95,6 +95,15 @@ app.post(
   }
 );
 
+app.post(
+  "/files-to-articles",
+  upload.array("files"), // Accept array of files with the key "files"
+  (req: any, res: any, next: any) => {
+    req.files = req.files; // Attach the files to the request object
+    next();
+  }
+);
+
 // Apply the tRPC middleware on the '/trpc' route
 app.use(
   trpcExpress.createExpressMiddleware({

@@ -30,6 +30,7 @@ import { wordpressTokenGenerationHandler } from "./handler/wordpress-token-gener
 import { t } from "./lib/trpc.js";
 import { processScheduledPostHandler } from "./handler/process-scheduled-post-handler.js";
 import { immediateProcessScheduledPostHandler } from "./handler/immediate-process-scheduled-post-handler.js";
+import { filesToArticlesHandler } from "./handler/files-to-articles-handler.js";
 
 /**
  * tRPC routers from here
@@ -40,13 +41,10 @@ import { immediateProcessScheduledPostHandler } from "./handler/immediate-proces
  */
 export const trpcRouter = t.router({
   hello: testEndpointHandler(t, "hello"),
-  "auth/wordpress/authorize": wordpressAuthHandler(
+  "wordpress-auth-url": wordpressAuthHandler(t, "wordpress-auth-url"),
+  "generate-wordpress-token": wordpressTokenGenerationHandler(
     t,
-    "auth/wordpress/authorize"
-  ),
-  "auth/wordpress/callback": wordpressTokenGenerationHandler(
-    t,
-    "auth/wordpress/callback"
+    "generate-wordpress-token"
   ),
   "create-post": createPostHandler(t, "create-post"),
   "web-retrieval": webRetrievalHandler(t, "web-retrieval"),
@@ -101,4 +99,5 @@ export const trpcRouter = t.router({
     t,
     "immediate-process-scheduled-post"
   ),
+  "files-to-articles": filesToArticlesHandler(t, "files-to-articles"),
 });

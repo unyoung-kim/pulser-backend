@@ -4,7 +4,7 @@ import { tRPC } from "../lib/trpc.js";
 import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
 import { generateGoogleAccessToken } from "../lib/google/generate-google-access-token.js";
 
-// handle the callback from wordpress to get the access token
+// handle the callback from google to get the access token
 export function googleTokenGenerationHandler(t: tRPC, path: string) {
   return t.procedure
     .meta({

@@ -10,7 +10,7 @@ export function wordpressAuthHandler(t: tRPC, path: string) {
     .meta({
       openapi: {
         method: "GET",
-        path: "/auth/wordpress/authorize",
+        path: "/wordpress-auth-url",
         summary: "Get WordPress authentication URL",
         description: "Generates and returns a URL for WordPress authentication",
         tags: ["WordPress"],

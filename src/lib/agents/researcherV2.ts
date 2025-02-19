@@ -213,12 +213,13 @@ Conduct a research on the topic. Then, come up with the outline of the blog post
 1) Only return the outline content without any other text.
 2) Research and include a statistic in the introduction outline and include the source as well. If there's more interesting statistics found, include it throughout the outline.
 3) Make sure to follow user instruction, if provided, to generate the outline 
-4) Do not include conclusionor any "Final Thoughts" type of section in the outline. 
+4) Do not include conclusion or any "Final Thoughts" type of section in the outline. 
 5) You must conduct research and you are not allowed to add links that are not from the research.
-6) Do note add any case studies unless explicitly provided in the user instructions.
+6) Do not add any case studies unless explicitly provided in the user instructions.
 7) Make sure links are added to the Statistics next to Source in [Source: ...] format.
 8) Create plenty of subtopics and subsubtopics to make the outline more detailed and comprehensive.
 9) Add around 10 sections to the outline. Then add an Frequently Asked Questions section at the end.
+10) If the user instruction is an outline, make sure to follow it strictly.
 
 Example Format:
 # Outline: **How to Save HR Managers 10+ Hours a Week on Employee Onboarding**
