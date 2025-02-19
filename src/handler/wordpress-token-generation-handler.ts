@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { err, ok, Result } from "true-myth/result";
+import { Result } from "true-myth/result";
 import { tRPC } from "../lib/trpc.js";
 import { callWordpressAccessTokenGenerationURL } from "../lib/call-wordpress-access-token-generation-url.js";
 import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
@@ -9,7 +9,7 @@ export function wordpressTokenGenerationHandler(t: tRPC, path: string) {
   return t.procedure
     .meta({
       openapi: {
-        method: "GET",
+        method: "POST",
         path: "/auth/wordpress/callback",
         summary: "Handle the callback from WordPress and get access token",
         description:
@@ -17,10 +17,14 @@ export function wordpressTokenGenerationHandler(t: tRPC, path: string) {
         tags: ["WordPress"],
       },
     })
-    .input(z.void())
+    .input(
+      z.object({
+        code: z.string().describe("Code to be used for generating tokens"),
+      })
+    )
     .output(ApiResponseSchema)
-    .query(async ({ ctx }) => {
-      const code = ctx.req.query.code as string;
+    .mutation(async ({ input }) => {
+      const code = input.code;
 
       if (typeof code !== "string") {
         return {
