@@ -4,7 +4,7 @@ import { err, ok } from "true-myth/result";
 
 const NORMAL_CONTENT_CREDIT = 3;
 const GLOSSARY_CONTENT_CREDIT = 1;
-
+const LISTICLE_CONTENT_CREDIT = 3;
 /**
  * Update the usage credit for an organization
  * @param supabase
@@ -14,7 +14,7 @@ const GLOSSARY_CONTENT_CREDIT = 1;
 export async function incrementUsageCredit(
   supabase: SupabaseClient,
   orgId: string,
-  postType: "NORMAL" | "GLOSSARY"
+  postType: "NORMAL" | "GLOSSARY" | "LISTICLE"
 ): Promise<Result<string, string>> {
   // Get active_usage_id from Organization
   const { data: org, error: orgError } = await supabase
@@ -29,7 +29,11 @@ export async function incrementUsageCredit(
 
   // Determine credit amount based on post type
   const creditAmount =
-    postType === "NORMAL" ? NORMAL_CONTENT_CREDIT : GLOSSARY_CONTENT_CREDIT;
+    postType === "NORMAL"
+      ? NORMAL_CONTENT_CREDIT
+      : postType === "GLOSSARY"
+      ? GLOSSARY_CONTENT_CREDIT
+      : LISTICLE_CONTENT_CREDIT;
 
   // First, get the current usage data
   const { data: currentUsage, error: usageError } = await supabase

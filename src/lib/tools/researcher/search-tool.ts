@@ -218,7 +218,8 @@ export async function tavilySearchWithRawContent(
   maxResults: number = 5,
   searchDepth: "basic" | "advanced" = "basic",
   includeDomains: string[] = [],
-  excludeDomains: string[] = []
+  excludeDomains: string[] = [],
+  cutOff: number = 16000
 ): Promise<SearchResults> {
   const apiKey = process.env.TAVILY_API_KEY;
   if (!apiKey) {
@@ -262,7 +263,7 @@ export async function tavilySearchWithRawContent(
     }) => {
       return {
         ...result,
-        raw_content: result.raw_content?.substring(0, 16000) ?? "",
+        raw_content: result.raw_content?.substring(0, cutOff) ?? "",
       };
     }
   );

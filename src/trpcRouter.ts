@@ -1,16 +1,19 @@
 import { autoFillBackgroundHandler } from "./handler/auto-fill-background-handler.js";
 import { deleteSubscriptionHandler } from "./handler/delete-subscription-handler.js";
+import { generateListiclesHandler } from "./handler/generate-listicles-handler.js";
 import { googleAuthHandler } from "./handler/google-auth-handler.js";
 import { googleDocCreationHandler } from "./handler/google-doc-creation-handler.js";
 import { googleDocSharingHandler } from "./handler/google-doc-sharing-handler.js";
 import { googleTokenGenerationHandler } from "./handler/google-token-generation-handler.js";
 import { imageSearchHandler } from "./handler/image-search-handler.js";
+import { immediateProcessScheduledPostHandler } from "./handler/immediate-process-scheduled-post-handler.js";
 import { initializeOrgHandler } from "./handler/initialize-org-handler.js";
 import { internalLinksHandler } from "./handler/internal-links-handler.js";
 import { postBatchCreationHandler } from "./handler/post-batch-creation-handler.js";
+import { processScheduledPostHandler } from "./handler/process-scheduled-post-handler.js";
 import { schedulePostHandler } from "./handler/schedule-post-handler.js";
-import { semrushKeywordOverviewOneDbHandler } from "./handler/semrush-keyword-overview-one-db-handler.js";
 import { semrushKeywordBroadMatchAndOverviewHandler } from "./handler/semrush-keyword-broad-match-and-overview-handler.js";
+import { semrushKeywordOverviewOneDbHandler } from "./handler/semrush-keyword-overview-one-db-handler.js";
 import { sendEmailHandler } from "./handler/send-email-handler.js";
 import { stripeSessionCreationHandler } from "./handler/stripe-session-creation-handler.js";
 import { stripeSessionVerificationHandler } from "./handler/stripe-session-verification-handler.js";
@@ -28,8 +31,6 @@ import { wordpressAuthHandler } from "./handler/wordpress-auth-handler.js";
 import { createPostHandler } from "./handler/wordpress-post-creation.js";
 import { wordpressTokenGenerationHandler } from "./handler/wordpress-token-generation-handler.js";
 import { t } from "./lib/trpc.js";
-import { processScheduledPostHandler } from "./handler/process-scheduled-post-handler.js";
-import { immediateProcessScheduledPostHandler } from "./handler/immediate-process-scheduled-post-handler.js";
 
 /**
  * tRPC routers from here
@@ -101,4 +102,5 @@ export const trpcRouter = t.router({
     t,
     "immediate-process-scheduled-post"
   ),
+  "generate-listicles": generateListiclesHandler(t, "generate-listicles"),
 });
