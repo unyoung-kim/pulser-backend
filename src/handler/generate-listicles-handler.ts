@@ -1,3 +1,4 @@
+import { Result } from "true-myth";
 import { z } from "zod";
 import { generateListicles } from "../lib/articles/listicles/listicle.js";
 import { ApiResponseSchema } from "../lib/schema/api-response-schema.js";
@@ -22,26 +23,27 @@ export function generateListiclesHandler(t: tRPC, path: string) {
     )
     .output(ApiResponseSchema)
     .mutation(async ({ input }) => {
-      // Start the generation process in the background
-      generateListicles({
-        projectId: input.projectId,
-        inputTopics: input.inputTopics,
-      })
-        .then((result) => {
-          // Handle the result in the background
-          console.log(
-            "Listicle generation completed:",
-            result.isOk ? "success" : "error"
-          );
-        })
-        .catch((error) => {
-          console.error("Listicle generation failed:", error);
+      try {
+        const result: Result<string, string> = await generateListicles({
+          projectId: input.projectId,
+          inputTopics: input.inputTopics,
         });
 
-      // Return immediately to the client
-      return {
-        success: true,
-        data: "Generation started",
-      };
+        if (result.isErr) {
+          return {
+            success: false,
+            error: result.error,
+          };
+        }
+        return {
+          success: true,
+          data: "Successfully generated listicle generation",
+        };
+      } catch (error) {
+        return {
+          success: false,
+          error: String(error),
+        };
+      }
     });
 }
