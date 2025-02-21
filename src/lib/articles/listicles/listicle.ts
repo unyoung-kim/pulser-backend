@@ -112,15 +112,15 @@ export async function generateListicles({
       console.error(`Error fetching email id: ${emailId.error}`);
       return ok("Listicle generation successful but failed to send email");
     } else {
-      let emailMessage = `Successfully generated articles for: ${successfulListicleTopics.join(
-        ", "
-      )}`;
+      let emailMessage = successfulListicleTopics
+        .map((topic) => `✅ ${topic}`)
+        .join("\n");
       if (failedListicleTopics.length > 0) {
-        emailMessage += `\nFailed to generate articles for: ${failedListicleTopics.join(
-          ", "
-        )}`;
+        emailMessage +=
+          "\n\nFailed to generate:\n" +
+          failedListicleTopics.map((topic) => `❌ ${topic}`).join("\n");
       }
-      await sendEmail(emailId.value, "Article generation status", emailMessage);
+      await sendEmail(emailId.value, "Your articles are ready!", emailMessage);
     }
 
     return ok("Listicle generation successful");
